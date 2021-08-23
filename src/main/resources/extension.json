@@ -1,0 +1,7 @@
+{
+  "entrypoint": "cc.minetale.flame.Flame",
+  "name": "Flame",
+  "dependencies": [
+    "mLib"
+  ]
+}
