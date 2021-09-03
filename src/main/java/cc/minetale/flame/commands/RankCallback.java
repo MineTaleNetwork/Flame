@@ -8,10 +8,12 @@ public class RankCallback {
 
     private final Profile profile;
     private final boolean minimum;
+    private final boolean console;
 
-    public RankCallback(Profile profile, boolean minimum) {
+    public RankCallback(Profile profile, boolean minimum, boolean console) {
         this.profile = profile;
         this.minimum = minimum;
+        this.console = console;
     }
 
 }

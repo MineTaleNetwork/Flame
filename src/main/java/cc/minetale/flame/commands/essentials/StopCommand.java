@@ -39,6 +39,7 @@ public class StopCommand extends Command {
         }
 
         MinecraftServer.stopCleanly();
+        System.exit(0);
     }
 
 }

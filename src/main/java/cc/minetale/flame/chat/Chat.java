@@ -1,5 +1,10 @@
 package cc.minetale.flame.chat;
 
+import cc.minetale.commonlib.modules.grant.Grant;
+import cc.minetale.commonlib.util.Duration;
+import cc.minetale.flame.menu.grant.GrantConfirmMenu;
+import cc.minetale.flame.menu.grant.GrantReasonMenu;
+import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.mlib.util.ProfileUtil;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.rank.Rank;
@@ -11,6 +16,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.entity.Player;
 
 import java.awt.*;
+import java.util.UUID;
 
 public class Chat {
 
@@ -35,12 +41,12 @@ public class Chat {
 //                return;
 //            }
 //
-//            GrantProcedure grantProcedure = GrantProcedure.getByPlayer(sender);
-//
-//            if (grantProcedure != null) {
-//                ChatProcedure.handleGrantProcedure(grantProcedure, sender, message);
-//                return;
-//            }
+            GrantProcedure grantProcedure = GrantProcedure.getByPlayer(profile.getId());
+
+            if (grantProcedure != null) {
+                handleGrantProcedure(grantProcedure, player, message);
+                return;
+            }
 //
 //            if (!player.hasPermission("flame.staff")) {
 //                Punishment punishment = profile.api().getActivePunishmentByType(Punishment.Type.MUTE);
@@ -82,8 +88,6 @@ public class Chat {
         });
     }
 
-    // TODO: TEMP UNTIL IT STOPS BEING A BITCH AND WORKING WITH HOVER EVENT
-
     public static TextComponent formatChat(Profile profile, String message) {
         Rank rank = profile.api().getActiveGrant().api().getRank();
         Color color = rank.api().getRankColor().getColor();
@@ -96,6 +100,67 @@ public class Chat {
                 .build();
     }
 
+    private static void handleGrantProcedure(GrantProcedure procedure, Player player, String message) {
+        UUID uuid = player.getUuid();
+
+        if (procedure.getStage() == GrantProcedure.Stage.PROVIDE_REASON && procedure.getType() == GrantProcedure.Type.REMOVE) {
+            if (message.equalsIgnoreCase("cancel")) {
+                GrantProcedure.getProcedures().remove(uuid);
+                player.sendMessage(Component.text("You have cancelled the grant removal procedure.")
+                        .color(MC.CC.RED.getTextColor()));
+                return;
+            }
+
+            // TODO
+//            new DeleteGrantMenu(player, procedure, content);
+        }
+
+        if (procedure.getStage() == GrantProcedure.Stage.PROVIDE_TIME && procedure.getType() == GrantProcedure.Type.ADD) {
+            if (message.equalsIgnoreCase("cancel")) {
+                GrantProcedure.getProcedures().remove(uuid);
+                player.sendMessage(Component.text("You have cancelled the grant procedure.")
+                        .color(MC.CC.RED.getTextColor()));
+                return;
+            }
+
+            Duration duration = Duration.fromString(message);
+
+            if (duration.getValue() == -1) {
+                procedure.cancel();
+                player.sendMessage(Component.text("That duration is not valid. Canceling grant procedure.")
+                        .color(MC.CC.RED.getTextColor()));
+                player.sendMessage(Component.text("Example: [perm/1y1m1w1d]")
+                        .color(MC.CC.RED.getTextColor()));
+            } else {
+                Grant grant = procedure.getGrant();
+
+                grant.setDuration(duration.getValue());
+                procedure.setGrant(grant);
+                procedure.setStage(GrantProcedure.Stage.PROVIDE_REASON);
+
+                new GrantReasonMenu(player, procedure);
+            }
+            return;
+        }
+
+        if (procedure.getStage() == GrantProcedure.Stage.PROVIDE_REASON && procedure.getType() == GrantProcedure.Type.ADD) {
+            if (message.equalsIgnoreCase("cancel")) {
+                GrantProcedure.getProcedures().remove(uuid);
+                player.sendMessage(Component.text("You have cancelled the grant procedure.")
+                        .color(MC.CC.RED.getTextColor()));
+                return;
+            }
+
+            Grant grant = procedure.getGrant();
+
+            grant.setAddedReason(message);
+            procedure.setGrant(grant);
+            procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
+
+            new GrantConfirmMenu(player, procedure);
+        }
+    }
+
     public static void handleAuthentication(Player player, Profile profile, Component message) {
         TextComponent component = (TextComponent) message;
         String content = component.content();
@@ -104,10 +169,10 @@ public class Chat {
             int code = Integer.parseInt(content);
 
             if (correctCode(profile, code)) {
-                player.sendMessage(MC.Style.SEPARATOR);
+                player.sendMessage(MC.Style.SEPARATOR_80);
                 player.sendMessage(Component.text("Access Granted! Thank you for Authenticating!")
                         .color(MC.CC.GREEN.getTextColor()));
-                player.sendMessage(MC.Style.SEPARATOR);
+                player.sendMessage(MC.Style.SEPARATOR_80);
             } else {
                 player.kick(Component.text("Incorrect or Expired Two Factor Code", NamedTextColor.RED));
             }

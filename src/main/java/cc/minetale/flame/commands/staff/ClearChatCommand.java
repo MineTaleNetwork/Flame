@@ -36,13 +36,13 @@ public class ClearChatCommand extends Command {
             }
 
             var component = Component.text()
-                    .append(MC.Style.SEPARATOR)
+                    .append(MC.Style.SEPARATOR_80)
                     .append(Component.newline())
                     .append(MC.Chat.notificationMessage("Chat",
                             Component.text("Chat has been cleared by ", MC.CC.GRAY.getTextColor())
                                     .append(commandCallback.getProfile().api().getChatFormat())))
                     .append(Component.newline())
-                    .append(MC.Style.SEPARATOR)
+                    .append(MC.Style.SEPARATOR_80)
                     .build();
 
             for (Player instancePlayer : player.getInstance().getPlayers()) {
