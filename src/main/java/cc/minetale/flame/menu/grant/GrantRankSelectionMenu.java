@@ -77,7 +77,8 @@ public class GrantRankSelectionMenu implements FabricProvider {
 
                         if (FlameAPI.canStartProcedure(uuid)) {
                             GrantProcedure procedure = new GrantProcedure(uuid, this.profile, GrantProcedure.Type.ADD, GrantProcedure.Stage.PROVIDE_TIME);
-                            procedure.setGrant(new Grant(this.profile.getId(), rank.getUuid(), player.getUuid(), 0, "", 0));
+                            // TODO
+//                            procedure.setGrant(new Grant(this.profile.getId(), rank.getUuid(), player.getUuid(), 0, "", 0));
 
                             new GrantDurationMenu(player, procedure);
                         }

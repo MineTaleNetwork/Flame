@@ -18,7 +18,9 @@ public class PingCommand extends Command {
         super("ping");
         setCondition(Conditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
+
         var targets = ArgumentType.Entity("targets").onlyPlayers(true);
+
         addSyntax(this::onPingOthersCommand, targets);
     }
 

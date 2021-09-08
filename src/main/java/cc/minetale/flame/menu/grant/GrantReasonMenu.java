@@ -31,54 +31,56 @@ public class GrantReasonMenu implements FabricProvider {
 
     @Override
     public void init(Player player, FabricContents contents) {
-        Grant grant = this.procedure.getGrant();
+        // TODO
 
-        contents.fill(ClickableItem.empty(ItemStack.of(Material.GRAY_STAINED_GLASS_PANE).withDisplayName(Component.empty())));
-
-        contents.setSlot(10, ClickableItem.of(ItemStack.of(Material.LIME_CONCRETE)
-                        .withDisplayName(MC.Style.component("Promoted", MC.CC.GREEN)),
-                event -> {
-                    grant.setAddedReason("Promoted");
-                    procedure.setGrant(grant);
-
-                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-
-                    new GrantConfirmMenu(player, procedure);
-                }));
-
-        contents.setSlot(12, ClickableItem.of(ItemStack.of(Material.YELLOW_CONCRETE)
-                        .withDisplayName(MC.Style.component("Demoted", MC.CC.YELLOW)),
-                event -> {
-                    grant.setAddedReason("Demoted");
-                    procedure.setGrant(grant);
-
-                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-
-                    new GrantConfirmMenu(player, procedure);
-                }));
-
-        contents.setSlot(14, ClickableItem.of(ItemStack.of(Material.ORANGE_CONCRETE)
-                        .withDisplayName(MC.Style.component("Granted", MC.CC.GOLD)),
-                event -> {
-
-                    grant.setAddedReason("Granted");
-                    procedure.setGrant(grant);
-
-                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-
-                    new GrantConfirmMenu(player, procedure);
-                }));
-
-        contents.setSlot(16, ClickableItem.of(ItemStack.of(Material.RED_CONCRETE)
-                        .withDisplayName(MC.Style.component("Custom", MC.CC.RED)),
-                event -> {
-                    procedure.setGrant(grant);
-
-                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-
-                    player.closeInventory();
-                    player.sendMessage(MC.Style.component("Type a reason for adding this grant in chat...", MC.CC.GREEN));
-                }));
+//        Grant grant = this.procedure.getGrant();
+//
+//        contents.fill(ClickableItem.empty(ItemStack.of(Material.GRAY_STAINED_GLASS_PANE).withDisplayName(Component.empty())));
+//
+//        contents.setSlot(10, ClickableItem.of(ItemStack.of(Material.LIME_CONCRETE)
+//                        .withDisplayName(MC.Style.component("Promoted", MC.CC.GREEN)),
+//                event -> {
+//                    grant.setAddedReason("Promoted");
+//                    procedure.setGrant(grant);
+//
+//                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
+//
+//                    new GrantConfirmMenu(player, procedure);
+//                }));
+//
+//        contents.setSlot(12, ClickableItem.of(ItemStack.of(Material.YELLOW_CONCRETE)
+//                        .withDisplayName(MC.Style.component("Demoted", MC.CC.YELLOW)),
+//                event -> {
+//                    grant.setAddedReason("Demoted");
+//                    procedure.setGrant(grant);
+//
+//                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
+//
+//                    new GrantConfirmMenu(player, procedure);
+//                }));
+//
+//        contents.setSlot(14, ClickableItem.of(ItemStack.of(Material.ORANGE_CONCRETE)
+//                        .withDisplayName(MC.Style.component("Granted", MC.CC.GOLD)),
+//                event -> {
+//
+//                    grant.setAddedReason("Granted");
+//                    procedure.setGrant(grant);
+//
+//                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
+//
+//                    new GrantConfirmMenu(player, procedure);
+//                }));
+//
+//        contents.setSlot(16, ClickableItem.of(ItemStack.of(Material.RED_CONCRETE)
+//                        .withDisplayName(MC.Style.component("Custom", MC.CC.RED)),
+//                event -> {
+//                    procedure.setGrant(grant);
+//
+//                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
+//
+//                    player.closeInventory();
+//                    player.sendMessage(MC.Style.component("Type a reason for adding this grant in chat...", MC.CC.GREEN));
+//                }));
 
     }
 

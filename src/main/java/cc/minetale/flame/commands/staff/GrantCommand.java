@@ -21,13 +21,9 @@ public class GrantCommand extends Command {
         setCondition(Conditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
 
-        var player = ArgumentType.Word("player").setSuggestionCallback((commandSender, context, suggestion) -> {
-            for(var onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-                suggestion.addEntry(new SuggestionEntry(onlinePlayer.getUsername()));
-            }
-        });
+        var targets = ArgumentType.Entity("targets").onlyPlayers(true);
 
-        addSyntax(this::onGrantCommand, player);
+        addSyntax(this::onGrantCommand, targets);
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {

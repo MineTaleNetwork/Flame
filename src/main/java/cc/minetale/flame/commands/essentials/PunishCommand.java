@@ -39,7 +39,7 @@ public class PunishCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(MC.Chat.notificationMessage("Grant", Component.text("Usage: /punish <player>", MC.CC.GRAY.getTextColor())));
+        sender.sendMessage(MC.Chat.notificationMessage("Punish", Component.text("Usage: /punish <player>", MC.CC.GRAY.getTextColor())));
     }
 
     private void onPunishCommand(CommandSender sender, CommandContext context) {

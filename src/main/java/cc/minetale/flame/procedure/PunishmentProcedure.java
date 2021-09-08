@@ -2,8 +2,13 @@ package cc.minetale.flame.procedure;
 
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.punishment.Punishment;
+import cc.minetale.commonlib.util.MC;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;
@@ -46,17 +51,21 @@ public class PunishmentProcedure {
     }
 
     public void cancel() {
+        Player player = MinecraftServer.getConnectionManager().getPlayer(this.issuer);
+
+        if(player != null)
+            player.sendMessage(Component.text("Cancelled the punishment procedure.", MC.CC.RED.getTextColor()));
+
         procedures.remove(this.issuer);
     }
 
+    @Getter
     public static final class Builder {
         private UUID player;
         private Punishment.Type type;
         private UUID addedBy;
         private String reason;
         private long duration;
-
-        private Builder() {}
 
         public PunishmentProcedure.Builder player(UUID player) {
             this.player = player;

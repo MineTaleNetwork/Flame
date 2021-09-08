@@ -3,8 +3,12 @@ package cc.minetale.flame.chat;
 import cc.minetale.commonlib.modules.grant.Grant;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.flame.menu.grant.GrantConfirmMenu;
+import cc.minetale.flame.menu.grant.GrantDeleteMenu;
 import cc.minetale.flame.menu.grant.GrantReasonMenu;
+import cc.minetale.flame.menu.punishment.PunishmentConfirmMenu;
+import cc.minetale.flame.menu.punishment.PunishmentReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
+import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.mlib.util.ProfileUtil;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.rank.Rank;
@@ -45,6 +49,13 @@ public class Chat {
 
             if (grantProcedure != null) {
                 handleGrantProcedure(grantProcedure, player, message);
+                return;
+            }
+
+            PunishmentProcedure punishmentProcedure = PunishmentProcedure.getByPlayer(profile.getId());
+
+            if (punishmentProcedure != null) {
+                handlePunishmentProcedure(punishmentProcedure, player, message);
                 return;
             }
 //
@@ -100,64 +111,74 @@ public class Chat {
                 .build();
     }
 
-    private static void handleGrantProcedure(GrantProcedure procedure, Player player, String message) {
-        UUID uuid = player.getUuid();
-
-        if (procedure.getStage() == GrantProcedure.Stage.PROVIDE_REASON && procedure.getType() == GrantProcedure.Type.REMOVE) {
-            if (message.equalsIgnoreCase("cancel")) {
-                GrantProcedure.getProcedures().remove(uuid);
-                player.sendMessage(Component.text("You have cancelled the grant removal procedure.")
-                        .color(MC.CC.RED.getTextColor()));
-                return;
-            }
-
-            // TODO
-//            new DeleteGrantMenu(player, procedure, content);
-        }
-
-        if (procedure.getStage() == GrantProcedure.Stage.PROVIDE_TIME && procedure.getType() == GrantProcedure.Type.ADD) {
-            if (message.equalsIgnoreCase("cancel")) {
-                GrantProcedure.getProcedures().remove(uuid);
-                player.sendMessage(Component.text("You have cancelled the grant procedure.")
-                        .color(MC.CC.RED.getTextColor()));
-                return;
-            }
-
-            Duration duration = Duration.fromString(message);
-
-            if (duration.getValue() == -1) {
-                procedure.cancel();
-                player.sendMessage(Component.text("That duration is not valid. Canceling grant procedure.")
-                        .color(MC.CC.RED.getTextColor()));
-                player.sendMessage(Component.text("Example: [perm/1y1m1w1d]")
-                        .color(MC.CC.RED.getTextColor()));
-            } else {
-                Grant grant = procedure.getGrant();
-
-                grant.setDuration(duration.getValue());
-                procedure.setGrant(grant);
-                procedure.setStage(GrantProcedure.Stage.PROVIDE_REASON);
-
-                new GrantReasonMenu(player, procedure);
-            }
+    private static void handlePunishmentProcedure(PunishmentProcedure procedure, Player player, String message) {
+        if (message.equalsIgnoreCase("cancel")) {
+            procedure.cancel();
             return;
         }
 
-        if (procedure.getStage() == GrantProcedure.Stage.PROVIDE_REASON && procedure.getType() == GrantProcedure.Type.ADD) {
-            if (message.equalsIgnoreCase("cancel")) {
-                GrantProcedure.getProcedures().remove(uuid);
-                player.sendMessage(Component.text("You have cancelled the grant procedure.")
-                        .color(MC.CC.RED.getTextColor()));
-                return;
+        switch (procedure.getStage()) {
+            case PROVIDE_TIME: {
+                long duration = Duration.fromString(message).getValue();
+
+                if (duration == -1) {
+                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1d]", MC.CC.RED.getTextColor()));
+                    procedure.cancel();
+                } else {
+                    procedure.getBuilder().duration(duration);
+                    procedure.setStage(PunishmentProcedure.Stage.PROVIDE_REASON);
+
+                    new PunishmentReasonMenu(player, procedure);
+                }
+                break;
             }
+            case PROVIDE_REASON: {
+                procedure.getBuilder().reason(message);
+                procedure.setStage(PunishmentProcedure.Stage.PROVIDE_CONFIRMATION);
+                new PunishmentConfirmMenu(player, procedure);
+                break;
+            }
+        }
+    }
 
-            Grant grant = procedure.getGrant();
+    private static void handleGrantProcedure(GrantProcedure procedure, Player player, String message) {
+        UUID uuid = player.getUuid();
 
-            grant.setAddedReason(message);
-            procedure.setGrant(grant);
-            procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
+        if (message.equalsIgnoreCase("cancel")) {
+            GrantProcedure.getProcedures().remove(uuid);
+            player.sendMessage(Component.text("You have cancelled the grant removal procedure.")
+                    .color(MC.CC.RED.getTextColor()));
+            return;
+        }
 
-            new GrantConfirmMenu(player, procedure);
+        switch (procedure.getStage()) {
+            case PROVIDE_TIME: {
+                long duration = Duration.fromString(message).getValue();
+
+                if (duration == -1) {
+                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1d]", MC.CC.RED.getTextColor()));
+                    procedure.cancel();
+                } else {
+                    procedure.getBuilder().duration(duration);
+                    procedure.setStage(GrantProcedure.Stage.PROVIDE_REASON);
+
+                    new GrantReasonMenu(player, procedure);
+                }
+                break;
+            }
+            case PROVIDE_REASON: {
+                procedure.getBuilder().reason(message);
+                procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
+
+                switch (procedure.getType()) {
+                    case ADD:
+                        new GrantConfirmMenu(player, procedure);
+                        break;
+                    case REMOVE:
+                        new GrantDeleteMenu(player, procedure);
+                        break;
+                }
+            }
         }
     }
 

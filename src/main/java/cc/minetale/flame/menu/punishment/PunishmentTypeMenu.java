@@ -1,14 +1,11 @@
 package cc.minetale.flame.menu.punishment;
 
-import cc.minetale.commonlib.modules.grant.Grant;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.punishment.Punishment;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.commands.RankUtil;
-import cc.minetale.flame.menu.grant.GrantDurationMenu;
-import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.flame.util.MenuUtils;
@@ -16,14 +13,11 @@ import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
 import cc.minetale.mlib.fabric.content.FabricProvider;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 public class PunishmentTypeMenu implements FabricProvider {
@@ -79,6 +73,7 @@ public class PunishmentTypeMenu implements FabricProvider {
             builder.type(type);
 
             FlameUtil.playClickSound(player);
+
             new PunishmentDurationMenu(player, procedure);
         } else {
             FlameUtil.playErrorSound(player);

@@ -19,8 +19,6 @@ public class ClearChatCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        if (sender.isConsole())
-            return;
 
         Player player = sender.asPlayer();
         Rank rank = Rank.getRank("Mod");

@@ -1,9 +1,10 @@
 package cc.minetale.flame.util;
 
 import cc.minetale.commonlib.modules.punishment.Punishment;
+import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
-import cc.minetale.mlib.fabric.ClickableItem;
+import cc.minetale.flame.commands.RankUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.kyori.adventure.key.Key;
@@ -12,9 +13,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.entity.Player;
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.Arrays;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class FlameUtil {
 
     public static void playClickSound(Player player) {
-        player.playSound(Sound.sound(Key.key("ui.button.click"), Sound.Source.MASTER, 1F, 2.0F));
+        player.playSound(Sound.sound(Key.key("minecraft:ui.button.click"), Sound.Source.MASTER, 1F, 2.0F));
     }
 
     public static void playErrorSound(Player player) {
@@ -81,6 +82,18 @@ public class FlameUtil {
         return CHAT_CONCRETE_COLOR_MAP.get(color);
     }
 
+    public static void broadcast(Rank rank, Component... messages) {
+        for(Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            RankUtil.hasMinimumRank(player, rank, rankCallback -> {
+                if(!rankCallback.isMinimum())
+                    return;
+
+                for(Component component : messages) {
+                    player.sendMessage(component);
+                }
+            });
+        }
+    }
 
     public static TextColor getPunishmentColor(Punishment punishment) {
         switch (punishment.getType()) {

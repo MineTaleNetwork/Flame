@@ -18,12 +18,12 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
-public class GrantConfirmMenu implements FabricProvider {
+public class GrantDeleteMenu implements FabricProvider {
 
     private final FabricInventory inventory;
     private final GrantProcedure procedure;
 
-    public GrantConfirmMenu(Player player, GrantProcedure procedure) {
+    public GrantDeleteMenu(Player player, GrantProcedure procedure) {
         this.procedure = procedure;
         this.inventory = FabricInventory.builder()
                 .provider(this)
@@ -56,6 +56,7 @@ public class GrantConfirmMenu implements FabricProvider {
             contents.setSlot(i, ClickableItem.of(ItemStack.of(Material.RED_CONCRETE)
                             .withDisplayName(MC.Style.component("Cancel Grant Procedure", MC.CC.RED)),
                     event -> {
+
                         procedure.cancel();
                         inventory.close(player);
 

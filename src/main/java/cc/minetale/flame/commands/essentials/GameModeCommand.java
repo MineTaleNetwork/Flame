@@ -24,8 +24,10 @@ public class GameModeCommand extends Command {
         super("gamemode", "gm");
         setCondition(Conditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
+
         var gamemode = ArgumentType.Enum("gamemode", GameMode.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
         var targets = ArgumentType.Entity("targets").onlyPlayers(true);
+
         setArgumentCallback(this::onGamemodeError, gamemode);
         addSyntax(this::onGamemodeSelfCommand, gamemode);
         addSyntax(this::onGamemodeOthersCommand, gamemode, targets);
