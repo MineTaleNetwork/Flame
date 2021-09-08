@@ -50,6 +50,7 @@ public class Flame extends Extension {
                 new PingCommand(),
                 new StopCommand(),
                 new ExtensionsCommand(),
+                new ListCommand(),
                 new RankCommand(),
                 new GrantCommand(),
                 new PunishCommand()
