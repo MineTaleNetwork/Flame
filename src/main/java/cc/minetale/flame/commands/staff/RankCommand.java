@@ -4,6 +4,7 @@ import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankReloadPayload;
 import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankRemovePayload;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.PigeonUtil;
 import cc.minetale.flame.commands.RankUtil;
 import cc.minetale.flame.menu.RanksMenu;
 import cc.minetale.mlib.mLib;
@@ -50,8 +51,8 @@ public class RankCommand extends Command {
         }
 
         private void onRankCreateCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, Rank.getRank("Owner"), commandCallback -> {
-                if (!commandCallback.isMinimum())
+            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
+                if (!true)
                     return;
 
                 String rankName = context.get("rank");
@@ -71,7 +72,7 @@ public class RankCommand extends Command {
                                 Component.text(" rank.", MC.CC.GRAY.getTextColor())
                         ).build()));
 
-                mLib.getMLib().getPigeon().broadcast(new RankReloadPayload(rank));
+                PigeonUtil.broadcast(new RankReloadPayload(rank));
             });
         }
     }
@@ -96,8 +97,8 @@ public class RankCommand extends Command {
         }
 
         private void onRankDeleteCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, Rank.getRank("Owner"), commandCallback -> {
-                if (!commandCallback.isMinimum())
+            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
+                if (!true)
                     return;
 
                 String rankName = context.get("rank");
@@ -114,7 +115,7 @@ public class RankCommand extends Command {
                                     Component.text(" rank.", MC.CC.GRAY.getTextColor())
                             ).build()));
 
-                    mLib.getMLib().getPigeon().broadcast(new RankRemovePayload(rank.getUuid()));
+                    PigeonUtil.broadcast(new RankRemovePayload(rank.getUuid()));
                 } else {
                     sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A rank with that name could not be found.", MC.CC.GRAY.getTextColor())));
                 }
@@ -130,8 +131,8 @@ public class RankCommand extends Command {
         }
 
         private void defaultExecutor(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, Rank.getRank("Owner"), commandCallback -> {
-                if (!commandCallback.isMinimum())
+            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
+                if (!true)
                     return;
 
                 new RanksMenu(sender.asPlayer());
@@ -161,8 +162,8 @@ public class RankCommand extends Command {
         }
 
         private void onRankSetColorCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, Rank.getRank("Owner"), commandCallback -> {
-                if (!commandCallback.isMinimum())
+            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
+                if (!true)
                     return;
 
                 String rankName = context.get("rank");
@@ -186,7 +187,7 @@ public class RankCommand extends Command {
                                         Component.text(color.toString(), color.getTextColor())
                                 ).build()));
 
-                        mLib.getMLib().getPigeon().broadcast(new RankReloadPayload(rank));
+                        PigeonUtil.broadcast(new RankReloadPayload(rank));
                     } catch (IllegalArgumentException e) {
                         sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A color with that name could not be found.", MC.CC.GRAY.getTextColor())));
                     }
@@ -225,8 +226,8 @@ public class RankCommand extends Command {
         }
 
         private void onRankSetWeightCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, Rank.getRank("Owner"), commandCallback -> {
-                if (!commandCallback.isMinimum())
+            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
+                if (!true)
                     return;
 
                 String rankName = context.get("rank");
@@ -246,7 +247,7 @@ public class RankCommand extends Command {
                                     Component.text(rankWeight, MC.CC.GOLD.getTextColor())
                             ).build()));
 
-                    mLib.getMLib().getPigeon().broadcast(new RankReloadPayload(rank));
+                    PigeonUtil.broadcast(new RankReloadPayload(rank));
                 } else {
                     sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A rank with that name could not be found.", MC.CC.GRAY.getTextColor())));
                 }
@@ -276,8 +277,8 @@ public class RankCommand extends Command {
         }
 
         private void onRankSetPrefixCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, Rank.getRank("Owner"), commandCallback -> {
-                if (!commandCallback.isMinimum())
+            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
+                if (!true)
                     return;
 
                 String rankName = context.get("rank");
@@ -297,7 +298,7 @@ public class RankCommand extends Command {
                                     MC.Style.fromLegacy(rank.getPrefix())
                             ).build()));
 
-                    mLib.getMLib().getPigeon().broadcast(new RankReloadPayload(rank));
+                    PigeonUtil.broadcast(new RankReloadPayload(rank));
                 } else {
                     sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A rank with that name could not be found.", MC.CC.GRAY.getTextColor())));
                 }

@@ -25,8 +25,8 @@ public class StopCommand extends Command {
 
         Player player = sender.asPlayer();
 
-        RankUtil.canUseCommand(player, Rank.getRank("Owner"), commandCallback -> {
-            if (!commandCallback.isMinimum())
+        RankUtil.canUseCommand(player, "Owner", commandCallback -> {
+            if (!true)
                 return;
 
             this.execute();

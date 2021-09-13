@@ -29,7 +29,7 @@ public class PunishmentTypeMenu implements FabricProvider {
         this.inventory = FabricInventory.builder()
                 .provider(this)
                 .type(InventoryType.CHEST_3_ROW)
-                .title(MC.Style.component("Select a Punishment Type"))
+                .title(MC.component("Select a Punishment Type"))
                 .build();
         this.offender = offender;
         this.inventory.open(player);
@@ -40,26 +40,26 @@ public class PunishmentTypeMenu implements FabricProvider {
         contents.fill(MenuUtils.FILLER);
 
         contents.setSlot(10, ClickableItem.empty(ItemStack.of(Material.RED_CONCRETE)
-                .withDisplayName(MC.Style.component("Blacklist", MC.CC.GRAY))));
+                .withDisplayName(MC.component("Blacklist", MC.CC.GRAY))));
 
-        RankUtil.hasMinimumRank(player, Rank.getRank("Owner"), rankCallback -> {
-            if (rankCallback.isMinimum()) {
+        RankUtil.hasMinimumRank(player, "Owner", rankCallback -> {
+            if (rankCallback.isEligible()) {
                 contents.setSlot(10, ClickableItem.of(ItemStack.of(Material.RED_CONCRETE)
-                                .withDisplayName(MC.Style.component("Blacklist", MC.CC.GRAY)),
+                                .withDisplayName(MC.component("Blacklist", MC.CC.GRAY)),
                         event -> this.selectType(event.getPlayer(), Punishment.Type.BLACKLIST)));
             }
         });
 
         contents.setSlot(12, ClickableItem.of(ItemStack.of(Material.YELLOW_CONCRETE)
-                        .withDisplayName(MC.Style.component("Ban", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("Ban", MC.CC.GRAY)),
                 event -> this.selectType(event.getPlayer(), Punishment.Type.BAN)));
 
         contents.setSlot(14, ClickableItem.of(ItemStack.of(Material.LIME_CONCRETE)
-                        .withDisplayName(MC.Style.component("Mute", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("Mute", MC.CC.GRAY)),
                 event -> this.selectType(event.getPlayer(), Punishment.Type.MUTE)));
 
         contents.setSlot(16, ClickableItem.of(ItemStack.of(Material.LIGHT_BLUE_CONCRETE)
-                        .withDisplayName(MC.Style.component("Warn", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("Warn", MC.CC.GRAY)),
                 event -> this.selectType(event.getPlayer(), Punishment.Type.WARN)));
     }
 

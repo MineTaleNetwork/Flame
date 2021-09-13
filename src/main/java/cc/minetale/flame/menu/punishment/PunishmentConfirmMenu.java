@@ -27,7 +27,7 @@ public class PunishmentConfirmMenu implements FabricProvider {
         this.inventory = FabricInventory.builder()
                 .provider(this)
                 .type(InventoryType.HOPPER)
-                .title(MC.Style.component("Please confirm the Punishment"))
+                .title(MC.component("Please confirm the Punishment"))
                 .build();
         this.procedure = procedure;
         this.inventory.open(player);
@@ -41,19 +41,19 @@ public class PunishmentConfirmMenu implements FabricProvider {
         String durationString = duration == Integer.MAX_VALUE ? "Permanent" : TimeUtil.millisToRoundedTime(duration);
 
         contents.setSlot(2, ClickableItem.of(ItemStack.of(Material.EMERALD)
-                .withDisplayName(MC.Style.component("Confirm this Punishment", MC.CC.GREEN))
+                .withDisplayName(MC.component("Confirm this Punishment", MC.CC.GREEN))
                 .withLore(Arrays.asList(
                         Component.text().append(
-                                MC.Style.component("Type: ", MC.CC.WHITE),
-                                MC.Style.component(this.procedure.getBuilder().getType().toString(), MC.CC.GRAY)
+                                MC.component("Type: ", MC.CC.WHITE),
+                                MC.component(this.procedure.getBuilder().getType().toString(), MC.CC.GRAY)
                         ).build(),
                         Component.text().append(
-                                MC.Style.component("Time: ", MC.CC.WHITE),
-                                MC.Style.component(durationString, MC.CC.GRAY)
+                                MC.component("Time: ", MC.CC.WHITE),
+                                MC.component(durationString, MC.CC.GRAY)
                         ).build(),
                         Component.text().append(
-                                MC.Style.component("Reason: ", MC.CC.WHITE),
-                                MC.Style.component(this.procedure.getBuilder().getReason(), MC.CC.GRAY)
+                                MC.component("Reason: ", MC.CC.WHITE),
+                                MC.component(this.procedure.getBuilder().getReason(), MC.CC.GRAY)
                         ).build())),
                 event -> {
             Profile profile = this.procedure.getRecipient();

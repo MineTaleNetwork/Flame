@@ -31,8 +31,8 @@ public class GrantCommand extends Command {
     }
 
     private void onGrantCommand(CommandSender sender, CommandContext context) {
-        RankUtil.canUseCommand(sender, Rank.getRank("Owner"), commandCallback -> {
-            if (!commandCallback.isMinimum())
+        RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
+            if (!true)
                 return;
 
             String playerName = context.get("player");

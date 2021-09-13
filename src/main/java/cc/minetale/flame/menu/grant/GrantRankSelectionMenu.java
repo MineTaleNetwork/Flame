@@ -58,15 +58,15 @@ public class GrantRankSelectionMenu implements FabricProvider {
             MC.CC color = rank.api().getRankColor();
 
             items[i] = ClickableItem.of(ItemStack.of(FlameUtil.toConcrete(color))
-                            .withDisplayName(MC.Style.component(rank.getName(), color))
+                            .withDisplayName(MC.component(rank.getName(), color))
                             .withLore(
                                     Arrays.asList(
                                             MC.Style.SEPARATOR_50,
                                             Component.text()
                                                     .append(
-                                                            MC.Style.component("Click to grant ", MC.CC.GRAY),
-                                                            MC.Style.component(rank.getName(), color),
-                                                            MC.Style.component(" to ", MC.CC.GRAY),
+                                                            MC.component("Click to grant ", MC.CC.GRAY),
+                                                            MC.component(rank.getName(), color),
+                                                            MC.component(" to ", MC.CC.GRAY),
                                                             MC.Style.fixItalics(this.profile.api().getColoredName())
                                                     ).build(),
                                             MC.Style.SEPARATOR_50
@@ -95,8 +95,8 @@ public class GrantRankSelectionMenu implements FabricProvider {
         contents.setSlot(39, ClickableItem.of(ItemStack.of(Material.GRAY_CARPET)
                         .withDisplayName(Component.text()
                                 .append(
-                                        MC.Style.component("< ", MC.CC.DARK_GRAY, TextDecoration.BOLD),
-                                        MC.Style.component("Previous Page", MC.CC.GRAY)
+                                        MC.component("< ", MC.CC.DARK_GRAY, TextDecoration.BOLD),
+                                        MC.component("Previous Page", MC.CC.GRAY)
                                 ).build()),
                 event -> {
                     this.inventory.open(player, pagination.previous().getPage());
@@ -106,8 +106,8 @@ public class GrantRankSelectionMenu implements FabricProvider {
         contents.setSlot(41, ClickableItem.of(ItemStack.of(Material.GRAY_CARPET)
                         .withDisplayName(Component.text()
                                 .append(
-                                        MC.Style.component("Next Page", MC.CC.GRAY),
-                                        MC.Style.component(" >", MC.CC.DARK_GRAY, TextDecoration.BOLD)
+                                        MC.component("Next Page", MC.CC.GRAY),
+                                        MC.component(" >", MC.CC.DARK_GRAY, TextDecoration.BOLD)
                                 ).build()),
                 event -> {
                     this.inventory.open(player, pagination.next().getPage());
@@ -124,7 +124,7 @@ public class GrantRankSelectionMenu implements FabricProvider {
     }
 
     public void setTitle(Inventory inventory, Pagination pagination) {
-        inventory.setTitle(MC.Style.component("Ranks (" + (pagination.getPage() + 1) + "/" + pagination.getPageCount() + ")"));
+        inventory.setTitle(MC.component("Ranks (" + (pagination.getPage() + 1) + "/" + pagination.getPageCount() + ")"));
     }
 
 }

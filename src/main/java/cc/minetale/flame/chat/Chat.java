@@ -100,7 +100,7 @@ public class Chat {
     }
 
     public static TextComponent formatChat(Profile profile, String message) {
-        Rank rank = profile.api().getActiveGrant().api().getRank();
+        Rank rank = profile.getGrant().api().getRank();
         Color color = rank.api().getRankColor().getColor();
 
         return Component.text()

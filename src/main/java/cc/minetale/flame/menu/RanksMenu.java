@@ -50,21 +50,21 @@ public class RanksMenu implements FabricProvider {
             MC.CC color = rank.api().getRankColor();
 
             items[i] = ClickableItem.empty(ItemStack.of(FlameUtil.toConcrete(color))
-                    .withDisplayName(MC.Style.component(rank.getName(), color))
+                    .withDisplayName(MC.component(rank.getName(), color))
                     .withLore(
                             Arrays.asList(
                                     MC.Style.SEPARATOR_32,
                                     Component.text().append(
-                                            MC.Style.component("Weight: ", MC.CC.GRAY),
-                                            MC.Style.component(String.valueOf(rank.getWeight()), color)
+                                            MC.component("Weight: ", MC.CC.GRAY),
+                                            MC.component(String.valueOf(rank.getWeight()), color)
                                     ).build(),
                                     Component.text().append(
-                                            MC.Style.component("Prefix: ", MC.CC.GRAY),
+                                            MC.component("Prefix: ", MC.CC.GRAY),
                                             MC.Style.fixItalics(MC.Style.fromLegacy(rank.getPrefix()))
                                     ).build(),
                                     Component.text().append(
-                                            MC.Style.component("Color: ", MC.CC.GRAY),
-                                            MC.Style.component(color.getName().toUpperCase(), color)
+                                            MC.component("Color: ", MC.CC.GRAY),
+                                            MC.component(color.getName().toUpperCase(), color)
                                     ).build(),
                                     MC.Style.SEPARATOR_32
                             )

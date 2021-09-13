@@ -22,7 +22,7 @@ public class PunishmentMenu implements FabricProvider {
         this.inventory = FabricInventory.builder()
                 .provider(this)
                 .type(InventoryType.CHEST_3_ROW)
-                .title(MC.Style.component("Punish " + offender.getName()))
+                .title(MC.component("Punish " + offender.getName()))
                 .build();
         this.offender = offender;
         this.inventory.open(player);
@@ -33,7 +33,7 @@ public class PunishmentMenu implements FabricProvider {
         contents.fill(MenuUtils.FILLER);
 
         contents.setSlot(13, ClickableItem.of(ItemStack.of(Material.ANVIL)
-                .withDisplayName(MC.Style.component("Punish " + offender.getName(), MC.CC.GRAY)),
+                .withDisplayName(MC.component("Punish " + offender.getName(), MC.CC.GRAY)),
                 event -> {
                     FlameUtil.playClickSound(player);
             new PunishmentTypeMenu(event.getPlayer(), this.offender);

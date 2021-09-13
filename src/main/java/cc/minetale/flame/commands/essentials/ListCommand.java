@@ -32,14 +32,15 @@ public class ListCommand extends Command {
             if (instance == null) {
                 return;
             }
+
             List<Player> sortedPlayers = new ArrayList<>(instance.getPlayers());
 
             sortedPlayers.sort((player1, player2) -> {
                 Profile profile1 = ProfileUtil.getAssociatedProfile(player1, false, false).getNow(null);
-                int weight1 = profile1 != null ? profile1.api().getActiveGrant().api().getRank().getWeight() : 100;
+                int weight1 = profile1 != null ? profile1.getGrant().api().getRank().getWeight() : 100;
 
                 Profile profile2 = ProfileUtil.getAssociatedProfile(player2, false, false).getNow(null);
-                int weight2 = profile2 != null ? profile2.api().getActiveGrant().api().getRank().getWeight() : 100;
+                int weight2 = profile2 != null ? profile2.getGrant().api().getRank().getWeight() : 100;
 
                 return weight1 - weight2;
             });

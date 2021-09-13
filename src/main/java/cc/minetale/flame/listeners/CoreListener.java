@@ -7,7 +7,6 @@ import cc.minetale.commonlib.modules.punishment.Punishment;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
-import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.team.TeamUtils;
 import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.mlib.util.ProfileUtil;
@@ -92,18 +91,17 @@ public class CoreListener implements APIListener {
 
     public void announcePunishment(Profile receiverProfile, Punishment punishment) {
         Profile.getProfile(punishment.getAddedByUUID()).thenAccept(profile -> {
-            Component component = Component.text()
-                    .append(MC.Style.SEPARATOR_80)
-                    .append(MC.Chat.notificationMessage("Punishment", receiverProfile.api().getColoredName()
-                            .append(Component.text(" has been " + punishment.api().getContext() + " by ")
-                                    .color(NamedTextColor.GRAY))
-                            .append(punishment.getAddedByUUID() != null ?
-                                    profile.api().getColoredName() :
-                                    MC.Style.CONSOLE)))
-                    .append(MC.Style.SEPARATOR_80)
-                    .build();
-
-            FlameUtil.broadcast(Rank.getRank("Helper"), component);
+            FlameUtil.broadcast(Rank.getRank("Helper"),
+                    MC.Style.SEPARATOR_80,
+                    MC.Chat.notificationMessage("Punishment",
+                            MC.component(
+                                    receiverProfile.api().getColoredName(),
+                                    MC.component(" has been " + punishment.api().getContext() + " by ", MC.CC.GRAY),
+                                    (punishment.getAddedByUUID() != null ? profile.api().getColoredName() : MC.Style.CONSOLE)
+                            )
+                    ),
+                    MC.Style.SEPARATOR_80
+            );
         });
     }
 

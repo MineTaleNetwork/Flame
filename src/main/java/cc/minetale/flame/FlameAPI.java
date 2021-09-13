@@ -24,7 +24,7 @@ public class FlameAPI {
     public static void refreshPlayers(UUID rank) {
         for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
-                if(profile.api().getActiveGrant().getRankUUID().equals(rank)) {
+                if(profile.getGrant().getRankUUID().equals(rank)) {
                     profile.reloadGrant();
                     TeamUtils.updateTeam(profile.getGrant().api().getRank(), player);
                 }

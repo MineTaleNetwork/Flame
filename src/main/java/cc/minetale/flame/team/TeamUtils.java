@@ -17,7 +17,7 @@ public class TeamUtils {
 
     public static void updateTeam(Player player) {
         ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
-            Rank rank = profile.api().getActiveGrant().api().getRank();
+            Rank rank = profile.getGrant().api().getRank();
 
             Team playerTeam = player.getTeam();
             Team rankTeam = Flame.getFlame().getRankTeams().get(rank.getUuid());

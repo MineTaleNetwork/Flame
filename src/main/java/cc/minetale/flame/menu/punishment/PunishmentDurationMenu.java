@@ -24,7 +24,7 @@ public class PunishmentDurationMenu implements FabricProvider, DurationType {
         this.inventory = FabricInventory.builder()
                 .provider(this)
                 .type(InventoryType.CHEST_4_ROW)
-                .title(MC.Style.component("Select a Punishment Duration"))
+                .title(MC.component("Select a Punishment Duration"))
                 .build();
         this.procedure = procedure;
         this.inventory.open(player);

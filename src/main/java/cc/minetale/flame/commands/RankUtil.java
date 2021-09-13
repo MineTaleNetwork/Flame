@@ -1,9 +1,12 @@
 package cc.minetale.flame.commands;
 
+import cc.minetale.commonlib.modules.grant.Grant;
+import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.mlib.util.ProfileUtil;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 
@@ -11,43 +14,46 @@ import java.util.function.Consumer;
 
 public class RankUtil {
 
-   public static void canUseCommand(CommandSender sender, Rank rank, Consumer<RankCallback> callback) {
-       if(sender.isConsole()) {
-           callback.accept(new RankCallback(null, true, true));
-       } else {
-           Player player = sender.asPlayer();
+//   public static void hasMinimumRank(Player player, String rankName, Consumer<RankCallback> callback) {
+//       ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
+//           Rank rank = Rank.getRank(rankName);
+//
+//           if(rank == null)
+//               throw new RuntimeException(rankName + " is not defined or not loaded.");
+//
+//           if(profile.getGrant().api().getRank().getWeight() > rank.getWeight()) {
+//               callback.accept(new RankCallback(profile, rank, false, false));
+//           } else {
+//               callback.accept(new RankCallback(profile, rank, true, false));
+//           }
+//       });
+//   }
 
-           hasMinimumRank(player, rank, rankCallback -> {
-               if (!rankCallback.isMinimum()) {
-                   if(rank == null) {
-                       player.sendMessage(Component.text("Could not execute command! The required rank does not exist.", MC.CC.RED.getTextColor()));
-                   } else {
-                       player.sendMessage(MC.Chat.notificationMessage("Permission", Component.text()
-                               .append(Component.text("You need rank ", MC.CC.GRAY.getTextColor()))
-                               .append(Component.text(rank.getName(), MC.CC.GOLD.getTextColor()))
-                               .append(Component.text(" to use this command.", MC.CC.GRAY.getTextColor()))
-                               .build()));
-                   }
-               }
+    public static boolean canUseCommand(Profile profile, String rankName) {
+        if(hasMinimumRank(profile, rankName)) {
+            Player player = MinecraftServer.getConnectionManager().getPlayer(profile.getId());
 
-               callback.accept(rankCallback);
-           });
-       }
+            if(player != null)
+                player.sendMessage(MC.Chat.notificationMessage("Permission", Component.text()
+                    .append(Component.text("You need rank ", MC.CC.GRAY.getTextColor()))
+                    .append(Component.text(rankName, MC.CC.GOLD.getTextColor()))
+                    .append(Component.text(" to use this command.", MC.CC.GRAY.getTextColor()))
+                    .build()));
+            return true;
+        } else {
+            return false;
+        }
    }
 
-   public static void hasMinimumRank(Player player, Rank rank, Consumer<RankCallback> callback) {
-       ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
-           if(rank == null) {
-               callback.accept(new RankCallback(profile, false, false));
-               return;
-           }
+    public static boolean hasMinimumRank(Profile profile, String rankName) {
+        Rank rank = Rank.getRank(rankName);
 
-           if(profile.api().getActiveGrant().api().getRank().getWeight() > rank.getWeight()) {
-               callback.accept(new RankCallback(profile, false, false));
-           } else {
-               callback.accept(new RankCallback(profile, true, false));
-           }
-       });
-   }
+        if(rank == null)
+            throw new RuntimeException(rankName + " is not defined or not loaded.");
+
+        Rank playerRank = profile.getGrant().api().getRank();
+
+        return playerRank.getWeight() > rank.getWeight();
+    }
 
 }

@@ -29,8 +29,8 @@ public class MenuUtils {
 
         contents.setSlot(slot, ClickableItem.of(ItemStack.of(Material.GRAY_CARPET)
                         .withDisplayName(Component.text()
-                                .append(MC.Style.component("Next Page", MC.CC.GRAY))
-                                .append(MC.Style.component(" >", MC.CC.DARK_GRAY, TextDecoration.BOLD))
+                                .append(MC.component("Next Page", MC.CC.GRAY))
+                                .append(MC.component(" >", MC.CC.DARK_GRAY, TextDecoration.BOLD))
                                 .build()),
                 event -> {
                     Player player = event.getPlayer();
@@ -54,8 +54,8 @@ public class MenuUtils {
 
         contents.setSlot(slot, ClickableItem.of(ItemStack.of(Material.GRAY_CARPET)
                         .withDisplayName(Component.text()
-                                .append(MC.Style.component("< ", MC.CC.DARK_GRAY, TextDecoration.BOLD))
-                                .append(MC.Style.component("Previous Page", MC.CC.GRAY))
+                                .append(MC.component("< ", MC.CC.DARK_GRAY, TextDecoration.BOLD))
+                                .append(MC.component("Previous Page", MC.CC.GRAY))
                                 .build()),
                 event -> {
                     if (event.getClickType() == ClickType.LEFT_CLICK) {
@@ -80,59 +80,59 @@ public class MenuUtils {
         contents.fill(MenuUtils.FILLER);
 
         contents.setSlot(10, ClickableItem.of(ItemStack.of(Material.RED_DYE)
-                        .withDisplayName(MC.Style.component("5 minutes", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("5 minutes", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("5m"))));
 
         contents.setSlot(11, ClickableItem.of(ItemStack.of(Material.ORANGE_DYE)
-                        .withDisplayName(MC.Style.component("15 minutes", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("15 minutes", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("15m"))));
 
         contents.setSlot(12, ClickableItem.of(ItemStack.of(Material.YELLOW_DYE)
-                        .withDisplayName(MC.Style.component("30 minutes", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("30 minutes", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("30m"))));
 
         contents.setSlot(13, ClickableItem.of(ItemStack.of(Material.LIME_DYE)
-                        .withDisplayName(MC.Style.component("1 hour", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("1 hour", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("1h"))));
 
         contents.setSlot(14, ClickableItem.of(ItemStack.of(Material.GREEN_DYE)
-                        .withDisplayName(MC.Style.component("12 hours", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("12 hours", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("12h"))));
 
         contents.setSlot(15, ClickableItem.of(ItemStack.of(Material.CYAN_DYE)
-                        .withDisplayName(MC.Style.component("1 day", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("1 day", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("1d"))));
 
         contents.setSlot(16, ClickableItem.of(ItemStack.of(Material.LIGHT_BLUE_DYE)
-                        .withDisplayName(MC.Style.component("1 week", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("1 week", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("1w"))));
 
         contents.setSlot(19, ClickableItem.of(ItemStack.of(Material.BLUE_DYE)
-                        .withDisplayName(MC.Style.component("1 month", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("1 month", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("1M"))));
 
         contents.setSlot(20, ClickableItem.of(ItemStack.of(Material.PURPLE_DYE)
-                        .withDisplayName(MC.Style.component("3 months", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("3 months", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("3M"))));
 
         contents.setSlot(21, ClickableItem.of(ItemStack.of(Material.MAGENTA_DYE)
-                        .withDisplayName(MC.Style.component("6 months", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("6 months", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("6M"))));
 
         contents.setSlot(22, ClickableItem.of(ItemStack.of(Material.BLACK_DYE)
-                        .withDisplayName(MC.Style.component("9 months", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("9 months", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("9M"))));
 
         contents.setSlot(23, ClickableItem.of(ItemStack.of(Material.GRAY_DYE)
-                        .withDisplayName(MC.Style.component("1 year", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("1 year", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("1y"))));
 
         contents.setSlot(24, ClickableItem.of(ItemStack.of(Material.LIGHT_GRAY_DYE)
-                        .withDisplayName(MC.Style.component("Permanent", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("Permanent", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, Duration.fromString("perm"))));
 
         contents.setSlot(25, ClickableItem.of(ItemStack.of(Material.WHITE_DYE)
-                        .withDisplayName(MC.Style.component("Custom", MC.CC.GRAY)),
+                        .withDisplayName(MC.component("Custom", MC.CC.GRAY)),
                 event -> durationType.selectDuration(player, null)));
     }
 

@@ -46,8 +46,8 @@ public class GameModeCommand extends Command {
     private void onGamemodeSelfCommand(CommandSender sender, CommandContext context) {
         Player player = sender.asPlayer();
 
-        RankUtil.canUseCommand(player, Rank.getRank("Admin"), commandCallback -> {
-            if (!commandCallback.isMinimum())
+        RankUtil.canUseCommand(player, "Admin", commandCallback -> {
+            if (!true)
                 return;
 
             GameMode mode = context.get("gamemode");
@@ -57,8 +57,8 @@ public class GameModeCommand extends Command {
     }
 
     private void onGamemodeOthersCommand(CommandSender sender, CommandContext context) {
-        RankUtil.canUseCommand(sender.asPlayer(), Rank.getRank("Admin"), commandCallback -> {
-            if (!commandCallback.isMinimum())
+        RankUtil.canUseCommand(sender.asPlayer(), "Admin", commandCallback -> {
+            if (!true)
                 return;
 
             GameMode mode = context.get("gamemode");

@@ -58,7 +58,7 @@ public class PlayerListener {
 
                     if (event.isFirstSpawn())
                         ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
-                            Rank rank = profile.api().getActiveGrant().api().getRank();
+                            Rank rank = profile.getGrant().api().getRank();
 
                             Team team = Flame.getFlame().getRankTeams().get(rank.getUuid());
 

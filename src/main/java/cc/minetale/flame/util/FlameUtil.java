@@ -85,7 +85,7 @@ public class FlameUtil {
     public static void broadcast(Rank rank, Component... messages) {
         for(Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             RankUtil.hasMinimumRank(player, rank, rankCallback -> {
-                if(!rankCallback.isMinimum())
+                if(!rankCallback.isEligible())
                     return;
 
                 for(Component component : messages) {

@@ -1,8 +1,13 @@
 package cc.minetale.flame;
 
 import cc.minetale.commonlib.CommonLib;
+import cc.minetale.commonlib.modules.network.Gamemode;
+import cc.minetale.commonlib.modules.pigeon.payloads.atom.AtomOnlinePlayerCountPayload;
+import cc.minetale.commonlib.modules.pigeon.payloads.atom.AtomPlayerRequestPayload;
+import cc.minetale.commonlib.modules.pigeon.payloads.network.ServerUpdatePayload;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.PigeonUtil;
 import cc.minetale.flame.chat.ChatFilter;
 import cc.minetale.flame.commands.essentials.*;
 import cc.minetale.flame.commands.staff.ClearChatCommand;
@@ -12,33 +17,46 @@ import cc.minetale.flame.listeners.CoreListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.pigeon.Listeners;
 import cc.minetale.flame.team.TeamUtils;
+import cc.minetale.mlib.config.mLibConfig;
 import cc.minetale.mlib.mLib;
+import cc.minetale.mlib.util.PlayerUtil;
 import cc.minetale.pigeon.Converter;
 import cc.minetale.pigeon.Pigeon;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.extensions.Extension;
+import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.scoreboard.Team;
+import net.minestom.server.timer.SchedulerManager;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
+import java.lang.management.ManagementFactory;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class Flame extends Extension {
 
     @Getter private static Flame flame;
+
+    private final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
+
     private Map<UUID, Team> rankTeams;
+
+    private int globalPlayers = 0;
 
     @Override
     public void initialize() {
         flame = this;
+
+        MinecraftServer.getUpdateManager().addTickMonitor(LAST_TICK::set);
 
         this.rankTeams = new ConcurrentHashMap<>();
 
@@ -56,19 +74,41 @@ public class Flame extends Extension {
                 new PunishCommand()
         ).forEach(command -> MinecraftServer.getCommandManager().register(command));
 
-        mLib mlib = mLib.getMLib();
+        CommonLib commonLib = CommonLib.getCommonLib();
 
-        mlib.getCommonLib().getApiListeners()
+        commonLib.getApiListeners()
                 .add(new CoreListener());
 
-        mlib.getPigeon().getListenersRegistry()
+        commonLib.getPigeon().getListenersRegistry()
                 .registerListener(new Listeners());
 
-        for(Converter<?> converter : mlib.getPigeon().getConvertersRegistry().getConverters()) {
-            System.out.println(converter.toString());
-        }
-
         MinecraftServer.getGlobalEventHandler().addChild(events());
+
+        SchedulerManager scheduler = MinecraftServer.getSchedulerManager();
+
+        /* Server Update Task */
+        scheduler.buildTask(() -> {
+            mLib lib = mLib.getMLib();
+            mLibConfig config = lib.getConfig();
+
+            List<String> players = PlayerUtil.getNames(MinecraftServer.getConnectionManager().getOnlinePlayers());
+
+            PigeonUtil.broadcast(new ServerUpdatePayload(
+                    config.getName(),
+                    Gamemode.getByName(config.getType()),
+                    ManagementFactory.getRuntimeMXBean().getUptime(),
+                    this.LAST_TICK.get().getTickTime(),
+                    players,
+                    mLib.getMLib().getConfig().getMaxPlayers()
+            ));
+        }).repeat(3, ChronoUnit.SECONDS).schedule();
+
+        /* Retrieve Online Players */
+        scheduler.buildTask(() -> {
+            PigeonUtil.broadcast(new AtomOnlinePlayerCountPayload(callback -> {
+                this.globalPlayers = callback.getPlayers();
+            }));
+        }).repeat(5, ChronoUnit.SECONDS).schedule();
 
         this.updateTeams();
     }

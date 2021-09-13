@@ -55,10 +55,10 @@ public class Listeners implements Listener {
         Profile.getProfile(payload.getTarget()).thenAccept(targetProfile -> {
             if(targetProfile == null) { return; }
             initiator.sendMessage(
-                    MC.Style.component(
-                            MC.Style.component("(To ", MC.CC.GRAY),
+                    MC.component(
+                            MC.component("(To ", MC.CC.GRAY),
                             targetProfile.api().getChatFormat(),
-                            MC.Style.component(") " + payload.getMessage(), MC.CC.GRAY)
+                            MC.component(") " + payload.getMessage(), MC.CC.GRAY)
                     )
             );
         });
@@ -73,10 +73,10 @@ public class Listeners implements Listener {
                 .thenAccept(initiatorProfile -> {
                     if(initiatorProfile == null) { return; }
                     target.sendMessage(
-                            MC.Style.component(
-                                    MC.Style.component("(From ", MC.CC.GRAY),
+                            MC.component(
+                                    MC.component("(From ", MC.CC.GRAY),
                                     initiatorProfile.api().getChatFormat(),
-                                    MC.Style.component(") " + payload.getMessage(), MC.CC.GRAY)
+                                    MC.component(") " + payload.getMessage(), MC.CC.GRAY)
                             )
                     );
 

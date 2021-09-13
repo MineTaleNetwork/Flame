@@ -28,7 +28,7 @@ public class GrantConfirmMenu implements FabricProvider {
         this.inventory = FabricInventory.builder()
                 .provider(this)
                 .type(InventoryType.CHEST_1_ROW)
-                .title(MC.Style.component("Please confirm the Grant"))
+                .title(MC.component("Please confirm the Grant"))
                 .build();
         inventory.open(player);
     }
@@ -42,24 +42,24 @@ public class GrantConfirmMenu implements FabricProvider {
 
         for (int i = 1; i <= 3; i++)
             contents.setSlot(i, ClickableItem.of(ItemStack.of(Material.LIME_CONCRETE)
-                            .withDisplayName(MC.Style.component("Confirm Grant Procedure", MC.CC.GREEN)),
+                            .withDisplayName(MC.component("Confirm Grant Procedure", MC.CC.GREEN)),
                     event -> {
                         profile.api().addGrant(grant);
 
                         this.procedure.finish();
                         this.inventory.close(player);
 
-                        player.sendMessage(MC.Style.component("You have added a " +  grant.api().getRank().getName() + " grant to " + profile.getName(), MC.CC.GREEN));
+                        player.sendMessage(MC.component("You have added a " +  grant.api().getRank().getName() + " grant to " + profile.getName(), MC.CC.GREEN));
                     }));
 
         for (int i = 5; i <= 7; i++)
             contents.setSlot(i, ClickableItem.of(ItemStack.of(Material.RED_CONCRETE)
-                            .withDisplayName(MC.Style.component("Cancel Grant Procedure", MC.CC.RED)),
+                            .withDisplayName(MC.component("Cancel Grant Procedure", MC.CC.RED)),
                     event -> {
-                        procedure.cancel();
-                        inventory.close(player);
+                        this.procedure.cancel();
+                        this.inventory.close(player);
 
-                        player.sendMessage(MC.Style.component("Cancelled the grant procedure.", MC.CC.RED));
+                        player.sendMessage(MC.component("Cancelled the grant procedure.", MC.CC.RED));
                     }));
     }
 

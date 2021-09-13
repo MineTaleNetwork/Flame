@@ -19,14 +19,9 @@ public class ClearChatCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-
         Player player = sender.asPlayer();
-        Rank rank = Rank.getRank("Mod");
 
-        RankUtil.canUseCommand(player, rank, commandCallback -> {
-            if (!commandCallback.isMinimum())
-                return;
-
+        RankUtil.canUseCommand(player, "Mod", commandCallback -> {
             var builder = Component.text();
 
             for (int i = 0; i < 150; i++) {
@@ -44,8 +39,8 @@ public class ClearChatCommand extends Command {
                     .build();
 
             for (Player instancePlayer : player.getInstance().getPlayers()) {
-                RankUtil.hasMinimumRank(instancePlayer, rank, rankCallback -> {
-                    if (!rankCallback.isMinimum()) {
+                RankUtil.hasMinimumRank(instancePlayer, "Mod", rankCallback -> {
+                    if (!rankCallback.isEligible()) {
                         instancePlayer.sendMessage(builder.build());
                     }
 

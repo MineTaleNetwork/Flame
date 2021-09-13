@@ -45,8 +45,8 @@ public class PunishCommand extends Command {
     private void onPunishCommand(CommandSender sender, CommandContext context) {
         Player player = sender.asPlayer();
 
-        RankUtil.canUseCommand(player, Rank.getRank("Owner"), commandCallback -> {
-            if (!commandCallback.isMinimum())
+        RankUtil.canUseCommand(player, "Owner", commandCallback -> {
+            if (!true)
                 return;
 
             String playerName = context.get("player");
