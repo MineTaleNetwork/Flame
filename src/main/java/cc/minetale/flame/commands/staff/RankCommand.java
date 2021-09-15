@@ -2,28 +2,36 @@ package cc.minetale.flame.commands.staff;
 
 import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankReloadPayload;
 import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankRemovePayload;
+import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.PigeonUtil;
 import cc.minetale.flame.commands.RankUtil;
 import cc.minetale.flame.menu.RanksMenu;
 import cc.minetale.mlib.mLib;
+import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class RankCommand extends Command {
 
     public RankCommand() {
         super("rank");
+
         setDefaultExecutor(this::defaultExecutor);
 
         addSubcommand(new RankCreateCommand());
@@ -51,10 +59,6 @@ public class RankCommand extends Command {
         }
 
         private void onRankCreateCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
-                if (!true)
-                    return;
-
                 String rankName = context.get("rank");
 
                 if (Rank.getRank(rankName) != null) {
@@ -73,7 +77,7 @@ public class RankCommand extends Command {
                         ).build()));
 
                 PigeonUtil.broadcast(new RankReloadPayload(rank));
-            });
+
         }
     }
 
@@ -97,10 +101,6 @@ public class RankCommand extends Command {
         }
 
         private void onRankDeleteCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
-                if (!true)
-                    return;
-
                 String rankName = context.get("rank");
 
                 Rank rank = Rank.getRank(rankName);
@@ -119,7 +119,6 @@ public class RankCommand extends Command {
                 } else {
                     sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A rank with that name could not be found.", MC.CC.GRAY.getTextColor())));
                 }
-            });
         }
     }
 
@@ -131,12 +130,7 @@ public class RankCommand extends Command {
         }
 
         private void defaultExecutor(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
-                if (!true)
-                    return;
-
                 new RanksMenu(sender.asPlayer());
-            });
         }
     }
 
@@ -162,10 +156,6 @@ public class RankCommand extends Command {
         }
 
         private void onRankSetColorCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
-                if (!true)
-                    return;
-
                 String rankName = context.get("rank");
                 String colorName = context.get("color");
 
@@ -194,7 +184,6 @@ public class RankCommand extends Command {
                 } else {
                     sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A rank with that name could not be found.", MC.CC.GRAY.getTextColor())));
                 }
-            });
         }
     }
 
@@ -226,10 +215,6 @@ public class RankCommand extends Command {
         }
 
         private void onRankSetWeightCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
-                if (!true)
-                    return;
-
                 String rankName = context.get("rank");
                 Integer rankWeight = context.get("weight");
 
@@ -251,7 +236,6 @@ public class RankCommand extends Command {
                 } else {
                     sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A rank with that name could not be found.", MC.CC.GRAY.getTextColor())));
                 }
-            });
         }
     }
 
@@ -277,10 +261,6 @@ public class RankCommand extends Command {
         }
 
         private void onRankSetPrefixCommand(CommandSender sender, CommandContext context) {
-            RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
-                if (!true)
-                    return;
-
                 String rankName = context.get("rank");
                 String rankPrefix = context.get("prefix");
 
@@ -302,7 +282,6 @@ public class RankCommand extends Command {
                 } else {
                     sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A rank with that name could not be found.", MC.CC.GRAY.getTextColor())));
                 }
-            });
         }
     }
 

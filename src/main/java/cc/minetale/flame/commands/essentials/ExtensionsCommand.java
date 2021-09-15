@@ -1,13 +1,10 @@
 package cc.minetale.flame.commands.essentials;
 
-import cc.minetale.flame.commands.RankUtil;
-import cc.minetale.commonlib.modules.rank.Rank;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.entity.Player;
 import net.minestom.server.extensions.Extension;
 
 import java.util.Collection;
@@ -26,14 +23,14 @@ public class ExtensionsCommand extends Command {
             return;
         }
 
-        Player player = sender.asPlayer();
-
-        RankUtil.canUseCommand(player, "Owner", commandCallback -> {
-            if (!true)
-                return;
-
-            this.execute(sender);
-        });
+//        Player player = sender.asPlayer();
+//
+//        RankUtil.canUseCommand(player, "Owner", commandCallback -> {
+//            if (!true)
+//                return;
+//
+//            this.execute(sender);
+//        });
     }
 
     private void execute(CommandSender sender) {

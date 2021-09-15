@@ -42,13 +42,13 @@ public class PunishmentTypeMenu implements FabricProvider {
         contents.setSlot(10, ClickableItem.empty(ItemStack.of(Material.RED_CONCRETE)
                 .withDisplayName(MC.component("Blacklist", MC.CC.GRAY))));
 
-        RankUtil.hasMinimumRank(player, "Owner", rankCallback -> {
-            if (rankCallback.isEligible()) {
-                contents.setSlot(10, ClickableItem.of(ItemStack.of(Material.RED_CONCRETE)
-                                .withDisplayName(MC.component("Blacklist", MC.CC.GRAY)),
-                        event -> this.selectType(event.getPlayer(), Punishment.Type.BLACKLIST)));
-            }
-        });
+//        RankUtil.hasMinimumRank(player, "Owner", rankCallback -> {
+//            if (rankCallback.isEligible()) {
+//                contents.setSlot(10, ClickableItem.of(ItemStack.of(Material.RED_CONCRETE)
+//                                .withDisplayName(MC.component("Blacklist", MC.CC.GRAY)),
+//                        event -> this.selectType(event.getPlayer(), Punishment.Type.BLACKLIST)));
+//            }
+//        });
 
         contents.setSlot(12, ClickableItem.of(ItemStack.of(Material.YELLOW_CONCRETE)
                         .withDisplayName(MC.component("Ban", MC.CC.GRAY)),

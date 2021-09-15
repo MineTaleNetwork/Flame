@@ -45,16 +45,16 @@ public class PunishCommand extends Command {
     private void onPunishCommand(CommandSender sender, CommandContext context) {
         Player player = sender.asPlayer();
 
-        RankUtil.canUseCommand(player, "Owner", commandCallback -> {
-            if (!true)
-                return;
-
-            String playerName = context.get("player");
-
-            ProfileUtil.getProfileByName(playerName).thenAccept(profile -> {
-                new PunishmentMenu(player, profile);
-            });
-        });
+//        RankUtil.canUseCommand(player, "Owner", commandCallback -> {
+//            if (!true)
+//                return;
+//
+//            String playerName = context.get("player");
+//
+//            ProfileUtil.getProfileByName(playerName).thenAccept(profile -> {
+//                new PunishmentMenu(player, profile);
+//            });
+//        });
     }
 
 }

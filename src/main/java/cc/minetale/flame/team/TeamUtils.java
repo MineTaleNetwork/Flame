@@ -19,14 +19,7 @@ public class TeamUtils {
         ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
             Rank rank = profile.getGrant().api().getRank();
 
-            Team playerTeam = player.getTeam();
-            Team rankTeam = Flame.getFlame().getRankTeams().get(rank.getUuid());
-
-            if(playerTeam != rankTeam) {
-                playerTeam.removeMember(player.getUsername());
-                rankTeam.addMember(player.getUsername());
-                player.setTeam(rankTeam);
-            }
+            updateTeam(rank, player);
         });
     }
 

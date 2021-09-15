@@ -91,7 +91,7 @@ public class CoreListener implements APIListener {
 
     public void announcePunishment(Profile receiverProfile, Punishment punishment) {
         Profile.getProfile(punishment.getAddedByUUID()).thenAccept(profile -> {
-            FlameUtil.broadcast(Rank.getRank("Helper"),
+            FlameUtil.broadcast("Helper",
                     MC.Style.SEPARATOR_80,
                     MC.Chat.notificationMessage("Punishment",
                             MC.component(

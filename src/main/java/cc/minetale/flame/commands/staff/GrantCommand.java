@@ -1,29 +1,45 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.commands.RankUtil;
 import cc.minetale.flame.menu.grant.GrantRankSelectionMenu;
 import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.command.builder.suggestion.SuggestionEntry;
+import net.minestom.server.command.builder.arguments.ArgumentType;;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class GrantCommand extends Command {
 
     public GrantCommand() {
         super("grant");
-        setCondition(Conditions::playerOnly);
-        setDefaultExecutor(this::defaultExecutor);
 
-        var targets = ArgumentType.Entity("targets").onlyPlayers(true);
+//        addConditionalSyntax((sender, s) -> {
+//            if(sender.isPlayer()) {
+//                CompletableFuture<Profile> profileFuture = ProfileUtil.getAssociatedProfile(sender.asPlayer());
+//
+//                try {
+//                    RankUtil.canUseCommand(profileFuture.get(), "Owner");
+//                } catch (InterruptedException | ExecutionException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                return true;
+//            }
+//
+//            return false;
+//        }, this::defaultExecutor);
 
-        addSyntax(this::onGrantCommand, targets);
+//        setDefaultExecutor(this::defaultExecutor);
+//
+//        var targets = ArgumentType.Entity("targets").onlyPlayers(true);
+//
+//        addSyntax(this::onGrantCommand, targets);
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
@@ -31,15 +47,10 @@ public class GrantCommand extends Command {
     }
 
     private void onGrantCommand(CommandSender sender, CommandContext context) {
-        RankUtil.canUseCommand(sender, "Owner", commandCallback -> {
-            if (!true)
-                return;
+        String playerName = context.get("player");
 
-            String playerName = context.get("player");
-
-            ProfileUtil.getProfileByName(playerName).thenAccept(profile -> {
-                new GrantRankSelectionMenu(sender.asPlayer(), profile);
-            });
+        ProfileUtil.getProfileByName(playerName).thenAccept(profile -> {
+            new GrantRankSelectionMenu(sender.asPlayer(), profile);
         });
     }
 

@@ -5,6 +5,7 @@ import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.commands.RankUtil;
+import cc.minetale.mlib.util.ProfileUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.kyori.adventure.key.Key;
@@ -82,14 +83,15 @@ public class FlameUtil {
         return CHAT_CONCRETE_COLOR_MAP.get(color);
     }
 
-    public static void broadcast(Rank rank, Component... messages) {
+    public static void broadcast(String rank, Component... messages) {
         for(Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            RankUtil.hasMinimumRank(player, rank, rankCallback -> {
-                if(!rankCallback.isEligible())
-                    return;
+            ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
+                boolean isEligible = RankUtil.hasMinimumRank(profile, rank);
 
-                for(Component component : messages) {
-                    player.sendMessage(component);
+                if(isEligible) {
+                    for (Component component : messages) {
+                        player.sendMessage(component);
+                    }
                 }
             });
         }

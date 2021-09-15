@@ -46,26 +46,26 @@ public class GameModeCommand extends Command {
     private void onGamemodeSelfCommand(CommandSender sender, CommandContext context) {
         Player player = sender.asPlayer();
 
-        RankUtil.canUseCommand(player, "Admin", commandCallback -> {
-            if (!true)
-                return;
-
-            GameMode mode = context.get("gamemode");
-
-            executeSelf(player, mode);
-        });
+//        RankUtil.canUseCommand(player, "Admin", commandCallback -> {
+//            if (!true)
+//                return;
+//
+//            GameMode mode = context.get("gamemode");
+//
+//            executeSelf(player, mode);
+//        });
     }
 
     private void onGamemodeOthersCommand(CommandSender sender, CommandContext context) {
-        RankUtil.canUseCommand(sender.asPlayer(), "Admin", commandCallback -> {
-            if (!true)
-                return;
-
-            GameMode mode = context.get("gamemode");
-            EntityFinder finder = context.get("targets");
-
-            executeOthers(sender, mode, finder.find(sender));
-        });
+//        RankUtil.canUseCommand(sender.asPlayer(), "Admin", commandCallback -> {
+//            if (!true)
+//                return;
+//
+//            GameMode mode = context.get("gamemode");
+//            EntityFinder finder = context.get("targets");
+//
+//            executeOthers(sender, mode, finder.find(sender));
+//        });
     }
 
     private void executeOthers(CommandSender sender, GameMode gameMode, List<Entity> entities) {

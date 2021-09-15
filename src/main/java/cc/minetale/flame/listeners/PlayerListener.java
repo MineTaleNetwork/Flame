@@ -75,6 +75,7 @@ public class PlayerListener {
                         Profile profile = ProfileUtil.getProfileByBoth(name, uuid).get(10, TimeUnit.SECONDS);
 
                         profile.setName(name);
+
                         profile.setSearchableName(name);
 
                         if (profile.getFirstSeen() == 0L)
