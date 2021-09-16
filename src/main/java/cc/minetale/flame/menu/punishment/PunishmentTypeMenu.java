@@ -2,13 +2,11 @@ package cc.minetale.flame.menu.punishment;
 
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.punishment.Punishment;
-import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
-import cc.minetale.flame.commands.RankUtil;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlameUtil;
-import cc.minetale.flame.util.MenuUtils;
+import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
@@ -37,7 +35,7 @@ public class PunishmentTypeMenu implements FabricProvider {
 
     @Override
     public void init(Player player, FabricContents contents) {
-        contents.fill(MenuUtils.FILLER);
+        contents.fill(MenuUtil.FILLER);
 
         contents.setSlot(10, ClickableItem.empty(ItemStack.of(Material.RED_CONCRETE)
                 .withDisplayName(MC.component("Blacklist", MC.CC.GRAY))));

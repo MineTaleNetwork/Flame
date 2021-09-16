@@ -1,6 +1,5 @@
 package cc.minetale.flame.chat;
 
-import cc.minetale.commonlib.modules.grant.Grant;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.flame.menu.grant.GrantConfirmMenu;
 import cc.minetale.flame.menu.grant.GrantDeleteMenu;
@@ -25,13 +24,6 @@ import java.util.UUID;
 public class Chat {
 
     public static void handleChat(Player player, String message) {
-        var instance = player.getInstance();
-
-        if(instance == null) {
-            player.sendMessage("A fatal error has occurred. Please trying rejoining the network.");
-            return;
-        }
-
         ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
 //            if (profile.getStaffProfile().isLocked()) {
 //                ChatProcedure.handleAuthentication(sender, profile, message);
@@ -95,7 +87,12 @@ public class Chat {
 //                }
 //            }
 
-            instance.sendMessage(player, formatChat(profile, message));
+            var instance = player.getInstance();
+
+            if(instance != null)
+                instance.sendMessage(player, formatChat(profile, message));
+
+
         });
     }
 

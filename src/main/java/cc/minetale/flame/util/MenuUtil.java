@@ -7,19 +7,15 @@ import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
 import cc.minetale.mlib.fabric.content.Pagination;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.PlayerHeadMeta;
 
-public class MenuUtils {
+public class MenuUtil {
 
     public static final ClickableItem FILLER = ClickableItem.empty(ItemStack.of(Material.GRAY_STAINED_GLASS_PANE).withDisplayName(Component.empty()));
     public static final ClickableItem AIR = ClickableItem.empty(ItemStack.AIR);
@@ -77,7 +73,7 @@ public class MenuUtils {
     }
 
     public static void addDuration(Player player, FabricContents contents, DurationType durationType) {
-        contents.fill(MenuUtils.FILLER);
+        contents.fill(MenuUtil.FILLER);
 
         contents.setSlot(10, ClickableItem.of(ItemStack.of(Material.RED_DYE)
                         .withDisplayName(MC.component("5 minutes", MC.CC.GRAY)),

@@ -1,29 +1,36 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.flame.commands.RankUtil;
-import cc.minetale.mlib.util.ProfileUtil;
+import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.flame.Lang;
 import net.minestom.server.command.builder.condition.CommandCondition;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import net.minestom.server.entity.Player;
+import net.minestom.server.tag.Tag;
 
 public class CommandUtil {
 
-//    public static CommandCondition getRankCondition(String rank) {
-//        return ((sender, s) -> {
-//            if(sender.isConsole())
-//                return true;
-//
-//            if(sender.isPlayer()) {
-//                CompletableFuture<Profile> profileFuture = ProfileUtil.getAssociatedProfile(sender.asPlayer(), true, false);
-//
-//                return RankUtil.canUseCommand(profileFuture.getNow(null), rank);
-//            }
-//
-//            return false;
-//        });
-//    }
+    public static CommandCondition getRankCondition(String rankName) {
+        return ((sender, s) -> {
+            boolean command = s != null;
+
+            if (sender.isConsole())
+                return true;
+
+            if (sender.isPlayer()) {
+                Player player = sender.asPlayer();
+
+                boolean hasMinimum = RankUtil.hasMinimumRank(player, rankName);
+
+                if(!hasMinimum)
+                    if (command)
+                        sender.sendMessage(Lang.COMMAND_PERMISSION(rankName));
+
+
+                return hasMinimum;
+            }
+
+            return false;
+        });
+    }
 
 
 }

@@ -11,6 +11,8 @@ import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
+import cc.minetale.flame.Lang;
+import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.mlib.util.ProfileUtil;
 import cc.minetale.pigeon.annotations.PayloadHandler;
 import cc.minetale.pigeon.annotations.PayloadListener;
@@ -24,6 +26,36 @@ import java.util.UUID;
 
 @PayloadListener
 public class Listeners implements Listener {
+
+    @PayloadHandler
+    public void onServerOnline(ServerOnlinePayload payload) {
+        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(
+                player -> {
+                    player.sendMessage(MC.Chat.notificationMessage("Proxy",
+                            MC.component(
+                                    MC.component(payload.getName(), MC.CC.GOLD),
+                                    MC.component( " has came ", MC.CC.GRAY),
+                                    MC.component("Online", MC.CC.GREEN)
+                            )
+                    ));
+                }
+        );
+    }
+
+    @PayloadHandler
+    public void onServerOffline(ServerOfflinePayload payload) {
+        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(
+                player -> {
+                    player.sendMessage(MC.Chat.notificationMessage("Proxy",
+                            MC.component(
+                                    MC.component(payload.getName(), MC.CC.GOLD),
+                                    MC.component(" has went ", MC.CC.GRAY),
+                                    MC.component("Offline", MC.CC.RED)
+                            )
+                    ));
+                }
+        );
+    }
 
     @PayloadHandler
     public void onReloadRank(RankReloadPayload payload) {
@@ -54,13 +86,7 @@ public class Listeners implements Listener {
 
         Profile.getProfile(payload.getTarget()).thenAccept(targetProfile -> {
             if(targetProfile == null) { return; }
-            initiator.sendMessage(
-                    MC.component(
-                            MC.component("(To ", MC.CC.GRAY),
-                            targetProfile.api().getChatFormat(),
-                            MC.component(") " + payload.getMessage(), MC.CC.GRAY)
-                    )
-            );
+            initiator.sendMessage(Lang.TO_MSG(targetProfile, payload.getMessage()));
         });
     }
 
@@ -72,17 +98,11 @@ public class Listeners implements Listener {
         Profile.getProfile(payload.getInitiator())
                 .thenAccept(initiatorProfile -> {
                     if(initiatorProfile == null) { return; }
-                    target.sendMessage(
-                            MC.component(
-                                    MC.component("(From ", MC.CC.GRAY),
-                                    initiatorProfile.api().getChatFormat(),
-                                    MC.component(") " + payload.getMessage(), MC.CC.GRAY)
-                            )
-                    );
+                    target.sendMessage(Lang.FROM_MSG(initiatorProfile, payload.getMessage()));
 
                     ProfileUtil.getAssociatedProfile(target).thenAccept(targetProfile -> {
                         if(targetProfile.getOptionsProfile().isReceivingMessageSounds())
-                            target.playSound(Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1F, 0.5F));
+                            FlameUtil.playMessageSound(target);
                     });
                 });
     }

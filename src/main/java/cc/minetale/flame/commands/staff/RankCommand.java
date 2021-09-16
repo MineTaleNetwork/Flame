@@ -2,35 +2,27 @@ package cc.minetale.flame.commands.staff;
 
 import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankReloadPayload;
 import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankRemovePayload;
-import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.PigeonUtil;
-import cc.minetale.flame.commands.RankUtil;
 import cc.minetale.flame.menu.RanksMenu;
-import cc.minetale.mlib.mLib;
-import cc.minetale.mlib.util.ProfileUtil;
+import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class RankCommand extends Command {
 
     public RankCommand() {
         super("rank");
+
+        setCondition(CommandUtil.getRankCondition("Owner"));
 
         setDefaultExecutor(this::defaultExecutor);
 

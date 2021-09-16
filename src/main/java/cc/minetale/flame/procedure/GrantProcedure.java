@@ -3,6 +3,7 @@ package cc.minetale.flame.procedure;
 import cc.minetale.commonlib.modules.grant.Grant;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.util.MC;
+import cc.minetale.flame.Lang;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -53,7 +54,7 @@ public class GrantProcedure {
         Player player = MinecraftServer.getConnectionManager().getPlayer(this.issuer);
 
         if(player != null)
-            player.sendMessage(Component.text("Cancelled the grant procedure.", MC.CC.RED.getTextColor()));
+            player.sendMessage(Lang.CANCELLED_GRANT);
 
         procedures.remove(this.issuer);
     }

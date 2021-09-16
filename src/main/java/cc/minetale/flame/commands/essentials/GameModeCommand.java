@@ -1,8 +1,7 @@
 package cc.minetale.flame.commands.essentials;
 
-import cc.minetale.flame.commands.RankUtil;
-import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
+import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -22,21 +21,25 @@ public class GameModeCommand extends Command {
 
     public GameModeCommand() {
         super("gamemode", "gm");
-        setCondition(Conditions::playerOnly);
+
+        setCondition(CommandUtil.getRankCondition("Admin"));
+
         setDefaultExecutor(this::defaultExecutor);
 
-        var gamemode = ArgumentType.Enum("gamemode", GameMode.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
-        var targets = ArgumentType.Entity("targets").onlyPlayers(true);
+        var gamemode = ArgumentType.Enum("gamemode", GameMode.class)
+                .setFormat(ArgumentEnum.Format.LOWER_CASED);
+
+        var targets = ArgumentType.Entity("targets")
+                .onlyPlayers(true);
 
         setArgumentCallback(this::onGamemodeError, gamemode);
+
         addSyntax(this::onGamemodeSelfCommand, gamemode);
         addSyntax(this::onGamemodeOthersCommand, gamemode, targets);
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        String commandName = context.getCommandName();
-
-        sender.sendMessage(MC.Chat.notificationMessage("Gamemode", Component.text("Usage: /" + commandName + " <gamemode> [targets]", MC.CC.GRAY.getTextColor())));
+        sender.sendMessage(MC.Chat.notificationMessage("Gamemode", Component.text("Usage: /gamemode <gamemode> [targets]", MC.CC.GRAY.getTextColor())));
     }
 
     private void onGamemodeError(CommandSender sender, ArgumentSyntaxException exception) {
@@ -44,28 +47,11 @@ public class GameModeCommand extends Command {
     }
 
     private void onGamemodeSelfCommand(CommandSender sender, CommandContext context) {
-        Player player = sender.asPlayer();
-
-//        RankUtil.canUseCommand(player, "Admin", commandCallback -> {
-//            if (!true)
-//                return;
-//
-//            GameMode mode = context.get("gamemode");
-//
-//            executeSelf(player, mode);
-//        });
+        executeSelf(sender.asPlayer(), context.get("gamemode"));
     }
 
     private void onGamemodeOthersCommand(CommandSender sender, CommandContext context) {
-//        RankUtil.canUseCommand(sender.asPlayer(), "Admin", commandCallback -> {
-//            if (!true)
-//                return;
-//
-//            GameMode mode = context.get("gamemode");
-//            EntityFinder finder = context.get("targets");
-//
-//            executeOthers(sender, mode, finder.find(sender));
-//        });
+        executeOthers(sender, context.get("gamemode"), ((EntityFinder) context.get("targets")).find(sender));
     }
 
     private void executeOthers(CommandSender sender, GameMode gameMode, List<Entity> entities) {
@@ -90,7 +76,7 @@ public class GameModeCommand extends Command {
     private void executeSelf(Player sender, GameMode gameMode) {
         sender.setGameMode(gameMode);
 
-        sender.sendMessage(MC.Chat.notificationMessage("Gamemode", Component.text("You've updated your own gamemode to " + gameMode.name(), MC.CC.GRAY.getTextColor())));
+        sender.sendMessage(MC.Chat.notificationMessage("Gamemode", Component.text("You have updated your own gamemode to " + gameMode.name(), MC.CC.GRAY.getTextColor())));
     }
 
 }

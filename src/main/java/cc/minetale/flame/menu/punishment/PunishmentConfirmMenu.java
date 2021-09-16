@@ -3,8 +3,9 @@ package cc.minetale.flame.menu.punishment;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
+import cc.minetale.flame.Lang;
 import cc.minetale.flame.procedure.PunishmentProcedure;
-import cc.minetale.flame.util.MenuUtils;
+import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
@@ -35,7 +36,7 @@ public class PunishmentConfirmMenu implements FabricProvider {
 
     @Override
     public void init(Player player, FabricContents contents) {
-        contents.fill(MenuUtils.FILLER);
+        contents.fill(MenuUtil.FILLER);
 
         long duration = this.procedure.getBuilder().getDuration();
         String durationString = duration == Integer.MAX_VALUE ? "Permanent" : TimeUtil.millisToRoundedTime(duration);
@@ -66,7 +67,7 @@ public class PunishmentConfirmMenu implements FabricProvider {
             this.procedure.finish();
             this.inventory.close(player);
 
-            player.sendMessage(Component.text("You have successfully punished " + profile.getName(), MC.CC.GREEN.getTextColor()));
+            player.sendMessage(Lang.PUNISHMENT_SUCCESS(profile));
         }));
     }
 

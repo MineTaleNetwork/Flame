@@ -61,6 +61,8 @@ public class Flame extends Extension {
 
         ChatFilter.init();
 
+        MinecraftServer.getCommandManager().setUnknownCommandCallback((sender, command) -> sender.sendMessage(Lang.UNKNOWN_COMMAND));
+
         Arrays.asList(
                 new ClearChatCommand(),
                 new GameModeCommand(),
@@ -83,20 +85,19 @@ public class Flame extends Extension {
 
         MinecraftServer.getGlobalEventHandler().addChild(events());
 
+        this.updateTeams();
+
         SchedulerManager scheduler = MinecraftServer.getSchedulerManager();
 
         /* Server Update Task */
-        // TODO: Fix Gamemode
-//        scheduler.buildTask(() -> PigeonUtil.broadcast(new ServerUpdatePayload(this.getServer(), ServerAction.STATE_CHANGE)))
-//                .repeat(3, ChronoUnit.SECONDS)
-//                .schedule();
+        scheduler.buildTask(() -> PigeonUtil.broadcast(new ServerUpdatePayload(this.getServer(), ServerAction.STATE_CHANGE)))
+                .repeat(3, ChronoUnit.SECONDS)
+                .schedule();
 
         /* Retrieve Online Players */
         scheduler.buildTask(() -> PigeonUtil.broadcast(new AtomPlayerCountRequestPayload(callback -> this.globalPlayers = callback.getPlayers())))
                 .repeat(5, ChronoUnit.SECONDS)
                 .schedule();
-
-        this.updateTeams();
     }
 
     @Override
@@ -112,9 +113,8 @@ public class Flame extends Extension {
                 this.start,
                 new ServerData(
                         config.getMaxPlayers(),
-                        this.LAST_TICK.get().getTickTime(),
+                        0.0,
                         Collections.emptyMap(),
-                        Gamemode.getByName(config.getType()),
                         players
                 )
         );

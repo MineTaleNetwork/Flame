@@ -3,7 +3,7 @@ package cc.minetale.flame.menu.punishment;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.util.FlameUtil;
-import cc.minetale.flame.util.MenuUtils;
+import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
@@ -30,7 +30,7 @@ public class PunishmentMenu implements FabricProvider {
 
     @Override
     public void init(Player player, FabricContents contents) {
-        contents.fill(MenuUtils.FILLER);
+        contents.fill(MenuUtil.FILLER);
 
         contents.setSlot(13, ClickableItem.of(ItemStack.of(Material.ANVIL)
                 .withDisplayName(MC.component("Punish " + offender.getName(), MC.CC.GRAY)),

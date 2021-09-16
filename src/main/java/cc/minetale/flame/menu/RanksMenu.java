@@ -3,7 +3,7 @@ package cc.minetale.flame.menu;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.util.FlameUtil;
-import cc.minetale.flame.util.MenuUtils;
+import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
@@ -36,8 +36,8 @@ public class RanksMenu implements FabricProvider {
 
     @Override
     public void init(Player player, FabricContents contents) {
-        contents.fill(MenuUtils.FILLER);
-        contents.fill(MenuUtils.AIR, 9, 26);
+        contents.fill(MenuUtil.FILLER);
+        contents.fill(MenuUtil.AIR, 9, 26);
 
         ClickableItem[] items = new ClickableItem[Rank.getRanks().size()];
 
@@ -78,8 +78,8 @@ public class RanksMenu implements FabricProvider {
         pagination.setItemsPerPage(27);
         pagination.addToIterator(contents.iterator(9));
 
-        MenuUtils.addPreviousPage(30, this.inventory, contents, "Ranks");
-        MenuUtils.addNextPage(32, this.inventory, contents, "Ranks");
+        MenuUtil.addPreviousPage(30, this.inventory, contents, "Ranks");
+        MenuUtil.addNextPage(32, this.inventory, contents, "Ranks");
     }
 
     @Override
@@ -87,7 +87,7 @@ public class RanksMenu implements FabricProvider {
         Inventory inventory = event.getInventory();
 
         if(inventory != null)
-            MenuUtils.setPaginatedTitle(inventory, contents.getPagination(), "Ranks");
+            MenuUtil.setPaginatedTitle(inventory, contents.getPagination(), "Ranks");
     }
 
 }

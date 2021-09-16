@@ -3,19 +3,17 @@ package cc.minetale.flame.commands.essentials;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
+import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +21,9 @@ import java.util.List;
 public class ListCommand extends Command {
     public ListCommand() {
         super("list");
+
+        setCondition(CommandUtil.getRankCondition("Helper"));
+
         setDefaultExecutor(this::execute);
     }
 

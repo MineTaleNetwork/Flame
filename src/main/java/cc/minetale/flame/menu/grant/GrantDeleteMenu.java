@@ -3,15 +3,13 @@ package cc.minetale.flame.menu.grant;
 
 import cc.minetale.commonlib.modules.grant.Grant;
 import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.procedure.GrantProcedure;
-import cc.minetale.flame.util.MenuUtils;
+import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
 import cc.minetale.mlib.fabric.content.FabricProvider;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.InventoryType;
@@ -38,7 +36,7 @@ public class GrantDeleteMenu implements FabricProvider {
         Profile profile = this.procedure.getRecipient();
         Grant grant = this.procedure.getBuilder().build();
 
-        contents.fill(MenuUtils.FILLER);
+        contents.fill(MenuUtil.FILLER);
 
         for (int i = 1; i <= 3; i++)
             contents.setSlot(i, ClickableItem.of(ItemStack.of(Material.LIME_CONCRETE)

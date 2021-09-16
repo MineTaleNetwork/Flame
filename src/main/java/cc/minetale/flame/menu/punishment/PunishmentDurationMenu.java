@@ -5,7 +5,7 @@ import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.menu.impl.DurationType;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlameUtil;
-import cc.minetale.flame.util.MenuUtils;
+import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
 import cc.minetale.mlib.fabric.content.FabricProvider;
@@ -32,7 +32,7 @@ public class PunishmentDurationMenu implements FabricProvider, DurationType {
 
     @Override
     public void init(Player player, FabricContents contents) {
-        MenuUtils.addDuration(player, contents, this);
+        MenuUtil.addDuration(player, contents, this);
     }
 
     @Override
