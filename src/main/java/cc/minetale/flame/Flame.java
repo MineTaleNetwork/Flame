@@ -1,7 +1,6 @@
 package cc.minetale.flame;
 
 import cc.minetale.commonlib.CommonLib;
-import cc.minetale.commonlib.modules.network.Gamemode;
 import cc.minetale.commonlib.modules.network.server.Server;
 import cc.minetale.commonlib.modules.network.server.ServerAction;
 import cc.minetale.commonlib.modules.network.server.ServerData;
@@ -15,6 +14,7 @@ import cc.minetale.flame.commands.essentials.*;
 import cc.minetale.flame.commands.staff.ClearChatCommand;
 import cc.minetale.flame.commands.staff.GrantCommand;
 import cc.minetale.flame.commands.staff.RankCommand;
+import cc.minetale.flame.commands.staff.AddGrantCommand;
 import cc.minetale.flame.listeners.CoreListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.pigeon.Listeners;
@@ -72,7 +72,8 @@ public class Flame extends Extension {
                 new ListCommand(),
                 new RankCommand(),
                 new GrantCommand(),
-                new PunishCommand()
+                new PunishCommand(),
+                new AddGrantCommand()
         ).forEach(command -> MinecraftServer.getCommandManager().register(command));
 
         CommonLib commonLib = CommonLib.getCommonLib();
@@ -105,6 +106,8 @@ public class Flame extends Extension {
 
     public Server getServer() {
         mLibConfig config = mLib.getMLib().getConfig();
+
+        // TODO: On player join send payload with size of players
 
         List<UUID> players = PlayerUtil.getUUIDs(MinecraftServer.getConnectionManager().getOnlinePlayers());
 

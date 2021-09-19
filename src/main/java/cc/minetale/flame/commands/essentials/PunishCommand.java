@@ -19,7 +19,7 @@ public class PunishCommand extends Command {
     public PunishCommand() {
         super("punish");
 
-        setCondition(CommandUtil.getRankCondition("Owner"));
+        setCondition(CommandUtil.getRankCondition("Default"));
 
         setDefaultExecutor(this::defaultExecutor);
 

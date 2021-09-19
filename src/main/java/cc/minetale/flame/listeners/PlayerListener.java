@@ -112,7 +112,7 @@ public class PlayerListener {
                         player.setTag(Tag.Integer("permission"), profile.getGrant().api().getRank().getWeight());
                         player.setTag(Tag.Structure("profile", new ProfileTagSerializer()), profile);
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                        Thread.currentThread().interrupt();
+//                        Thread.currentThread().interrupt();
                         player.kick(Lang.PROFILE_FAILED);
                         e.printStackTrace();
                     }
