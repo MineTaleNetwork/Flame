@@ -1,6 +1,5 @@
 package cc.minetale.flame.menu.grant;
 
-import cc.minetale.commonlib.modules.grant.Grant;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.MC;

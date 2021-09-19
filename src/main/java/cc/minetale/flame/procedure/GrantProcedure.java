@@ -2,15 +2,14 @@ package cc.minetale.flame.procedure;
 
 import cc.minetale.commonlib.modules.grant.Grant;
 import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.Lang;
 import lombok.Getter;
 import lombok.Setter;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter @Setter
