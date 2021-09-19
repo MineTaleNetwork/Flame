@@ -81,11 +81,6 @@ public class Listeners implements Listener {
         FlameAPI.refreshPlayers(rank);
     }
 
-    @PayloadHandler(requiredState = RequiredState.RESPONSE)
-    public void onProfileLoad(ProfileRequestPayload payload) {
-        System.out.println("Loaded: " + payload.getProfiles().get(0).getName());
-    }
-
     @PayloadHandler
     public void onConversationTo(ConversationToPayload payload) {
         var initiator = MinecraftServer.getConnectionManager().getPlayer(payload.getInitiator());

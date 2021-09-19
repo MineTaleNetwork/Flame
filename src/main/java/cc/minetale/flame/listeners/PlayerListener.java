@@ -11,7 +11,6 @@ import cc.minetale.flame.chat.Chat;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.team.TeamUtils;
 import cc.minetale.flame.util.FlameUtil;
-import cc.minetale.mlib.util.ProfileTagSerializer;
 import cc.minetale.mlib.util.ProfileUtil;
 import com.google.common.hash.Hashing;
 import net.kyori.adventure.text.Component;
@@ -51,6 +50,8 @@ public class PlayerListener {
 
                     if (grantProcedure != null)
                         grantProcedure.cancel();
+
+                    ProfileUtil.dissociateProfile(player);
                 })
                 .addListener(PlayerSpawnEvent.class, event -> {
                     var player = event.getPlayer();
@@ -110,9 +111,12 @@ public class PlayerListener {
                         profile.update();
 
                         player.setTag(Tag.Integer("permission"), profile.getGrant().api().getRank().getWeight());
-                        player.setTag(Tag.Structure("profile", new ProfileTagSerializer()), profile);
-                    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//                        Thread.currentThread().interrupt();
+                        ProfileUtil.associateProfile(player, profile);
+                    } catch (ExecutionException | TimeoutException e) {
+                        player.kick(Lang.PROFILE_FAILED);
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         player.kick(Lang.PROFILE_FAILED);
                         e.printStackTrace();
                     }
