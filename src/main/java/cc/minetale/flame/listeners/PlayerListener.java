@@ -44,6 +44,8 @@ public class PlayerListener {
 
                     if (grantProcedure != null)
                         grantProcedure.cancel();
+
+                    ProfileUtil.dissociateProfile(player);
                 })
                 .addListener(PlayerSpawnEvent.class, event -> {
                     var player = event.getPlayer();

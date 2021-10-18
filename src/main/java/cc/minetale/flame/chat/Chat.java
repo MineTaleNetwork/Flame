@@ -1,6 +1,9 @@
 package cc.minetale.flame.chat;
 
+import cc.minetale.commonlib.modules.profile.Profile;
+import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.commonlib.util.Duration;
+import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.menu.grant.GrantConfirmMenu;
 import cc.minetale.flame.menu.grant.GrantDeleteMenu;
 import cc.minetale.flame.menu.grant.GrantReasonMenu;
@@ -9,9 +12,6 @@ import cc.minetale.flame.menu.punishment.PunishmentReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.mlib.util.ProfileUtil;
-import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.commonlib.modules.rank.Rank;
-import cc.minetale.commonlib.util.MC;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;

@@ -5,7 +5,6 @@ import cc.minetale.commonlib.modules.pigeon.payloads.conversation.ConversationTo
 import cc.minetale.commonlib.modules.pigeon.payloads.minecraft.MessagePlayerPayload;
 import cc.minetale.commonlib.modules.pigeon.payloads.network.ServerOfflinePayload;
 import cc.minetale.commonlib.modules.pigeon.payloads.network.ServerOnlinePayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.profile.ProfileRequestPayload;
 import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankReloadPayload;
 import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankRemovePayload;
 import cc.minetale.commonlib.modules.profile.Profile;
@@ -17,10 +16,7 @@ import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.mlib.util.ProfileUtil;
 import cc.minetale.pigeon.annotations.PayloadHandler;
 import cc.minetale.pigeon.annotations.PayloadListener;
-import cc.minetale.pigeon.feedback.RequiredState;
 import cc.minetale.pigeon.listeners.Listener;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 
@@ -79,11 +75,6 @@ public class Listeners implements Listener {
         Rank.getRanks().remove(rank);
 
         FlameAPI.refreshPlayers(rank);
-    }
-
-    @PayloadHandler(requiredState = RequiredState.RESPONSE)
-    public void onProfileLoad(ProfileRequestPayload payload) {
-        System.out.println("Loaded: " + payload.getProfiles().get(0).getName());
     }
 
     @PayloadHandler

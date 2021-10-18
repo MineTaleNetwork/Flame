@@ -1,10 +1,8 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.modules.rank.Rank;
 import cc.minetale.flame.Lang;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
-import net.minestom.server.tag.Tag;
 
 public class CommandUtil {
 

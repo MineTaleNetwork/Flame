@@ -1,8 +1,5 @@
 package cc.minetale.flame.chat;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;

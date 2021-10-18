@@ -1,18 +1,13 @@
 package cc.minetale.flame.menu.grant;
 
-import cc.minetale.commonlib.modules.grant.Grant;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.procedure.GrantProcedure;
-import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
 import cc.minetale.mlib.fabric.content.FabricProvider;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 
 public class GrantReasonMenu implements FabricProvider {
 

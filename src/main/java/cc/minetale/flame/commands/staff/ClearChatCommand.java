@@ -1,9 +1,8 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.Lang;
-import cc.minetale.flame.util.RankUtil;
 import cc.minetale.flame.util.CommandUtil;
+import cc.minetale.flame.util.RankUtil;
 import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;

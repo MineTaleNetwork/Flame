@@ -3,7 +3,6 @@ package cc.minetale.flame.procedure;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.punishment.Punishment;
 import cc.minetale.commonlib.util.MC;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;

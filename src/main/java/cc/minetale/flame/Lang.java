@@ -3,12 +3,7 @@ package cc.minetale.flame;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.punishment.Punishment;
 import cc.minetale.commonlib.util.MC;
-import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class Lang {
 
