@@ -2,7 +2,7 @@ package cc.minetale.flame.util;
 
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
-import cc.minetale.flame.menu.impl.DurationType;
+import cc.minetale.flame.menu.DurationType;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;

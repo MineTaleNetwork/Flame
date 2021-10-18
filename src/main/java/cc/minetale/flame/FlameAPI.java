@@ -22,6 +22,8 @@ public class FlameAPI {
     }
 
     public static void refreshPlayers(UUID rank) {
+        FlameAPI.refreshCommands();
+
         for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
                 if(profile.getGrant().getRankUUID().equals(rank)) {
@@ -30,6 +32,10 @@ public class FlameAPI {
                 }
             });
         }
+    }
+
+    public static void refreshCommands() {
+        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(Player::refreshCommands);
     }
 
 }

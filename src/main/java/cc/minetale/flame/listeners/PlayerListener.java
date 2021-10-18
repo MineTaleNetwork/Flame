@@ -3,28 +3,21 @@ package cc.minetale.flame.listeners;
 import cc.minetale.commonlib.modules.profile.Profile;
 import cc.minetale.commonlib.modules.punishment.Punishment;
 import cc.minetale.commonlib.modules.rank.Rank;
-import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.Flame;
-import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.chat.Chat;
 import cc.minetale.flame.procedure.GrantProcedure;
-import cc.minetale.flame.team.TeamUtils;
+import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.flame.util.FlameUtil;
-import cc.minetale.mlib.util.ProfileTagSerializer;
 import cc.minetale.mlib.util.ProfileUtil;
 import com.google.common.hash.Hashing;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.tag.Tag;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
@@ -66,7 +59,7 @@ public class PlayerListener {
                         });
                 })
                 .addListener(PlayerLoginEvent.class, event -> {
-                    var player = event.getPlayer();
+                    var player = (FlamePlayer) event.getPlayer();
                     var name = player.getUsername();
                     var uuid = player.getUuid();
 
@@ -109,10 +102,9 @@ public class PlayerListener {
 
                         profile.update();
 
-                        player.setTag(Tag.Integer("permission"), profile.getGrant().api().getRank().getWeight());
-                        player.setTag(Tag.Structure("profile", new ProfileTagSerializer()), profile);
+                        player.setProfile(profile);
+                        player.updatePermission();
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//                        Thread.currentThread().interrupt();
                         player.kick(Lang.PROFILE_FAILED);
                         e.printStackTrace();
                     }
