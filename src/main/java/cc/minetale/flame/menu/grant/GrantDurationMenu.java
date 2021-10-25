@@ -2,7 +2,7 @@ package cc.minetale.flame.menu.grant;
 
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
-import cc.minetale.flame.menu.impl.DurationType;
+import cc.minetale.flame.menu.DurationType;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.flame.util.MenuUtil;

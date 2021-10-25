@@ -1,4 +1,4 @@
-package cc.minetale.flame.menu.impl;
+package cc.minetale.flame.menu;
 
 import cc.minetale.commonlib.util.Duration;
 import net.minestom.server.entity.Player;

@@ -78,7 +78,6 @@ public class FlameUtil {
         return CHAT_DYE_COLOR_MAP.get(color);
     }
 
-
     public static Material toConcrete(MC.CC color) {
         return CHAT_CONCRETE_COLOR_MAP.get(color);
     }

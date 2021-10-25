@@ -19,6 +19,7 @@ import cc.minetale.flame.listeners.CoreListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.pigeon.Listeners;
 import cc.minetale.flame.team.TeamUtils;
+import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.mlib.config.mLibConfig;
 import cc.minetale.mlib.mLib;
 import cc.minetale.mlib.util.PlayerUtil;
@@ -55,6 +56,7 @@ public class Flame extends Extension {
 
         this.start = System.currentTimeMillis();
 
+        MinecraftServer.getConnectionManager().setPlayerProvider(FlamePlayer::new);
         MinecraftServer.getUpdateManager().addTickMonitor(LAST_TICK::set);
 
         this.rankTeams = new ConcurrentHashMap<>();
@@ -107,7 +109,7 @@ public class Flame extends Extension {
     public Server getServer() {
         mLibConfig config = mLib.getMLib().getConfig();
 
-        // TODO: On player join send payload with size of players
+        // TODO: On player join send payload with size of players orrr not?
 
         List<UUID> players = PlayerUtil.getUUIDs(MinecraftServer.getConnectionManager().getOnlinePlayers());
 
