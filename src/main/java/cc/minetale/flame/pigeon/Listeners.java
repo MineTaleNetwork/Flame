@@ -107,12 +107,10 @@ public class Listeners implements Listener {
 
     @PayloadHandler
     public void onMessagePlayer(MessagePlayerPayload payload) {
-        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            if (player.getUuid().equals(payload.getPlayer())) {
-                player.sendMessage(payload.getMessage());
-                return;
-            }
-        }
+        Player player = MinecraftServer.getConnectionManager().getPlayer(payload.getPlayer());
+
+        if(player != null)
+            player.sendMessage(payload.getMessage());
     }
 
 }
