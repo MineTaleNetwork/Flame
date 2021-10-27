@@ -1,14 +1,14 @@
 package cc.minetale.flame.pigeon;
 
-import cc.minetale.commonlib.modules.pigeon.payloads.conversation.ConversationFromPayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.conversation.ConversationToPayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.minecraft.MessagePlayerPayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.network.ServerOfflinePayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.network.ServerOnlinePayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankReloadPayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankRemovePayload;
-import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.pigeon.payloads.conversation.ConversationFromPayload;
+import cc.minetale.commonlib.pigeon.payloads.conversation.ConversationToPayload;
+import cc.minetale.commonlib.pigeon.payloads.minecraft.MessagePlayerPayload;
+import cc.minetale.commonlib.pigeon.payloads.network.ServerOfflinePayload;
+import cc.minetale.commonlib.pigeon.payloads.network.ServerOnlinePayload;
+import cc.minetale.commonlib.pigeon.payloads.rank.RankReloadPayload;
+import cc.minetale.commonlib.pigeon.payloads.rank.RankRemovePayload;
+import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.Lang;

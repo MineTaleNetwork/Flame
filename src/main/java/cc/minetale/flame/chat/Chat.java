@@ -1,7 +1,7 @@
 package cc.minetale.flame.chat;
 
-import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.menu.grant.GrantConfirmMenu;

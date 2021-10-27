@@ -1,7 +1,7 @@
 package cc.minetale.flame;
 
-import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.commonlib.modules.punishment.Punishment;
+import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.punishment.Punishment;
 import cc.minetale.commonlib.util.MC;
 import net.kyori.adventure.text.Component;
 

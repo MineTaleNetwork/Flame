@@ -1,6 +1,6 @@
 package cc.minetale.flame.menu.punishment;
 
-import cc.minetale.commonlib.modules.profile.Profile;
+import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.flame.util.MenuUtil;

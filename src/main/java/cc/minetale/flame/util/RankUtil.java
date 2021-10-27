@@ -1,6 +1,6 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.rank.Rank;
 import net.minestom.server.entity.Player;
 
 public class RankUtil {

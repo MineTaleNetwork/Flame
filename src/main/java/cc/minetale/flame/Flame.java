@@ -1,12 +1,12 @@
 package cc.minetale.flame;
 
 import cc.minetale.commonlib.CommonLib;
-import cc.minetale.commonlib.modules.network.server.Server;
-import cc.minetale.commonlib.modules.network.server.ServerAction;
-import cc.minetale.commonlib.modules.network.server.ServerData;
-import cc.minetale.commonlib.modules.pigeon.payloads.atom.AtomPlayerCountRequestPayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.network.ServerUpdatePayload;
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.network.server.Server;
+import cc.minetale.commonlib.network.server.ServerAction;
+import cc.minetale.commonlib.network.server.ServerData;
+import cc.minetale.commonlib.pigeon.payloads.atom.AtomPlayerCountRequestPayload;
+import cc.minetale.commonlib.pigeon.payloads.network.ServerUpdatePayload;
+import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.PigeonUtil;
 import cc.minetale.flame.chat.ChatFilter;

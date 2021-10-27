@@ -1,6 +1,6 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.modules.punishment.Punishment;
+import cc.minetale.commonlib.punishment.Punishment;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
 import com.google.common.collect.ImmutableMap;

@@ -1,5 +1,6 @@
 package cc.minetale.flame;
 
+import cc.minetale.flame.commands.staff.RankCommand;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.team.TeamUtils;
@@ -7,6 +8,8 @@ import cc.minetale.mlib.util.ProfileUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 
 import java.util.UUID;
@@ -35,6 +38,15 @@ public class FlameAPI {
     }
 
     public static void refreshCommands() {
+        CommandManager manager = MinecraftServer.getCommandManager();
+
+        Command rankCommand = manager.getCommand("rank");
+
+        if(rankCommand != null)
+            manager.unregister(rankCommand);
+
+        manager.register(new RankCommand());
+
         MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(Player::refreshCommands);
     }
 

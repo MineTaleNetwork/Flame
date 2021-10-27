@@ -1,8 +1,8 @@
 package cc.minetale.flame.listeners;
 
-import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.commonlib.modules.punishment.Punishment;
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.punishment.Punishment;
+import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.flame.Flame;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.chat.Chat;

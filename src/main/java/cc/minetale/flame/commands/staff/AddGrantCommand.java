@@ -1,8 +1,8 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.commonlib.modules.grant.Grant;
-import cc.minetale.commonlib.modules.profile.Profile;
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.grant.Grant;
+import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.arguments.ArgumentProfile;

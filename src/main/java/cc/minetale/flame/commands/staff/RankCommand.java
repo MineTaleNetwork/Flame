@@ -1,8 +1,8 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankReloadPayload;
-import cc.minetale.commonlib.modules.pigeon.payloads.rank.RankRemovePayload;
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.pigeon.payloads.rank.RankReloadPayload;
+import cc.minetale.commonlib.pigeon.payloads.rank.RankRemovePayload;
+import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.PigeonUtil;
 import cc.minetale.flame.arguments.ArgumentRank;

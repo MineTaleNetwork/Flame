@@ -1,6 +1,6 @@
 package cc.minetale.flame.arguments;
 
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.rank.Rank;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;

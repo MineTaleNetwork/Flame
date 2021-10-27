@@ -1,6 +1,6 @@
 package cc.minetale.flame.menu;
 
-import cc.minetale.commonlib.modules.rank.Rank;
+import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.flame.util.MenuUtil;

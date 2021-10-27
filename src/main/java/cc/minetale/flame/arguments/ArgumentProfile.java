@@ -1,6 +1,6 @@
 package cc.minetale.flame.arguments;
 
-import cc.minetale.commonlib.modules.profile.Profile;
+import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.mlib.util.ProfileUtil;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
