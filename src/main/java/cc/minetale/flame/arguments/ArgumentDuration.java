@@ -17,8 +17,7 @@ public class ArgumentDuration extends Argument<Duration> {
         super(id);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public Duration parse(@NotNull String input) throws ArgumentSyntaxException {
         Duration duration = Duration.fromString(input);
 

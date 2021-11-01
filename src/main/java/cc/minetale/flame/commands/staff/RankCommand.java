@@ -12,10 +12,9 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-
-import java.util.Arrays;
 
 public class RankCommand extends Command {
 
@@ -26,12 +25,12 @@ public class RankCommand extends Command {
 
         setDefaultExecutor(this::defaultExecutor);
 
-        addSubcommand(new RankCreateCommand());
-        addSubcommand(new RankDeleteCommand());
-        addSubcommand(new RankListCommand());
-        addSubcommand(new RankSetColorCommand());
-        addSubcommand(new RankSetWeightCommand());
-        addSubcommand(new RankSetPrefixCommand());
+        addSubcommand(new Create());
+        addSubcommand(new Delete());
+        addSubcommand(new List());
+        addSubcommand(new SetColor());
+        addSubcommand(new SetWeight());
+        addSubcommand(new SetPrefix());
     }
 
     public static void onRankError(CommandSender sender, ArgumentSyntaxException exception) {
@@ -42,9 +41,9 @@ public class RankCommand extends Command {
         sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("Usage: /rank <create/delete/list/setcolor/setweight/setprefix>", MC.CC.GRAY.getTextColor())));
     }
 
-    private static final class RankCreateCommand extends Command {
+    private static final class Create extends Command {
 
-        public RankCreateCommand() {
+        public Create() {
             super("create");
 
             setDefaultExecutor(this::defaultExecutor);
@@ -78,15 +77,14 @@ public class RankCommand extends Command {
         }
     }
 
-    private static final class RankDeleteCommand extends Command {
+    private static final class Delete extends Command {
 
-        public RankDeleteCommand() {
+        public Delete() {
             super("delete");
 
             setDefaultExecutor(this::defaultExecutor);
 
             var rank = new ArgumentRank("rank");
-
             setArgumentCallback(RankCommand::onRankError, rank);
 
             addSyntax(this::onRankDeleteCommand, rank);
@@ -113,9 +111,9 @@ public class RankCommand extends Command {
         }
     }
 
-    private static final class RankListCommand extends Command {
+    private static final class List extends Command {
 
-        public RankListCommand() {
+        public List() {
             super("list");
 
             setDefaultExecutor(this::defaultExecutor);
@@ -126,20 +124,24 @@ public class RankCommand extends Command {
         }
     }
 
-    private static final class RankSetColorCommand extends Command {
+    private static final class SetColor extends Command {
 
-        public RankSetColorCommand() {
+        public SetColor() {
             super("setcolor");
 
             setDefaultExecutor(this::defaultExecutor);
 
             var rank = new ArgumentRank("rank");
-
             setArgumentCallback(RankCommand::onRankError, rank);
 
-            var color = ArgumentType.Word("color").from(Arrays.stream(MC.CC.values()).map(MC.CC::getName).toArray(String[]::new));
+            var color = ArgumentType.Enum("color", MC.CC.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
+            setArgumentCallback(this::onColorError, color);
 
             addSyntax(this::onRankSetColorCommand, rank, color);
+        }
+
+        private void onColorError(CommandSender sender, ArgumentSyntaxException exception) {
+            sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A color with that name could not be found.", MC.CC.GRAY.getTextColor())));
         }
 
         private void defaultExecutor(CommandSender sender, CommandContext context) {
@@ -148,42 +150,34 @@ public class RankCommand extends Command {
 
         private void onRankSetColorCommand(CommandSender sender, CommandContext context) {
             Rank rank = context.get("rank");
-            String colorName = context.get("color");
+            MC.CC color = context.get("color");
 
-            try {
-                MC.CC color = MC.CC.valueOf(colorName.toUpperCase());
+            rank.setColor(color.toString());
+            rank.save();
 
-                rank.setColor(color.toString());
-                rank.save();
+            sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text()
+                    .append(
+                            Component.text("You have set the ", MC.CC.GRAY.getTextColor()),
+                            Component.text(rank.getName(), MC.CC.GOLD.getTextColor()),
+                            Component.text(" rank's color to ", MC.CC.GRAY.getTextColor()),
+                            Component.text(color.toString(), color.getTextColor())
+                    ).build()));
 
-                sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text()
-                        .append(
-                                Component.text("You have set the ", MC.CC.GRAY.getTextColor()),
-                                Component.text(rank.getName(), MC.CC.GOLD.getTextColor()),
-                                Component.text(" rank's color to ", MC.CC.GRAY.getTextColor()),
-                                Component.text(color.toString(), color.getTextColor())
-                        ).build()));
-
-                PigeonUtil.broadcast(new RankReloadPayload(rank));
-            } catch (IllegalArgumentException e) {
-                sender.sendMessage(MC.Chat.notificationMessage("Rank", Component.text("A color with that name could not be found.", MC.CC.GRAY.getTextColor())));
-            }
+            PigeonUtil.broadcast(new RankReloadPayload(rank));
         }
     }
 
-    private static final class RankSetWeightCommand extends Command {
+    private static final class SetWeight extends Command {
 
-        public RankSetWeightCommand() {
+        public SetWeight() {
             super("setweight");
 
             setDefaultExecutor(this::defaultExecutor);
 
             var rank = new ArgumentRank("rank");
-
             setArgumentCallback(RankCommand::onRankError, rank);
 
             var weight = ArgumentType.Integer("weight").between(0, 999);
-
             setArgumentCallback(this::weightArgumentCallback, weight);
 
             addSyntax(this::onRankSetWeightCommand, rank, weight);
@@ -216,18 +210,17 @@ public class RankCommand extends Command {
         }
     }
 
-    private static final class RankSetPrefixCommand extends Command {
+    private static final class SetPrefix extends Command {
 
-        public RankSetPrefixCommand() {
+        public SetPrefix() {
             super("setprefix");
 
             setDefaultExecutor(this::defaultExecutor);
 
             var rank = new ArgumentRank("rank");
-
             setArgumentCallback(RankCommand::onRankError, rank);
 
-            var prefix = ArgumentType.String("prefix");
+            var prefix = ArgumentType.StringArray("prefix");
 
             addSyntax(this::onRankSetPrefixCommand, rank, prefix);
         }
@@ -238,7 +231,7 @@ public class RankCommand extends Command {
 
         private void onRankSetPrefixCommand(CommandSender sender, CommandContext context) {
             Rank rank = context.get("rank");
-            String prefix = context.get("prefix");
+            String prefix = String.join(" ", (String[]) context.get("prefix"));
 
             rank.setPrefix(prefix);
             rank.save();

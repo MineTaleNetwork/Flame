@@ -19,8 +19,7 @@ public class ArgumentRank extends Argument<Rank> {
         this.values = Rank.getRanks().values().toArray(Rank[]::new);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public Rank parse(@NotNull String input) throws ArgumentSyntaxException {
         Rank rank = Rank.getRank(input);
 

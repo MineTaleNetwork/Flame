@@ -9,7 +9,6 @@ import cc.minetale.commonlib.pigeon.payloads.network.ServerUpdatePayload;
 import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.PigeonUtil;
-import cc.minetale.flame.chat.ChatFilter;
 import cc.minetale.flame.commands.essentials.*;
 import cc.minetale.flame.commands.staff.AddGrantCommand;
 import cc.minetale.flame.commands.staff.ClearChatCommand;

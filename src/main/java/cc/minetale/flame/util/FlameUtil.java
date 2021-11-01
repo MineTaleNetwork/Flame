@@ -16,12 +16,11 @@ import net.minestom.server.color.DyeColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.Material;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FlameUtil {
+
+    // TODO: Move over to mLib
 
     private static final ImmutableMap<MC.CC, DyeColor> CHAT_DYE_COLOR_MAP = Maps.immutableEnumMap((Map) ImmutableMap.builder()
             .put(MC.CC.AQUA, DyeColor.LIGHT_BLUE)
@@ -94,29 +93,20 @@ public class FlameUtil {
 
     public static TextColor getPunishmentColor(Punishment punishment) {
         switch (punishment.getType()) {
-            case BLACKLIST: {
-                return MC.CC.RED.getTextColor();
-            }
-            case BAN: {
-                return MC.CC.GOLD.getTextColor();
-            }
-            case MUTE: {
-                return MC.CC.GREEN.getTextColor();
-            }
-            case WARN: {
-                return MC.CC.BLUE.getTextColor();
-            }
-            default:
-                return MC.CC.WHITE.getTextColor();
+            case BLACKLIST -> { return MC.CC.RED.getTextColor(); }
+            case BAN -> { return MC.CC.GOLD.getTextColor(); }
+            case MUTE -> { return MC.CC.GREEN.getTextColor(); }
+            case WARN -> { return MC.CC.BLUE.getTextColor(); }
+            default -> { return MC.CC.WHITE.getTextColor(); }
         }
     }
 
-    public static List<Component> getPunishmentMessage(Punishment punishment) {
+    public static List<Component> getPunishmentMessage(Punishment punishment, boolean initial) {
         Date date = new Date(punishment.getAddedAt());
 
         return Arrays.asList(
                 MC.Style.SEPARATOR_80,
-                Component.text("You are " + punishment.api().getContext() + (!punishment.api().isPermanent() ? " for " + punishment.api().getTimeRemaining() : "") + ".")
+                Component.text((initial ? "You have been " : "You are ") + punishment.api().getContext() + (!punishment.api().isPermanent() ? " for " + punishment.api().getTimeRemaining() : "") + ".")
                         .color(NamedTextColor.RED),
                 Component.empty(),
                 Component.text("Reason: ")

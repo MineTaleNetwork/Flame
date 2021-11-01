@@ -31,7 +31,7 @@ public class PlayerListener {
                 .addListener(PlayerChatEvent.class, event -> {
                     event.setCancelled(true);
 
-                    Chat.handleChat(event.getPlayer(), event.getMessage());
+                    Chat.handleChat((FlamePlayer) event.getPlayer(), event.getMessage());
                 })
                 .addListener(PlayerDisconnectEvent.class, event -> {
                     Player player = event.getPlayer();

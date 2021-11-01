@@ -105,9 +105,9 @@ public class CoreListener implements APIListener {
         ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
             if(!punishment.isRemoved()) {
                 if (punishment.getType() == Punishment.Type.BAN || punishment.getType() == Punishment.Type.BLACKLIST) {
-                    player.kick(Component.join(Component.newline(), FlameUtil.getPunishmentMessage(punishment)));
+                    player.kick(Component.join(Component.newline(), FlameUtil.getPunishmentMessage(punishment, true)));
                 } else if (punishment.getType() == Punishment.Type.MUTE) {
-                    FlameUtil.getPunishmentMessage(punishment).forEach(player::sendMessage);
+                    FlameUtil.getPunishmentMessage(punishment, true).forEach(player::sendMessage);
                     FlameUtil.playErrorSound(player);
                 }
             }
@@ -123,7 +123,6 @@ public class CoreListener implements APIListener {
     public void punishmentRemove(Punishment punishment) {
         announcePunishment(punishment);
     }
-
 
     public void announcePunishment(Punishment punishment) {
         List<UUID> profileIds = new ArrayList<>();

@@ -18,8 +18,7 @@ public class ArgumentProfile extends Argument<CompletableFuture<Profile>> {
         super(id);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public CompletableFuture<Profile> parse(@NotNull String input) throws ArgumentSyntaxException {
         return ProfileUtil.getProfileByName(input);
     }

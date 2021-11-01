@@ -23,4 +23,9 @@ public class FlamePlayer extends Player {
         this.rank = this.profile.getGrant().api().getRank().getWeight();
     }
 
+    @Override
+    public void kill() {
+
+    }
+
 }

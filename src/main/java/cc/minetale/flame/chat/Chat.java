@@ -1,9 +1,11 @@
 package cc.minetale.flame.chat;
 
 import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.punishment.Punishment;
 import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
+import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.menu.grant.GrantConfirmMenu;
 import cc.minetale.flame.menu.grant.GrantDeleteMenu;
 import cc.minetale.flame.menu.grant.GrantReasonMenu;
@@ -11,6 +13,9 @@ import cc.minetale.flame.menu.punishment.PunishmentConfirmMenu;
 import cc.minetale.flame.menu.punishment.PunishmentReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
+import cc.minetale.flame.util.FlamePlayer;
+import cc.minetale.flame.util.FlameUtil;
+import cc.minetale.flame.util.RankUtil;
 import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -23,20 +28,8 @@ import java.util.UUID;
 
 public class Chat {
 
-    public static void handleChat(Player player, String message) {
+    public static void handleChat(FlamePlayer player, String message) {
         ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
-//            if (profile.getStaffProfile().isLocked()) {
-//                ChatProcedure.handleAuthentication(sender, profile, message);
-//                return;
-//            }
-//
-//            PunishmentProcedure punishmentProcedure = PunishmentProcedure.getByPlayer(sender);
-//
-//            if (punishmentProcedure != null) {
-//                ChatProcedure.handlePunishmentProcedure(punishmentProcedure, sender, message);
-//                return;
-//            }
-//
             GrantProcedure grantProcedure = GrantProcedure.getByPlayer(profile.getId());
 
             if (grantProcedure != null) {
@@ -50,49 +43,28 @@ public class Chat {
                 handlePunishmentProcedure(punishmentProcedure, player, message);
                 return;
             }
-//
-//            if (!player.hasPermission("flame.staff")) {
-//                Punishment punishment = profile.api().getActivePunishmentByType(Punishment.Type.MUTE);
-//
-//                if (FlameAPI.chatMuted) {
-//                    player.sendMessage(MC.Style.SEPARATOR);
-//                    player.sendMessage(Component.text("The chat is currently muted! Please try again later.")
-//                            .color(MC.CC.RED.getTextColor()));
-//                    player.sendMessage(MC.Style.SEPARATOR);
-//                    return;
-//                }
-//
-//                if (punishment != null) {
-//                    Util.getPunishmentMessage(punishment).forEach(sender::sendMessage);
-//                    return;
-//                }
-//
-//                if (!ChatFilter.isSafe(message)) {
-//                    var markedMessage = Component.text("[")
-//                            .color(NamedTextColor.DARK_GRAY)
-//                            .append(Component.text("➤")
-//                                    .color(NamedTextColor.RED))
-//                            .append(Component.text("] ")
-//                                    .color(NamedTextColor.DARK_GRAY))
-//                            .append(formatChat(profile, message));
-//
-//                    Bukkit.getServer().getOnlinePlayers().stream()
-//                            .filter(staff -> staff.hasPermission("flame.staff"))
-//                            .forEach(staff -> {
-//                                staff.sendMessage(markedMessage);
-//                            });
-//
-//                    sender.sendMessage(formatChat(profile, message));
-//                    return;
-//                }
-//            }
+
+            if(!RankUtil.hasMinimumRank(player, "Helper")) {
+                Punishment punishment = profile.api().getActivePunishmentByType(Punishment.Type.MUTE);
+
+                if (FlameAPI.isChatMuted()) {
+                    player.sendMessage(MC.Style.SEPARATOR_80);
+                    player.sendMessage(Component.text("The chat is currently muted! Please try again later.")
+                            .color(MC.CC.RED.getTextColor()));
+                    player.sendMessage(MC.Style.SEPARATOR_80);
+                    return;
+                }
+
+                if (punishment != null) {
+                    FlameUtil.getPunishmentMessage(punishment, false).forEach(player::sendMessage);
+                    return;
+                }
+            }
 
             var instance = player.getInstance();
 
             if(instance != null)
                 instance.sendMessage(player, formatChat(profile, message));
-
-
         });
     }
 
@@ -115,7 +87,7 @@ public class Chat {
         }
 
         switch (procedure.getStage()) {
-            case PROVIDE_TIME: {
+            case PROVIDE_TIME -> {
                 long duration = Duration.fromString(message).getValue();
 
                 if (duration == -1) {
@@ -127,13 +99,11 @@ public class Chat {
 
                     new PunishmentReasonMenu(player, procedure);
                 }
-                break;
             }
-            case PROVIDE_REASON: {
+            case PROVIDE_REASON -> {
                 procedure.getBuilder().reason(message);
                 procedure.setStage(PunishmentProcedure.Stage.PROVIDE_CONFIRMATION);
                 new PunishmentConfirmMenu(player, procedure);
-                break;
             }
         }
     }
@@ -149,7 +119,7 @@ public class Chat {
         }
 
         switch (procedure.getStage()) {
-            case PROVIDE_TIME: {
+            case PROVIDE_TIME -> {
                 long duration = Duration.fromString(message).getValue();
 
                 if (duration == -1) {
@@ -161,19 +131,14 @@ public class Chat {
 
                     new GrantReasonMenu(player, procedure);
                 }
-                break;
             }
-            case PROVIDE_REASON: {
+            case PROVIDE_REASON -> {
                 procedure.getBuilder().reason(message);
                 procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
 
                 switch (procedure.getType()) {
-                    case ADD:
-                        new GrantConfirmMenu(player, procedure);
-                        break;
-                    case REMOVE:
-                        new GrantDeleteMenu(player, procedure);
-                        break;
+                    case ADD -> new GrantConfirmMenu(player, procedure);
+                    case REMOVE -> new GrantDeleteMenu(player, procedure);
                 }
             }
         }
@@ -211,81 +176,5 @@ public class Chat {
 //        }
         return false;
     }
-
-//    public static void handleGrantProcedure(GrantProcedure procedure, Player player, Component message) {
-//        TextComponent component = (TextComponent) message;
-//        String content = component.content();
-//
-//        if (procedure.getStage() == GrantProcedure.Stage.REQUIRE_REASON && procedure.getType() == GrantProcedure.Type.REMOVE) {
-//            if (content.equalsIgnoreCase("cancel")) {
-//                GrantProcedure.procedures.remove(procedure);
-//                player.sendMessage(Component.text("You have cancelled the grant removal procedure.")
-//                        .color(MC.CC.RED.getTextColor()));
-//                return;
-//            }
-//
-//            Bukkit.getServer().getScheduler().runTask(Flame.getFlame(), () -> new DeleteGrantMenu(player, procedure, content));
-//        }
-//
-//        if (procedure.getStage() == GrantProcedure.Stage.PROVIDE_CUSTOM_TIME && procedure.getType() == GrantProcedure.Type.ADD) {
-//            if (content.equalsIgnoreCase("cancel")) {
-//                GrantProcedure.procedures.remove(procedure);
-//                player.sendMessage(Component.text("You have cancelled the grant procedure.")
-//                        .color(MC.CC.RED.getTextColor()));
-//                return;
-//            }
-//
-//            Duration duration = Duration.fromString(content);
-//
-//            if (duration.getValue() == -1) {
-//                procedure.cancel();
-//                player.sendMessage(Component.text("That duration is not valid. Canceling grant procedure.")
-//                        .color(MC.CC.RED.getTextColor()));
-//                player.sendMessage(Component.text("Example: [perm/1y1m1w1d]")
-//                        .color(MC.CC.RED.getTextColor()));
-//            } else {
-//                Grant grant = procedure.getGrant();
-//                grant.setDuration(duration.getValue());
-//                procedure.setGrant(grant);
-//                procedure.setStage(GrantProcedure.Stage.REQUIRE_REASON);
-//                Bukkit.getServer().getScheduler().runTask(Flame.getFlame(), () -> new GrantReasonMenu(player, procedure));
-//            }
-//            return;
-//        }
-//
-//        if (procedure.getStage() == GrantProcedure.Stage.PROVIDE_CUSTOM_REASON && procedure.getType() == GrantProcedure.Type.ADD) {
-//            if (content.equalsIgnoreCase("cancel")) {
-//                GrantProcedure.procedures.remove(procedure);
-//                player.sendMessage(Component.text("You have cancelled the grant procedure.")
-//                        .color(MC.CC.RED.getTextColor()));
-//                return;
-//            }
-//
-//            Grant grant = procedure.getGrant();
-//            grant.setAddedReason(content);
-//            procedure.setGrant(grant);
-//            procedure.setStage(GrantProcedure.Stage.REQUIRE_CONFIRMATION);
-//            Bukkit.getServer().getScheduler().runTask(Flame.getFlame(), () -> new ConfirmGrantMenu(player, procedure));
-//        }
-//    }
-//
-//    public static void handlePunishmentProcedure(PunishmentProcedure procedure, Player player, Component message) {
-//        TextComponent component = (TextComponent) message;
-//        String content = component.content();
-//
-//        if (procedure.getStage() == PunishmentProcedure.Stage.REQUIRE_TEXT) {
-//
-//            if (content.equalsIgnoreCase("cancel")) {
-//                PunishmentProcedure.getProcedures().remove(procedure);
-//                player.sendMessage(Component.text("You have cancelled the punishment procedure.")
-//                        .color(MC.CC.RED.getTextColor()));
-//                return;
-//            }
-//
-//            if (procedure.getType() == PunishmentProcedure.Type.REMOVE) {
-//                Bukkit.getServer().getScheduler().runTask(Flame.getFlame(), () -> new DeletePunishmentMenu(player, procedure, content));
-//            }
-//        }
-//    }
 
 }
