@@ -2,10 +2,9 @@ package cc.minetale.flame.commands.staff;
 
 import cc.minetale.commonlib.pigeon.payloads.rank.RankReloadPayload;
 import cc.minetale.commonlib.pigeon.payloads.rank.RankRemovePayload;
-import cc.minetale.commonlib.rank.Rank;
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.PigeonUtil;
-import cc.minetale.flame.arguments.ArgumentRank;
 import cc.minetale.flame.menu.RanksMenu;
 import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;

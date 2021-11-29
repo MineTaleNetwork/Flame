@@ -1,5 +1,6 @@
 package cc.minetale.flame.commands.essentials;
 
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
@@ -14,7 +15,7 @@ public class StopCommand extends Command {
     public StopCommand() {
         super("stop");
 
-        setCondition(CommandUtil.getRankCondition("Owner"));
+        setCondition(CommandUtil.getRankCondition(Rank.OWNER));
 
         setDefaultExecutor(this::defaultExecutor);
     }

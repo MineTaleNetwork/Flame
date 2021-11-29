@@ -1,5 +1,6 @@
 package cc.minetale.flame;
 
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.punishment.Punishment;
 import cc.minetale.commonlib.util.MC;
@@ -41,11 +42,11 @@ public class Lang {
         );
     }
 
-    public static Component COMMAND_PERMISSION(String rank) {
+    public static Component COMMAND_PERMISSION(Rank rank) {
         return MC.Chat.notificationMessage("Permission",
                 MC.component(
                         MC.component("You need ", MC.CC.GRAY),
-                        MC.component(rank, MC.CC.GOLD),
+                        MC.component(rank.getName(), MC.CC.GOLD),
                         MC.component(" rank to use this command.", MC.CC.GRAY)
                 )
         );

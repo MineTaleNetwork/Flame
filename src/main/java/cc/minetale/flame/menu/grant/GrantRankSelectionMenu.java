@@ -1,11 +1,10 @@
 package cc.minetale.flame.menu.grant;
 
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.rank.Rank;
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.procedure.GrantProcedure;
-import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
@@ -50,23 +49,23 @@ public class GrantRankSelectionMenu implements FabricProvider {
 
         int i = 0;
 
-        List<Rank> sortedRanks = new ArrayList<>(Rank.getRanks().values());
+        List<Rank> sortedRanks = new ArrayList<>(Rank.getRanks());
         sortedRanks.sort(Rank.COMPARATOR);
 
         for (Rank rank : sortedRanks) {
-            MC.CC color = rank.api().getRankColor();
+            MC.CC color = rank.getRankColor();
 
             items[i] = ClickableItem.of(ItemStack.of(FlameUtil.toConcrete(color))
-                            .withDisplayName(MC.component(rank.getName(), color))
+                            .withDisplayName(MC.component(rank.getId(), color))
                             .withLore(
                                     Arrays.asList(
                                             MC.Style.SEPARATOR_50,
                                             Component.text()
                                                     .append(
                                                             MC.component("Click to grant ", MC.CC.GRAY),
-                                                            MC.component(rank.getName(), color),
+                                                            MC.component(rank.getId(), color),
                                                             MC.component(" to ", MC.CC.GRAY),
-                                                            MC.Style.fixItalics(this.profile.api().getColoredName())
+                                                            MC.Style.fixItalics(this.profile.getColoredName())
                                                     ).build(),
                                             MC.Style.SEPARATOR_50
                                     )

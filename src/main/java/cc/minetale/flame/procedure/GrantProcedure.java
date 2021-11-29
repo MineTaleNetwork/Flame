@@ -1,8 +1,10 @@
 package cc.minetale.flame.procedure;
 
-import cc.minetale.commonlib.grant.Grant;
+import cc.minetale.commonlib.api.Grant;
 import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.flame.Lang;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
@@ -12,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Getter @Setter
+@Getter @Setter @Builder
 public class GrantProcedure {
 
     @Getter private static final Map<UUID, GrantProcedure> procedures = new ConcurrentHashMap<>();
@@ -21,14 +23,12 @@ public class GrantProcedure {
     private final Profile recipient;
     private final Type type;
     private Stage stage;
-    private Builder builder;
 
     public GrantProcedure(UUID issuer, Profile recipient, Type type, Stage stage) {
         this.issuer = issuer;
         this.recipient = recipient;
         this.type = type;
         this.stage = stage;
-        this.builder = new Builder();
 
         procedures.put(issuer, this);
     }
@@ -56,46 +56,6 @@ public class GrantProcedure {
             player.sendMessage(Lang.CANCELLED_GRANT);
 
         procedures.remove(this.issuer);
-    }
-
-    public static final class Builder {
-        private UUID player;
-        private UUID rank;
-        private UUID addedBy;
-        private String reason;
-        private long duration;
-
-        public GrantProcedure.Builder player(UUID player) {
-            this.player = player;
-            return this;
-        }
-
-        public GrantProcedure.Builder rank(UUID rank) {
-            this.rank = rank;
-            return this;
-        }
-
-        public GrantProcedure.Builder addedBy(UUID addedBy) {
-            this.addedBy = addedBy;
-            return this;
-        }
-
-        public GrantProcedure.Builder reason(String reason) {
-            this.reason = reason;
-            return this;
-        }
-
-        public GrantProcedure.Builder duration(long duration) {
-            this.duration = duration;
-            return this;
-        }
-
-        public Grant build() {
-            if(this.player == null || this.rank == null || this.reason == null)
-                throw new IllegalStateException("The builder must contain all values.");
-
-            return new Grant(this.player, this.rank, this.addedBy, System.currentTimeMillis(), this.reason, this.duration);
-        }
     }
 
     public enum Type {

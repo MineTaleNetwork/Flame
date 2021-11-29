@@ -1,8 +1,7 @@
 package cc.minetale.flame.menu;
 
-import cc.minetale.commonlib.rank.Rank;
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.MC;
-import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;

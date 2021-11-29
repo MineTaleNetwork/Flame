@@ -4,7 +4,6 @@ import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.menu.DurationType;
 import cc.minetale.flame.procedure.GrantProcedure;
-import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;

@@ -1,5 +1,6 @@
 package cc.minetale.flame.commands.essentials;
 
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.menu.punishment.PunishmentMenu;
 import cc.minetale.flame.util.CommandUtil;
@@ -18,9 +19,11 @@ public class PunishCommand extends Command {
     public PunishCommand() {
         super("punish");
 
-        setCondition(CommandUtil.getRankCondition("Default"));
+        setCondition(CommandUtil.getRankCondition(Rank.OWNER));
 
         setDefaultExecutor(this::defaultExecutor);
+
+        // TODO -> Replace this with the proper argument
 
         var player = ArgumentType.Word("player").setSuggestionCallback((commandSender, context, suggestion) -> {
             for(var onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {

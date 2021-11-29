@@ -1,8 +1,8 @@
 package cc.minetale.flame.chat;
 
+import cc.minetale.commonlib.api.Punishment;
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.punishment.Punishment;
-import cc.minetale.commonlib.rank.Rank;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
@@ -14,22 +14,19 @@ import cc.minetale.flame.menu.punishment.PunishmentReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlamePlayer;
-import cc.minetale.flame.util.FlameUtil;
-import cc.minetale.flame.util.RankUtil;
-import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.entity.Player;
 
-import java.awt.*;
 import java.util.UUID;
 
 public class Chat {
 
     public static void handleChat(FlamePlayer player, String message) {
-        ProfileUtil.getAssociatedProfile(player).thenAccept(profile -> {
+        var profile = player.getProfile();
+
             GrantProcedure grantProcedure = GrantProcedure.getByPlayer(profile.getId());
 
             if (grantProcedure != null) {
@@ -44,8 +41,8 @@ public class Chat {
                 return;
             }
 
-            if(!RankUtil.hasMinimumRank(player, "Helper")) {
-                Punishment punishment = profile.api().getActivePunishmentByType(Punishment.Type.MUTE);
+            if(!Rank.hasMinimumRank(profile, "Helper")) {
+                Punishment punishment = profile.getActivePunishmentByType(Punishment.Type.MUTE);
 
                 if (FlameAPI.isChatMuted()) {
                     player.sendMessage(MC.Style.SEPARATOR_80);
@@ -56,7 +53,7 @@ public class Chat {
                 }
 
                 if (punishment != null) {
-                    FlameUtil.getPunishmentMessage(punishment, false).forEach(player::sendMessage);
+//                    FlameUtil.getPunishmentMessage(punishment, false).forEach(player::sendMessage); // TODO
                     return;
                 }
             }
@@ -65,15 +62,19 @@ public class Chat {
 
             if(instance != null)
                 instance.sendMessage(player, formatChat(profile, message));
-        });
     }
 
     public static TextComponent formatChat(Profile profile, String message) {
-        Rank rank = profile.getGrant().api().getRank();
-        Color color = rank.api().getRankColor().getColor();
+        var rank = profile.getGrant().getRank();
+
+        if(rank == null) {
+            return Component.empty();
+        }
+
+        var color = rank.getRankColor().getColor();
 
         return Component.text()
-                .append(profile.api().getChatFormat())
+                .append(profile.getChatFormat())
                 .append(Component.text(" » ")
                         .color(NamedTextColor.DARK_GRAY))
                 .append(Component.text(message, TextColor.color(MC.Style.bleach(color, 0.80))))

@@ -2,7 +2,6 @@ package cc.minetale.flame.menu.punishment;
 
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.procedure.PunishmentProcedure;
-import cc.minetale.flame.util.FlameUtil;
 import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.ClickableItem;
 import cc.minetale.mlib.fabric.FabricInventory;

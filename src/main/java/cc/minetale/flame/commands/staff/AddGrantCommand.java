@@ -1,12 +1,11 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.commonlib.grant.Grant;
+import cc.minetale.commonlib.api.Grant;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.rank.Rank;
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.arguments.ArgumentProfile;
-import cc.minetale.flame.arguments.ArgumentRank;
 import cc.minetale.flame.arguments.ArgumentDuration;
 import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
@@ -14,6 +13,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentStringArray;
+import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,12 +23,12 @@ public class AddGrantCommand extends Command {
     public AddGrantCommand() {
         super("addgrant");
 
-        setCondition(CommandUtil.getRankCondition("Owner"));
+        setCondition(CommandUtil.getRankCondition(Rank.OWNER));
 
         setDefaultExecutor(this::defaultExecutor);
 
         var profile = new ArgumentProfile("profile");
-        var rank = new ArgumentRank("rank");
+        var rank = ArgumentType.Enum("rank", Rank.class);
         var duration = new ArgumentDuration("duration");
         var reason = new ArgumentStringArray("reason");
 
@@ -57,11 +57,9 @@ public class AddGrantCommand extends Command {
         String[] reason = context.get("reason");
 
         profileFuture.thenAccept(profile -> {
-            System.out.println(profile.getName() + " has been loaded!");
-
-            profile.api().addGrant(new Grant(
+            profile.addGrant(new Grant(
                     profile.getId(),
-                    rank.getUuid(),
+                    rank,
                     (sender.isPlayer() ? sender.asPlayer().getUuid() : null),
                     System.currentTimeMillis(),
                     String.join(" ", reason),

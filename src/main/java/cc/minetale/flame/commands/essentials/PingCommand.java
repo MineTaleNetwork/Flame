@@ -36,8 +36,7 @@ public class PingCommand extends Command {
         if (finder.find(sender).size() == 0) {
             sender.sendMessage(MC.Chat.notificationMessage("Ping", Component.text("A player with that name doesn't exist.", MC.CC.GRAY.getTextColor())));
         } else for (Entity entity : ((EntityFinder) context.get("targets")).find(sender)) {
-            if (entity instanceof Player) {
-                Player player = (Player) entity;
+            if (entity instanceof Player player) {
                 if (player == sender) {
                     executeSelf(sender);
                 } else {

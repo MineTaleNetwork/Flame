@@ -1,8 +1,9 @@
 package cc.minetale.flame.commands.staff;
 
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.util.CommandUtil;
-import cc.minetale.flame.util.RankUtil;
+import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
@@ -13,14 +14,10 @@ import net.minestom.server.instance.Instance;
 
 public class ClearChatCommand extends Command {
 
-    private final String rankName;
-
     public ClearChatCommand() {
         super("clearchat", "cc");
 
-        this.rankName = "Helper";
-
-        setCondition(CommandUtil.getRankCondition(this.rankName));
+        setCondition(CommandUtil.getRankCondition(Rank.HELPER));
 
         setDefaultExecutor(this::defaultExecutor);
     }
@@ -37,12 +34,11 @@ public class ClearChatCommand extends Command {
                     }
 
                     var component = Lang.CHAT_CLEARED(profile);
-
-                    Instance instance = player.getInstance();
+                    var instance = player.getInstance();
 
                     if (instance != null) {
                         for (Player instancePlayer : instance.getPlayers()) {
-                            if (!RankUtil.hasMinimumRank(instancePlayer, this.rankName)) {
+                            if (!Rank.hasMinimumRank(FlamePlayer.fromPlayer(instancePlayer).getProfile(), Rank.HELPER)) {
                                 instancePlayer.sendMessage(builder.build());
                             }
 

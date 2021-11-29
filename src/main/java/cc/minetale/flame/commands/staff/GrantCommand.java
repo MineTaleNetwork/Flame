@@ -1,5 +1,6 @@
 package cc.minetale.flame.commands.staff;
 
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.menu.grant.GrantRankSelectionMenu;
 import cc.minetale.flame.util.CommandUtil;
@@ -15,7 +16,7 @@ public class GrantCommand extends Command {
     public GrantCommand() {
         super("grant");
 
-        setCondition(CommandUtil.getRankCondition("Owner"));
+        setCondition(CommandUtil.getRankCondition(Rank.OWNER));
 
         setDefaultExecutor(this::defaultExecutor);
 
