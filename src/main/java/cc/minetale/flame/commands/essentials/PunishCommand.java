@@ -2,10 +2,9 @@ package cc.minetale.flame.commands.essentials;
 
 import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.MC;
-import cc.minetale.flame.menu.punishment.PunishmentMenu;
 import cc.minetale.flame.util.CommandUtil;
-import cc.minetale.mlib.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -35,15 +34,17 @@ public class PunishCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(MC.Chat.notificationMessage("Punish", Component.text("Usage: /punish <player>", MC.CC.GRAY.getTextColor())));
+        sender.sendMessage(MC.notificationMessage("Punish", Component.text("Usage: /punish <player>", NamedTextColor.GRAY)));
     }
 
     private void onPunishCommand(CommandSender sender, CommandContext context) {
-        Player player = sender.asPlayer();
+        if(sender instanceof Player player) {
+            String playerName = context.get("player");
+        }
 
-        String playerName = context.get("player");
 
-        ProfileUtil.getProfileByName(playerName).thenAccept(profile -> new PunishmentMenu(player, profile));
+
+//        ProfileUtil.getProfileByName(playerName).thenAccept(profile -> new PunishmentMenu(player, profile));
     }
 
 }

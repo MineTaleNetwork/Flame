@@ -1,9 +1,9 @@
 package cc.minetale.flame.commands.essentials;
 
 import cc.minetale.commonlib.api.Rank;
-import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -22,7 +22,7 @@ public class StopCommand extends Command {
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
         for(Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            player.kick(Component.text("The server is shutting down", MC.CC.RED.getTextColor()));
+            player.kick(Component.text("The server is shutting down", NamedTextColor.RED));
         }
 
         MinecraftServer.stopCleanly();

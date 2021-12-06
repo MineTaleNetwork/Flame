@@ -1,70 +1,70 @@
 package cc.minetale.flame;
 
+import cc.minetale.commonlib.api.Punishment;
 import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.punishment.Punishment;
 import cc.minetale.commonlib.util.MC;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class Lang {
 
-    public static final Component UNKNOWN_COMMAND = MC.Chat.notificationMessage("Command", MC.component("You have entered an unknown command.", MC.CC.RED));
-    public static final Component CANCELLED_GRANT = MC.component("Cancelled the grant procedure.", MC.CC.RED);
-    public static final Component PROFILE_FAILED = MC.component("Failed to load your profile. Try again later.", MC.CC.RED);
+    public static final Component UNKNOWN_COMMAND = MC.notificationMessage("Command", Component.text("You have entered an unknown command.", NamedTextColor.RED));
+    public static final Component CANCELLED_GRANT = Component.text("Cancelled the grant procedure.", NamedTextColor.RED);
+    public static final Component PROFILE_FAILED = Component.text("Failed to load your profile. Try again later.", NamedTextColor.RED);
 
     public static Component ANNOUNCE_PUNISHMENT_CONTEXT(Profile target, Profile initiator, Punishment punishment) {
-        return MC.Chat.notificationMessage("Punishment",
-                MC.component(
-                        target.api().getColoredName(),
-                        MC.component(" has been " + punishment.api().getContext() + " by ", MC.CC.GRAY),
-                        (punishment.getAddedByUUID() != null ? initiator.api().getColoredName() : MC.Style.CONSOLE)
-                )
+        return MC.notificationMessage("Punishment",
+                Component.text().append(
+                        target.getColoredName(),
+                        Component.text(" has been " + punishment.getContext() + " by ", NamedTextColor.GRAY),
+                        (punishment.getAddedById() != null ? initiator.getColoredName() : MC.CONSOLE)
+                ).build()
         );
     }
 
     public static Component PUNISHMENT_SUCCESS(Profile profile) {
-        return MC.component("You have successfully punished " + profile.getName(), MC.CC.GREEN);
+        return Component.text("You have successfully punished " + profile.getName(), NamedTextColor.GREEN);
     }
 
     public static Component TO_MSG(Profile target, String message) {
-        return MC.component(
-                MC.component("(To ", MC.CC.GRAY),
-                target.api().getChatFormat(),
-                MC.component(") " + message, MC.CC.GRAY)
-        );
+        return Component.text().append(
+                Component.text("(To ", NamedTextColor.GRAY),
+                target.getChatFormat(),
+                Component.text(") " + message, NamedTextColor.GRAY)
+        ).build();
     }
 
     public static Component FROM_MSG(Profile initiator, String message) {
-        return MC.component(
-                MC.component("(From ", MC.CC.GRAY),
-                initiator.api().getChatFormat(),
-                MC.component(") " + message, MC.CC.GRAY)
-        );
+        return Component.text().append(
+                Component.text("(From ", NamedTextColor.GRAY),
+                initiator.getChatFormat(),
+                Component.text(") " + message, NamedTextColor.GRAY)
+        ).build();
     }
 
     public static Component COMMAND_PERMISSION(Rank rank) {
-        return MC.Chat.notificationMessage("Permission",
-                MC.component(
-                        MC.component("You need ", MC.CC.GRAY),
-                        MC.component(rank.getName(), MC.CC.GOLD),
-                        MC.component(" rank to use this command.", MC.CC.GRAY)
-                )
+        return MC.notificationMessage("Permission",
+                Component.text().append(
+                        Component.text("You need ", NamedTextColor.GRAY),
+                        Component.text(rank.getName(), NamedTextColor.GOLD),
+                        Component.text(" rank to use this command.", NamedTextColor.GRAY)
+                ).build()
         );
     }
 
     public static Component CHAT_CLEARED(Profile profile) {
-        return MC.component(
-                MC.Style.SEPARATOR_80,
+        return Component.text().append(
+                MC.SEPARATOR_80,
                 Component.newline(),
-                MC.Chat.notificationMessage("Chat",
-                        MC.component(
-                                MC.component("Chat has been cleared by ", MC.CC.GRAY),
-                                profile.api().getChatFormat()
-                        )
-                ),
+                MC.notificationMessage("Chat",
+                        Component.text().append(
+                                Component.text("Chat has been cleared by ", NamedTextColor.GRAY),
+                                profile.getChatFormat()
+                        ).build()),
                 Component.newline(),
-                MC.Style.SEPARATOR_80
-        );
+                MC.SEPARATOR_80
+        ).build();
     }
 
 }

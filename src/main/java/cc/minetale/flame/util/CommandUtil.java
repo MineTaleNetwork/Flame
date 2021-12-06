@@ -2,6 +2,7 @@ package cc.minetale.flame.util;
 
 import cc.minetale.commonlib.api.Rank;
 import cc.minetale.flame.Lang;
+import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 
@@ -11,12 +12,10 @@ public class CommandUtil {
         return ((sender, s) -> {
             boolean command = s != null;
 
-            if (sender.isConsole())
+            if (sender instanceof ConsoleSender)
                 return true;
 
-            if (sender.isPlayer()) {
-                Player player = sender.asPlayer();
-
+            if (sender instanceof Player player) {
                 boolean hasMinimum = Rank.hasMinimumRank(FlamePlayer.fromPlayer(player).getProfile(), rank);
 
                 if(!hasMinimum)

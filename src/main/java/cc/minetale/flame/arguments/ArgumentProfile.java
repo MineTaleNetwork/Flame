@@ -1,7 +1,6 @@
 package cc.minetale.flame.arguments;
 
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.mlib.util.ProfileUtil;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -20,7 +19,7 @@ public class ArgumentProfile extends Argument<CompletableFuture<Profile>> {
 
     @NotNull @Override
     public CompletableFuture<Profile> parse(@NotNull String input) throws ArgumentSyntaxException {
-        return ProfileUtil.getProfileByName(input);
+        return Profile.getProfile(input);
     }
 
     @Override

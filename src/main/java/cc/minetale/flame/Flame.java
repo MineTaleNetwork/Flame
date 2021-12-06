@@ -1,14 +1,12 @@
 package cc.minetale.flame;
 
-import cc.minetale.commonlib.CommonLib;
-import cc.minetale.commonlib.api.Rank;
-import cc.minetale.commonlib.util.MC;
-import cc.minetale.flame.commands.essentials.*;
+import cc.minetale.flame.commands.essentials.PingCommand;
+import cc.minetale.flame.commands.essentials.PunishCommand;
+import cc.minetale.flame.commands.essentials.StopCommand;
 import cc.minetale.flame.commands.staff.AddGrantCommand;
 import cc.minetale.flame.commands.staff.ClearChatCommand;
 import cc.minetale.flame.commands.staff.GrantCommand;
-import cc.minetale.flame.commands.staff.RankCommand;
-import cc.minetale.flame.listeners.CoreListener;
+import cc.minetale.flame.commands.staff.RanksCommand;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.util.FlamePlayer;
 import lombok.Getter;
@@ -18,7 +16,7 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.extensions.Extension;
 
-import java.util.*;
+import java.util.Arrays;
 
 @Getter
 public class Flame extends Extension {
@@ -39,16 +37,11 @@ public class Flame extends Extension {
                 new ClearChatCommand(),
                 new PingCommand(),
                 new StopCommand(),
-                new RankCommand(),
+                new RanksCommand(),
                 new GrantCommand(),
                 new PunishCommand(),
                 new AddGrantCommand()
         ).forEach(command -> MinecraftServer.getCommandManager().register(command));
-
-        var commonLib = CommonLib.getCommonLib();
-
-        commonLib.getApiListeners()
-                .add(new CoreListener());
 
         MinecraftServer.getGlobalEventHandler().addChild(events());
     }

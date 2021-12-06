@@ -2,6 +2,7 @@ package cc.minetale.flame.commands.essentials;
 
 import cc.minetale.commonlib.util.MC;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -34,20 +35,20 @@ public class PingCommand extends Command {
         EntityFinder finder = context.get("targets");
 
         if (finder.find(sender).size() == 0) {
-            sender.sendMessage(MC.Chat.notificationMessage("Ping", Component.text("A player with that name doesn't exist.", MC.CC.GRAY.getTextColor())));
+            sender.sendMessage(MC.notificationMessage("Ping", Component.text("A player with that name doesn't exist.", NamedTextColor.GRAY)));
         } else for (Entity entity : ((EntityFinder) context.get("targets")).find(sender)) {
             if (entity instanceof Player player) {
                 if (player == sender) {
                     executeSelf(sender);
                 } else {
-                    sender.sendMessage(MC.Chat.notificationMessage("Ping", Component.text(player.getUsername() + "'s ping is " + player.getLatency() + "ms", MC.CC.GRAY.getTextColor())));
+                    sender.sendMessage(MC.notificationMessage("Ping", Component.text(player.getUsername() + "'s ping is " + player.getLatency() + "ms", NamedTextColor.GRAY)));
                 }
             }
         }
     }
 
     private void executeSelf(CommandSender sender) {
-        sender.sendMessage(MC.Chat.notificationMessage("Ping", Component.text("Your ping is " + sender.asPlayer().getLatency() + "ms", MC.CC.GRAY.getTextColor())));
+        sender.sendMessage(MC.notificationMessage("Ping", Component.text("Your ping is " + sender.asPlayer().getLatency() + "ms", NamedTextColor.GRAY)));
     }
 
 }

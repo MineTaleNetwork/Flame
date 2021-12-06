@@ -1,12 +1,12 @@
 package cc.minetale.flame.procedure;
 
-import cc.minetale.commonlib.api.Punishment;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.util.MC;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Getter @Setter @Builder
+@Getter @Setter @Builder @AllArgsConstructor
 public class PunishmentProcedure {
 
     @Getter private static final Map<UUID, PunishmentProcedure> procedures = new ConcurrentHashMap<>();
@@ -23,6 +23,9 @@ public class PunishmentProcedure {
     private final Profile recipient;
     private final Type type;
     private Stage stage;
+
+    private long duration;
+    private String reason;
 
     public PunishmentProcedure(UUID issuer, Profile recipient, Type type, Stage stage) {
         this.issuer = issuer;
@@ -52,7 +55,7 @@ public class PunishmentProcedure {
         Player player = MinecraftServer.getConnectionManager().getPlayer(this.issuer);
 
         if(player != null)
-            player.sendMessage(Component.text("Cancelled the punishment procedure.", MC.CC.RED.getTextColor()));
+            player.sendMessage(Component.text("Cancelled the punishment procedure.", NamedTextColor.RED));
 
         procedures.remove(this.issuer);
     }

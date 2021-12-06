@@ -1,6 +1,5 @@
 package cc.minetale.flame.procedure;
 
-import cc.minetale.commonlib.api.Grant;
 import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.flame.Lang;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Getter @Setter @Builder
+@Getter @Setter @Builder @AllArgsConstructor
 public class GrantProcedure {
 
     @Getter private static final Map<UUID, GrantProcedure> procedures = new ConcurrentHashMap<>();
@@ -23,6 +22,9 @@ public class GrantProcedure {
     private final Profile recipient;
     private final Type type;
     private Stage stage;
+
+    private long duration;
+    private String reason;
 
     public GrantProcedure(UUID issuer, Profile recipient, Type type, Stage stage) {
         this.issuer = issuer;

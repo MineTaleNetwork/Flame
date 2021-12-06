@@ -1,20 +1,22 @@
 package cc.minetale.flame.commands.staff;
 
 import cc.minetale.commonlib.api.Grant;
-import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.api.Rank;
+import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
-import cc.minetale.flame.arguments.ArgumentProfile;
 import cc.minetale.flame.arguments.ArgumentDuration;
+import cc.minetale.flame.arguments.ArgumentProfile;
 import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -39,15 +41,15 @@ public class AddGrantCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(MC.Chat.notificationMessage("Add Grant", Component.text("Usage: /addgrant <player> <rank> <duration> <reason>", MC.CC.GRAY.getTextColor())));
+        sender.sendMessage(MC.notificationMessage("Add Grant", Component.text("Usage: /addgrant <player> <rank> <duration> <reason>", NamedTextColor.GRAY)));
     }
 
     public void onRankError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(MC.Chat.notificationMessage("Add Grant", Component.text("A rank with that name could not be found.", MC.CC.GRAY.getTextColor())));
+        sender.sendMessage(MC.notificationMessage("Add Grant", Component.text("A rank with that name could not be found.", NamedTextColor.GRAY)));
     }
 
     public void onDurationError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(MC.Chat.notificationMessage("Add Grant", Component.text("The provided duration is invalid.", MC.CC.GRAY.getTextColor())));
+        sender.sendMessage(MC.notificationMessage("Add Grant", Component.text("The provided duration is invalid.", NamedTextColor.GRAY)));
     }
 
     private void addGrantExecutor(CommandSender sender, CommandContext context) {
@@ -60,7 +62,7 @@ public class AddGrantCommand extends Command {
             profile.addGrant(new Grant(
                     profile.getId(),
                     rank,
-                    (sender.isPlayer() ? sender.asPlayer().getUuid() : null),
+                    (sender instanceof Player player ? player.getUuid() : null),
                     System.currentTimeMillis(),
                     String.join(" ", reason),
                     duration.getValue()

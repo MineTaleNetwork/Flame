@@ -17,7 +17,7 @@ import cc.minetale.flame.util.FlamePlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 
 import java.util.UUID;
@@ -41,14 +41,13 @@ public class Chat {
                 return;
             }
 
-            if(!Rank.hasMinimumRank(profile, "Helper")) {
+            if(!Rank.hasMinimumRank(profile, Rank.HELPER)) {
                 Punishment punishment = profile.getActivePunishmentByType(Punishment.Type.MUTE);
 
                 if (FlameAPI.isChatMuted()) {
-                    player.sendMessage(MC.Style.SEPARATOR_80);
-                    player.sendMessage(Component.text("The chat is currently muted! Please try again later.")
-                            .color(MC.CC.RED.getTextColor()));
-                    player.sendMessage(MC.Style.SEPARATOR_80);
+                    player.sendMessage(MC.SEPARATOR_80);
+                    player.sendMessage(Component.text("The chat is currently muted! Please try again later.", NamedTextColor.RED));
+                    player.sendMessage(MC.SEPARATOR_80);
                     return;
                 }
 
@@ -67,18 +66,11 @@ public class Chat {
     public static TextComponent formatChat(Profile profile, String message) {
         var rank = profile.getGrant().getRank();
 
-        if(rank == null) {
-            return Component.empty();
-        }
-
-        var color = rank.getRankColor().getColor();
-
-        return Component.text()
-                .append(profile.getChatFormat())
-                .append(Component.text(" » ")
-                        .color(NamedTextColor.DARK_GRAY))
-                .append(Component.text(message, TextColor.color(MC.Style.bleach(color, 0.80))))
-                .build();
+        return Component.text().append(
+                profile.getChatFormat(),
+                        Component.text(" » ", NamedTextColor.DARK_GRAY, TextDecoration.BOLD),
+                        Component.text(message, MC.toTextColor(MC.bleach(MC.fromNamedTextColor(rank.getColor()), 0.80)))
+                ).build();
     }
 
     private static void handlePunishmentProcedure(PunishmentProcedure procedure, Player player, String message) {
@@ -92,17 +84,17 @@ public class Chat {
                 long duration = Duration.fromString(message).getValue();
 
                 if (duration == -1) {
-                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1d]", MC.CC.RED.getTextColor()));
+                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1d]", NamedTextColor.RED));
                     procedure.cancel();
                 } else {
-                    procedure.getBuilder().duration(duration);
+                    procedure.setDuration(duration);
                     procedure.setStage(PunishmentProcedure.Stage.PROVIDE_REASON);
 
                     new PunishmentReasonMenu(player, procedure);
                 }
             }
             case PROVIDE_REASON -> {
-                procedure.getBuilder().reason(message);
+                procedure.setReason(message);
                 procedure.setStage(PunishmentProcedure.Stage.PROVIDE_CONFIRMATION);
                 new PunishmentConfirmMenu(player, procedure);
             }
@@ -115,7 +107,7 @@ public class Chat {
         if (message.equalsIgnoreCase("cancel")) {
             GrantProcedure.getProcedures().remove(uuid);
             player.sendMessage(Component.text("You have cancelled the grant removal procedure.")
-                    .color(MC.CC.RED.getTextColor()));
+                    .color(NamedTextColor.RED));
             return;
         }
 
@@ -124,17 +116,17 @@ public class Chat {
                 long duration = Duration.fromString(message).getValue();
 
                 if (duration == -1) {
-                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1d]", MC.CC.RED.getTextColor()));
+                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1d]", NamedTextColor.RED));
                     procedure.cancel();
                 } else {
-                    procedure.getBuilder().duration(duration);
+                    procedure.setDuration(duration);
                     procedure.setStage(GrantProcedure.Stage.PROVIDE_REASON);
 
                     new GrantReasonMenu(player, procedure);
                 }
             }
             case PROVIDE_REASON -> {
-                procedure.getBuilder().reason(message);
+                procedure.setReason(message);
                 procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
 
                 switch (procedure.getType()) {
@@ -153,15 +145,15 @@ public class Chat {
             int code = Integer.parseInt(content);
 
             if (correctCode(profile, code)) {
-                player.sendMessage(MC.Style.SEPARATOR_80);
+                player.sendMessage(MC.SEPARATOR_80);
                 player.sendMessage(Component.text("Access Granted! Thank you for Authenticating!")
-                        .color(MC.CC.GREEN.getTextColor()));
-                player.sendMessage(MC.Style.SEPARATOR_80);
+                        .color(NamedTextColor.GREEN));
+                player.sendMessage(MC.SEPARATOR_80);
             } else {
                 player.kick(Component.text("Incorrect or Expired Two Factor Code", NamedTextColor.RED));
             }
         } catch (NumberFormatException e) {
-            player.kick(Component.text("Incorrect or Expired Two Factor Code!", MC.CC.RED.getTextColor()));
+            player.kick(Component.text("Incorrect or Expired Two Factor Code!", NamedTextColor.RED));
         }
     }
 

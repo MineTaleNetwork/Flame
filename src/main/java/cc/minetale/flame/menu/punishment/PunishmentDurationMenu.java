@@ -1,14 +1,12 @@
 package cc.minetale.flame.menu.punishment;
 
 import cc.minetale.commonlib.util.Duration;
-import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.menu.DurationType;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.MenuUtil;
 import cc.minetale.mlib.fabric.FabricInventory;
 import cc.minetale.mlib.fabric.content.FabricContents;
 import cc.minetale.mlib.fabric.content.FabricProvider;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.InventoryType;
@@ -23,7 +21,7 @@ public class PunishmentDurationMenu implements FabricProvider, DurationType {
         this.inventory = FabricInventory.builder()
                 .provider(this)
                 .type(InventoryType.CHEST_4_ROW)
-                .title(MC.component("Select a Punishment Duration"))
+//                .title(MC.component("Select a Punishment Duration"))
                 .build();
         this.procedure = procedure;
         this.inventory.open(player);
@@ -43,23 +41,23 @@ public class PunishmentDurationMenu implements FabricProvider, DurationType {
 
     @Override
     public void selectDuration(Player player, Duration duration) {
-        FlameUtil.playClickSound(player);
-
-        if(duration == null) {
-            this.procedure.setStage(PunishmentProcedure.Stage.PROVIDE_TIME);
-
-            this.shouldCancel = false;
-
-            this.inventory.close(player);
-
-            player.sendMessage(Component.text("Type the amount of time you would like to add this punishment for in chat...", MC.CC.GREEN.getTextColor()));
-        } else {
-            PunishmentProcedure.Builder builder = this.procedure.getBuilder();
-
-            builder.duration(duration.getValue());
-
-            new PunishmentReasonMenu(player, procedure);
-        }
+//        FlameUtil.playClickSound(player);
+//
+//        if(duration == null) {
+//            this.procedure.setStage(PunishmentProcedure.Stage.PROVIDE_TIME);
+//
+//            this.shouldCancel = false;
+//
+//            this.inventory.close(player);
+//
+//            player.sendMessage(Component.text("Type the amount of time you would like to add this punishment for in chat...", NamedTextColor.GREEN));
+//        } else {
+//            PunishmentProcedure.Builder builder = this.procedure.getBuilder();
+//
+//            builder.duration(duration.getValue());
+//
+//            new PunishmentReasonMenu(player, procedure);
+//        }
     }
 
 }
