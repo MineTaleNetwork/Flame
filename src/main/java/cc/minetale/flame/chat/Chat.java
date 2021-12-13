@@ -68,9 +68,9 @@ public class Chat {
 
         return Component.text().append(
                 profile.getChatFormat(),
-                        Component.text(" » ", NamedTextColor.DARK_GRAY, TextDecoration.BOLD),
-                        Component.text(message, MC.toTextColor(MC.bleach(MC.fromNamedTextColor(rank.getColor()), 0.80)))
-                ).build();
+                Component.text(" » ", NamedTextColor.DARK_GRAY, TextDecoration.BOLD),
+                Component.text(message, MC.toTextColor(MC.bleach(MC.fromNamedTextColor(rank.getColor()), 0.80)))
+        ).build();
     }
 
     private static void handlePunishmentProcedure(PunishmentProcedure procedure, Player player, String message) {

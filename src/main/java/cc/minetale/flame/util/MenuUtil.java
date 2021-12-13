@@ -8,6 +8,7 @@ import cc.minetale.mlib.fabric.content.Pagination;
 import cc.minetale.mlib.util.SoundsUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
@@ -25,8 +26,8 @@ public class MenuUtil {
 
         contents.setSlot(slot, ClickableItem.of(ItemStack.of(Material.GRAY_CARPET)
                         .withDisplayName(Component.text().append(
-                                        Component.text("Next Page", NamedTextColor.GRAY),
-                                        Component.text(" >", NamedTextColor.DARK_GRAY, TextDecoration.BOLD)
+                                        Component.text("Next Page", Style.style(NamedTextColor.GRAY, TextDecoration.ITALIC.as(false))),
+                                        Component.text(" >", Style.style(NamedTextColor.DARK_GRAY, TextDecoration.ITALIC.as(false), TextDecoration.BOLD))
                                 ).build()),
                 event -> {
                     Player player = event.getPlayer();
@@ -50,8 +51,8 @@ public class MenuUtil {
 
         contents.setSlot(slot, ClickableItem.of(ItemStack.of(Material.GRAY_CARPET)
                         .withDisplayName(Component.text().append(
-                                Component.text("< ", NamedTextColor.DARK_GRAY, TextDecoration.BOLD),
-                                Component.text("Previous Page", NamedTextColor.GRAY)
+                                Component.text("< ", Style.style(NamedTextColor.DARK_GRAY, TextDecoration.ITALIC.as(false), TextDecoration.BOLD)),
+                                Component.text("Previous Page", Style.style(NamedTextColor.GRAY, TextDecoration.ITALIC.as(false)))
                         ).build()),
                 event -> {
                     if (event.getClickType() == ClickType.LEFT_CLICK) {

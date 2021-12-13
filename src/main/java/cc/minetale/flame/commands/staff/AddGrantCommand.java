@@ -5,6 +5,7 @@ import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.arguments.ArgumentDuration;
 import cc.minetale.flame.arguments.ArgumentProfile;
 import cc.minetale.flame.util.CommandUtil;
@@ -25,7 +26,7 @@ public class AddGrantCommand extends Command {
     public AddGrantCommand() {
         super("addgrant");
 
-        setCondition(CommandUtil.getRankCondition(Rank.OWNER));
+//        setCondition(CommandUtil.getRankCondition(Rank.OWNER));
 
         setDefaultExecutor(this::defaultExecutor);
 
@@ -55,7 +56,7 @@ public class AddGrantCommand extends Command {
     private void addGrantExecutor(CommandSender sender, CommandContext context) {
         CompletableFuture<Profile> profileFuture = context.get("profile");
         Rank rank = context.get("rank");
-        Duration duration = context.get("duration");
+        long duration = ((Duration) context.get("duration")).getValue();
         String[] reason = context.get("reason");
 
         profileFuture.thenAccept(profile -> {
@@ -65,9 +66,13 @@ public class AddGrantCommand extends Command {
                     (sender instanceof Player player ? player.getUuid() : null),
                     System.currentTimeMillis(),
                     String.join(" ", reason),
-                    duration.getValue()
+                    duration
             ));
+
+            sender.sendMessage(Component.text("Granted " + profile.getName() + " " + rank.getName() + " " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)) + "."));
         });
+
+
     }
 
 }
