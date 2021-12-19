@@ -6,11 +6,6 @@ import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
-import cc.minetale.flame.menu.grant.GrantConfirmMenu;
-import cc.minetale.flame.menu.grant.GrantDeleteMenu;
-import cc.minetale.flame.menu.grant.GrantReasonMenu;
-import cc.minetale.flame.menu.punishment.PunishmentConfirmMenu;
-import cc.minetale.flame.menu.punishment.PunishmentReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlamePlayer;
@@ -90,13 +85,14 @@ public class Chat {
                     procedure.setDuration(duration);
                     procedure.setStage(PunishmentProcedure.Stage.PROVIDE_REASON);
 
-                    new PunishmentReasonMenu(player, procedure);
+//                    new PunishmentReasonMenu(player, procedure);
                 }
             }
             case PROVIDE_REASON -> {
                 procedure.setReason(message);
                 procedure.setStage(PunishmentProcedure.Stage.PROVIDE_CONFIRMATION);
-                new PunishmentConfirmMenu(player, procedure);
+
+//                new PunishmentConfirmMenu(player, procedure);
             }
         }
     }
@@ -122,7 +118,7 @@ public class Chat {
                     procedure.setDuration(duration);
                     procedure.setStage(GrantProcedure.Stage.PROVIDE_REASON);
 
-                    new GrantReasonMenu(player, procedure);
+//                    new GrantReasonMenu(player, procedure);
                 }
             }
             case PROVIDE_REASON -> {
@@ -130,8 +126,8 @@ public class Chat {
                 procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
 
                 switch (procedure.getType()) {
-                    case ADD -> new GrantConfirmMenu(player, procedure);
-                    case REMOVE -> new GrantDeleteMenu(player, procedure);
+//                    case ADD -> new GrantConfirmMenu(player, procedure);
+//                    case REMOVE -> new GrantDeleteMenu(player, procedure);
                 }
             }
         }

@@ -22,7 +22,6 @@ public class CommandUtil {
                     if (command)
                         sender.sendMessage(Lang.COMMAND_PERMISSION(rank));
 
-
                 return hasMinimum;
             }
 

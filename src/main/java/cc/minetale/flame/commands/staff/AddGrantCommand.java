@@ -8,7 +8,6 @@ import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.arguments.ArgumentDuration;
 import cc.minetale.flame.arguments.ArgumentProfile;
-import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
@@ -26,6 +25,7 @@ public class AddGrantCommand extends Command {
     public AddGrantCommand() {
         super("addgrant");
 
+        // TODO -> AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 //        setCondition(CommandUtil.getRankCondition(Rank.OWNER));
 
         setDefaultExecutor(this::defaultExecutor);
