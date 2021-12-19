@@ -39,7 +39,7 @@ public class PlayerListener {
                     var uuid = player.getUuid();
 
                     try {
-                        Profile profile = Profile.getProfile(uuid).get(5, TimeUnit.SECONDS);
+                        Profile profile = Profile.getProfile(player.getUsername(), uuid).get(5, TimeUnit.SECONDS);
 
                         player.setProfile(profile);
 //                        player.refreshCommands(); // TODO Will it work when the profile gets loaded?
