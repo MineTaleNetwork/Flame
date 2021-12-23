@@ -7,19 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter @Setter @Builder @AllArgsConstructor
 public class PunishmentProcedure {
 
-    @Getter private static final Map<UUID, PunishmentProcedure> procedures = new ConcurrentHashMap<>();
+    @Getter private static final Map<Player, PunishmentProcedure> procedures = new ConcurrentHashMap<>();
 
-    private final UUID issuer;
+    private final Player issuer;
     private final Profile recipient;
     private final Type type;
     private Stage stage;
@@ -27,7 +25,7 @@ public class PunishmentProcedure {
     private long duration;
     private String reason;
 
-    public PunishmentProcedure(UUID issuer, Profile recipient, Type type, Stage stage) {
+    public PunishmentProcedure(Player issuer, Profile recipient, Type type, Stage stage) {
         this.issuer = issuer;
         this.recipient = recipient;
         this.type = type;
@@ -36,9 +34,9 @@ public class PunishmentProcedure {
         procedures.put(issuer, this);
     }
 
-    public static PunishmentProcedure getByPlayer(UUID uuid) {
+    public static PunishmentProcedure getByPlayer(Player player) {
         for (PunishmentProcedure procedure : procedures.values()) {
-            if (procedure.issuer.equals(uuid)) {
+            if (procedure.issuer.equals(player)) {
                 return procedure;
             }
         }
@@ -52,10 +50,7 @@ public class PunishmentProcedure {
     }
 
     public void cancel() {
-        Player player = MinecraftServer.getConnectionManager().getPlayer(this.issuer);
-
-        if(player != null)
-            player.sendMessage(Component.text("Cancelled the punishment procedure.", NamedTextColor.RED));
+        this.issuer.sendMessage(Component.text("You have cancelled the punishment " + (this.type == Type.REMOVE ? "removal " : "") + "procedure.", NamedTextColor.RED));
 
         procedures.remove(this.issuer);
     }

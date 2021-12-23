@@ -1,9 +1,9 @@
-package cc.minetale.flame.commands.staff;
+package cc.minetale.flame.commands.essentials;
 
 import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.Lang;
-import cc.minetale.flame.menu.grant.GrantRankMenu;
+import cc.minetale.flame.menu.grant.GrantsMenu;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.ProfileUtil;
 import net.kyori.adventure.text.Component;
@@ -16,35 +16,36 @@ import net.minestom.server.entity.Player;
 
 import java.util.concurrent.TimeUnit;
 
-public class GrantCommand extends Command {
+public class GrantsCommand extends Command {
 
-    public GrantCommand() {
-        super("grant");
+    public GrantsCommand() {
+        super("grants");
 
-        setCondition(CommandUtil.getRankCondition(Rank.OWNER));
+        setCondition(CommandUtil.getRankCondition(Rank.ADMIN));
         setDefaultExecutor(this::defaultExecutor);
 
         var profile = ArgumentType.Word("profile");
 
-        addSyntax(this::onGrantCommand, profile);
+        addSyntax(this::onGrantsCommand, profile);
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
         sender.sendMessage(MC.notificationMessage("Command",
-                Component.text("Usage: /grant <player>", NamedTextColor.GRAY)));
+                Component.text("Usage: /grants <player>", NamedTextColor.GRAY)));
     }
 
-    private void onGrantCommand(CommandSender sender, CommandContext context) {
+    private void onGrantsCommand(CommandSender sender, CommandContext context) {
         if (sender instanceof Player player) {
             ProfileUtil.getProfile((String) context.get("profile"))
                     .orTimeout(5, TimeUnit.SECONDS)
                     .whenComplete((profile, throwable) -> {
                         if (profile != null) {
-                            new GrantRankMenu(player, profile);
+                            new GrantsMenu(player, profile);
                         } else {
                             player.sendMessage(Lang.COULD_NOT_LOAD_PROFILE);
                         }
                     });
         }
     }
+
 }

@@ -10,8 +10,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class Lang {
 
     public static final Component UNKNOWN_COMMAND = MC.notificationMessage("Command", Component.text("You have entered an unknown command.", NamedTextColor.RED));
-    public static final Component CANCELLED_GRANT = Component.text("Cancelled the grant procedure.", NamedTextColor.RED);
     public static final Component PROFILE_FAILED = Component.text("Failed to load your profile. Try again later.", NamedTextColor.RED);
+    public static final Component COULD_NOT_LOAD_PROFILE = Component.text("Unable to load that player's profile.", NamedTextColor.RED);
 
     public static Component ANNOUNCE_PUNISHMENT_CONTEXT(Profile target, Profile initiator, Punishment punishment) {
         return MC.notificationMessage("Punishment",

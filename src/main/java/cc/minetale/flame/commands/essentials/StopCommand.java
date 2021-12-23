@@ -16,7 +16,6 @@ public class StopCommand extends Command {
         super("stop");
 
         setCondition(CommandUtil.getRankCondition(Rank.OWNER));
-
         setDefaultExecutor(this::defaultExecutor);
     }
 

@@ -6,6 +6,8 @@ import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
+import cc.minetale.flame.menu.grant.GrantConfirmMenu;
+import cc.minetale.flame.menu.grant.GrantReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlamePlayer;
@@ -15,21 +17,19 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 
-import java.util.UUID;
-
 public class Chat {
 
     public static void handleChat(FlamePlayer player, String message) {
         var profile = player.getProfile();
 
-            GrantProcedure grantProcedure = GrantProcedure.getByPlayer(profile.getId());
+            GrantProcedure grantProcedure = GrantProcedure.getByPlayer(player);
 
             if (grantProcedure != null) {
                 handleGrantProcedure(grantProcedure, player, message);
                 return;
             }
 
-            PunishmentProcedure punishmentProcedure = PunishmentProcedure.getByPlayer(profile.getId());
+            PunishmentProcedure punishmentProcedure = PunishmentProcedure.getByPlayer(player);
 
             if (punishmentProcedure != null) {
                 handlePunishmentProcedure(punishmentProcedure, player, message);
@@ -98,12 +98,8 @@ public class Chat {
     }
 
     private static void handleGrantProcedure(GrantProcedure procedure, Player player, String message) {
-        UUID uuid = player.getUuid();
-
         if (message.equalsIgnoreCase("cancel")) {
-            GrantProcedure.getProcedures().remove(uuid);
-            player.sendMessage(Component.text("You have cancelled the grant removal procedure.")
-                    .color(NamedTextColor.RED));
+            procedure.cancel();
             return;
         }
 
@@ -118,7 +114,7 @@ public class Chat {
                     procedure.setDuration(duration);
                     procedure.setStage(GrantProcedure.Stage.PROVIDE_REASON);
 
-//                    new GrantReasonMenu(player, procedure);
+                    new GrantReasonMenu(player, procedure);
                 }
             }
             case PROVIDE_REASON -> {
@@ -126,7 +122,7 @@ public class Chat {
                 procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
 
                 switch (procedure.getType()) {
-//                    case ADD -> new GrantConfirmMenu(player, procedure);
+                    case ADD -> new GrantConfirmMenu(player, procedure);
 //                    case REMOVE -> new GrantDeleteMenu(player, procedure);
                 }
             }
@@ -134,8 +130,8 @@ public class Chat {
     }
 
     public static void handleAuthentication(Player player, Profile profile, Component message) {
-        TextComponent component = (TextComponent) message;
-        String content = component.content();
+        var component = (TextComponent) message;
+        var content = component.content();
 
         try {
             int code = Integer.parseInt(content);

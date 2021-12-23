@@ -1,5 +1,6 @@
 package cc.minetale.flame;
 
+import cc.minetale.flame.commands.essentials.GrantsCommand;
 import cc.minetale.flame.commands.essentials.PingCommand;
 import cc.minetale.flame.commands.essentials.PunishCommand;
 import cc.minetale.flame.commands.essentials.StopCommand;
@@ -7,13 +8,12 @@ import cc.minetale.flame.commands.staff.AddGrantCommand;
 import cc.minetale.flame.commands.staff.ClearChatCommand;
 import cc.minetale.flame.commands.staff.GrantCommand;
 import cc.minetale.flame.commands.staff.RanksCommand;
+import cc.minetale.flame.listeners.PigeonListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.util.FlamePlayer;
+import cc.minetale.pigeon.Pigeon;
 import lombok.Getter;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventNode;
-import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.extensions.Extension;
 
 import java.util.Arrays;
@@ -40,25 +40,16 @@ public class Flame extends Extension {
                 new RanksCommand(),
                 new GrantCommand(),
                 new PunishCommand(),
-                new AddGrantCommand()
+                new AddGrantCommand(),
+                new GrantsCommand()
         ).forEach(command -> MinecraftServer.getCommandManager().register(command));
 
-        MinecraftServer.getGlobalEventHandler().addChild(events());
+        Pigeon.getPigeon().getListenersRegistry().registerListener(new PigeonListener());
+
+        MinecraftServer.getGlobalEventHandler().addChild(PlayerListener.events());
     }
 
     @Override
     public void terminate() {}
-
-    public static EventNode<EntityEvent> events() {
-        EventNode<EntityEvent> node = EventNode.type("flame-events", EventFilter.ENTITY);
-
-        node.addChild(playerEvents());
-
-        return node;
-    }
-
-    public static EventNode<EntityEvent> playerEvents() {
-        return PlayerListener.events();
-    }
 
 }

@@ -4,15 +4,14 @@ import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.UUID;
+import net.minestom.server.entity.Player;
 
 public class FlameAPI {
 
     @Getter @Setter private static boolean chatMuted = false;
 
-    public static boolean canStartProcedure(UUID uuid) {
-        return GrantProcedure.getByPlayer(uuid) == null && PunishmentProcedure.getByPlayer(uuid) == null;
+    public static boolean canStartProcedure(Player player) {
+        return GrantProcedure.getByPlayer(player) == null && PunishmentProcedure.getByPlayer(player) == null;
     }
 
 }

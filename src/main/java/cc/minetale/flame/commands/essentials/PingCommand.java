@@ -1,54 +1,51 @@
 package cc.minetale.flame.commands.essentials;
 
 import cc.minetale.commonlib.util.MC;
+import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.entity.EntityFinder;
 
 public class PingCommand extends Command {
 
     public PingCommand() {
         super("ping");
 
-        setCondition(Conditions::playerOnly);
-
         setDefaultExecutor(this::defaultExecutor);
-
-        var targets = ArgumentType.Entity("targets")
-                .onlyPlayers(true);
-
-        addSyntax(this::onPingOthersCommand, targets);
+        addSyntax(this::onPingOthers, ArgumentType.Entity("target").onlyPlayers(true).singleEntity(true));
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        executeSelf(sender);
+        this.onPingSelf(sender);
     }
 
-    private void onPingOthersCommand(CommandSender sender, CommandContext context) {
-        EntityFinder finder = context.get("targets");
+    private void onPingOthers(CommandSender sender, CommandContext context) {
+        var player = CommandUtil.playerFromEntityFinder(sender, context.get("target"));
 
-        if (finder.find(sender).size() == 0) {
-            sender.sendMessage(MC.notificationMessage("Ping", Component.text("A player with that name doesn't exist.", NamedTextColor.GRAY)));
-        } else for (Entity entity : ((EntityFinder) context.get("targets")).find(sender)) {
-            if (entity instanceof Player player) {
-                if (player == sender) {
-                    executeSelf(sender);
+        if(sender instanceof Player executor) {
+            if (player != null) {
+                if(player == executor) {
+                    this.onPingSelf(sender);
                 } else {
-                    sender.sendMessage(MC.notificationMessage("Ping", Component.text(player.getUsername() + "'s ping is " + player.getLatency() + "ms", NamedTextColor.GRAY)));
+                    sender.sendMessage(MC.notificationMessage("Ping",
+                            Component.text(player.getUsername() + "'s ping is " + player.getLatency() + "ms", NamedTextColor.GRAY)));
                 }
+            } else {
+                sender.sendMessage(MC.notificationMessage("Ping",
+                        Component.text("A player with that name could not be found.", NamedTextColor.GRAY)));
             }
         }
     }
 
-    private void executeSelf(CommandSender sender) {
-        sender.sendMessage(MC.notificationMessage("Ping", Component.text("Your ping is " + sender.asPlayer().getLatency() + "ms", NamedTextColor.GRAY)));
+    private void onPingSelf(CommandSender sender) {
+        if(sender instanceof Player executor) {
+            sender.sendMessage(MC.notificationMessage("Ping",
+                    Component.text("Your ping is " + executor.getLatency() + "ms", NamedTextColor.GRAY)));
+        }
     }
 
 }

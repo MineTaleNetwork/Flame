@@ -12,37 +12,40 @@ import net.minestom.server.entity.Player;
 
 public class ClearChatCommand extends Command {
 
+    private static final Component CLEAR_CHAT;
+
+    static {
+        var builder = Component.text();
+
+        for (int i = 0; i < 150; i++) {
+            builder.append(Component.newline());
+        }
+
+        CLEAR_CHAT = builder.build();
+    }
+
     public ClearChatCommand() {
         super("clearchat", "cc");
 
         setCondition(CommandUtil.getRankCondition(Rank.HELPER));
-
         setDefaultExecutor(this::defaultExecutor);
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
         if(sender instanceof Player player) {
             var profile = FlamePlayer.fromPlayer(player).getProfile();
-            var builder = Component.text();
-
-            for (int i = 0; i < 150; i++) {
-                builder.append(Component.newline());
-            }
-
             var component = Lang.CHAT_CLEARED(profile);
             var instance = player.getInstance();
 
             if (instance != null) {
                 for (Player instancePlayer : instance.getPlayers()) {
                     if (!Rank.hasMinimumRank(FlamePlayer.fromPlayer(instancePlayer).getProfile(), Rank.HELPER)) {
-                        instancePlayer.sendMessage(builder.build());
+                        instancePlayer.sendMessage(CLEAR_CHAT);
                     }
 
                     instancePlayer.sendMessage(component);
                 }
             }
-        } else {
-            // TODO -> Allow console usage
         }
     }
 }

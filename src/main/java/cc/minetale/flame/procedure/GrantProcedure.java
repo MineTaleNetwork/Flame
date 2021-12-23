@@ -1,32 +1,34 @@
 package cc.minetale.flame.procedure;
 
+import cc.minetale.commonlib.api.Rank;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.flame.Lang;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import net.minestom.server.MinecraftServer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter @Setter @Builder @AllArgsConstructor
 public class GrantProcedure {
 
-    @Getter private static final Map<UUID, GrantProcedure> procedures = new ConcurrentHashMap<>();
+    @Getter private static final Map<Player, GrantProcedure> procedures = new ConcurrentHashMap<>();
 
-    private final UUID issuer;
+    private final Player issuer;
     private final Profile recipient;
     private final Type type;
     private Stage stage;
 
+    private String grantId;
+    private Rank rank;
     private long duration;
     private String reason;
 
-    public GrantProcedure(UUID issuer, Profile recipient, Type type, Stage stage) {
+    public GrantProcedure(Player issuer, Profile recipient, Type type, Stage stage) {
         this.issuer = issuer;
         this.recipient = recipient;
         this.type = type;
@@ -35,9 +37,9 @@ public class GrantProcedure {
         procedures.put(issuer, this);
     }
 
-    public static GrantProcedure getByPlayer(UUID uuid) {
+    public static GrantProcedure getByPlayer(Player player) {
         for (GrantProcedure procedure : procedures.values()) {
-            if (procedure.issuer.equals(uuid)) {
+            if (procedure.issuer.equals(player)) {
                 return procedure;
             }
         }
@@ -46,17 +48,11 @@ public class GrantProcedure {
     }
 
     public void finish() {
-        this.recipient.update();
-
         procedures.remove(this.issuer);
     }
 
     public void cancel() {
-        Player player = MinecraftServer.getConnectionManager().getPlayer(this.issuer);
-
-        if(player != null)
-            player.sendMessage(Lang.CANCELLED_GRANT);
-
+        this.issuer.sendMessage(Component.text("You have cancelled the grant " + (this.type == Type.REMOVE ? "removal " : "") + "procedure.", NamedTextColor.RED));
         procedures.remove(this.issuer);
     }
 

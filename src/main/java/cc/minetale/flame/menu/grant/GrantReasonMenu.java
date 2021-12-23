@@ -1,92 +1,81 @@
-//package cc.minetale.flame.menu.grant;
-//
-//import cc.minetale.flame.procedure.GrantProcedure;
-//import cc.minetale.mlib.fabric.FabricInventory;
-//import cc.minetale.mlib.fabric.content.FabricContents;
-//import cc.minetale.mlib.fabric.content.FabricProvider;
-//import net.minestom.server.entity.Player;
-//import net.minestom.server.event.inventory.InventoryCloseEvent;
-//import net.minestom.server.inventory.InventoryType;
-//
-//public class GrantReasonMenu implements FabricProvider {
-//
-//    private final GrantProcedure procedure;
-//    private final FabricInventory inventory;
-//
-//    public GrantReasonMenu(Player player, GrantProcedure procedure) {
-//        this.procedure = procedure;
-//        this.inventory = FabricInventory.builder()
-//                .provider(this)
-//                .type(InventoryType.CHEST_3_ROW)
-////                .title(MC.component("Select a Grant Reason"))
-//                .build();
-//        inventory.open(player);
-//    }
-//
-//    @Override
-//    public void init(Player player, FabricContents contents) {
-//        // TODO
-//
-////        Grant grant = this.procedure.getGrant();
-////
-////        contents.fill(ClickableItem.empty(ItemStack.of(Material.GRAY_STAINED_GLASS_PANE).withDisplayName(Component.empty())));
-////
-////        contents.setSlot(10, ClickableItem.of(ItemStack.of(Material.LIME_CONCRETE)
-////                        .withDisplayName(MC.component("Promoted", NamedTextColor.GREEN)),
-////                event -> {
-////                    grant.setAddedReason("Promoted");
-////                    procedure.setGrant(grant);
-////
-////                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-////
-////                    new GrantConfirmMenu(player, procedure);
-////                }));
-////
-////        contents.setSlot(12, ClickableItem.of(ItemStack.of(Material.YELLOW_CONCRETE)
-////                        .withDisplayName(MC.component("Demoted", NamedTextColor.YELLOW)),
-////                event -> {
-////                    grant.setAddedReason("Demoted");
-////                    procedure.setGrant(grant);
-////
-////                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-////
-////                    new GrantConfirmMenu(player, procedure);
-////                }));
-////
-////        contents.setSlot(14, ClickableItem.of(ItemStack.of(Material.ORANGE_CONCRETE)
-////                        .withDisplayName(MC.component("Granted", NamedTextColor.GOLD)),
-////                event -> {
-////
-////                    grant.setAddedReason("Granted");
-////                    procedure.setGrant(grant);
-////
-////                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-////
-////                    new GrantConfirmMenu(player, procedure);
-////                }));
-////
-////        contents.setSlot(16, ClickableItem.of(ItemStack.of(Material.RED_CONCRETE)
-////                        .withDisplayName(MC.component("Custom", NamedTextColor.RED)),
-////                event -> {
-////                    procedure.setGrant(grant);
-////
-////                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-////
-////                    player.closeInventory();
-////                    player.sendMessage(MC.component("Type a reason for adding this grant in chat...", NamedTextColor.GREEN));
-////                }));
-//
-//    }
-//
-//    @Override
-//    public void close(InventoryCloseEvent event) {
-//        Player player = event.getPlayer();
-//        GrantProcedure procedure = GrantProcedure.getByPlayer(player.getUuid());
-//
-//        if (procedure != null && procedure.getStage() == GrantProcedure.Stage.PROVIDE_REASON) {
-//            procedure.cancel();
-////            player.sendMessage(MC.component("Cancelled the grant procedure.", NamedTextColor.RED));
-//        }
-//    }
-//
-//}
+package cc.minetale.flame.menu.grant;
+
+import cc.minetale.flame.procedure.GrantProcedure;
+import cc.minetale.mlib.canvas.*;
+import cc.minetale.mlib.util.MenuUtil;
+import cc.minetale.mlib.util.SoundsUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class GrantReasonMenu extends Menu {
+
+    private final GrantProcedure procedure;
+    private boolean shouldCancel = true;
+
+    public GrantReasonMenu(Player player, GrantProcedure procedure) {
+        super(player, Component.text("Grant Reason Selection"), CanvasType.FOUR_ROW);
+
+        this.procedure = procedure;
+
+        setFiller(FillingType.BORDER);
+
+        setFragment(30, MenuUtil.PREVIOUS_PAGE(this));
+        setFragment(32, MenuUtil.NEXT_PAGE(this));
+
+        List<String> reasons = Arrays.asList(
+                "Donation Issue",
+                "Promoted",
+                "Demoted",
+                "Admin Discretion",
+                "Event Winner",
+                "Custom"
+        );
+
+        var pagination = new Pagination(10, 14);
+        var fragments = new Fragment[reasons.size()];
+
+        int i = 0;
+
+        for (var reason : reasons) {
+            fragments[i] = Fragment.of(ItemStack.of(Material.PAPER)
+                    .withDisplayName(Component.text(reason, Style.style(NamedTextColor.GRAY, TextDecoration.ITALIC.as(false)))), event -> {
+                SoundsUtil.playClickSound(player);
+
+                if(reason.equals("Custom")) {
+                    this.procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
+                    this.shouldCancel = false;
+
+                    this.handleClose(player);
+                    player.closeInventory();
+
+                    player.sendMessage(Component.text("Type the reason for adding this grant in chat...", NamedTextColor.GREEN));
+                } else {
+                    this.procedure.setReason(reason);
+                    new GrantConfirmMenu(player, this.procedure);
+                }
+            });
+
+            i++;
+        }
+
+        pagination.setFragments(fragments);
+        setPagination(pagination);
+
+        openMenu();
+    }
+
+    @Override
+    public void close() {
+        if(this.shouldCancel)
+            this.procedure.cancel();
+    }
+
+}

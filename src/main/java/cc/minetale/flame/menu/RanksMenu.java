@@ -17,20 +17,20 @@ import java.util.Arrays;
 public class RanksMenu extends Menu {
 
     public RanksMenu(Player player) {
-        super(player, Component.text("Ranks"), CanvasType.SIX_ROW);
+        super(player, Component.text("Ranks"), CanvasType.FOUR_ROW);
 
         setFiller(FillingType.BORDER);
 
-        setFragment(48, MenuUtil.PREVIOUS_PAGE(this));
-        setFragment(50, MenuUtil.NEXT_PAGE(this));
+        setFragment(30, MenuUtil.PREVIOUS_PAGE(this));
+        setFragment(32, MenuUtil.NEXT_PAGE(this));
 
-        var pagination = new Pagination(10, 28);
+        var pagination = new Pagination(10, 14);
         var fragments = new Fragment[Rank.values().length];
 
         int i = 0;
 
         for (var rank : Rank.values()) {
-            NamedTextColor color = rank.getColor();
+            var color = rank.getColor();
 
             fragments[i] = Fragment.empty(ItemStack.of(ColorUtil.toConcrete(color))
                     .withDisplayName(Component.text(rank.getName(), Style.style(color, TextDecoration.ITALIC.as(false))))
@@ -40,15 +40,15 @@ public class RanksMenu extends Menu {
                                     Component.text().append(
                                             Component.text("Weight: ", NamedTextColor.GRAY),
                                             Component.text(rank.getWeight(), color)
-                                    ).build(),
+                                    ).decoration(TextDecoration.ITALIC, false).build(),
                                     Component.text().append(
                                             Component.text("Prefix: ", NamedTextColor.GRAY),
                                             rank.getPrefix()
-                                    ).build(),
+                                    ).decoration(TextDecoration.ITALIC, false).build(),
                                     Component.text().append(
                                             Component.text("Color: ", NamedTextColor.GRAY),
                                             Component.text(color.toString().toUpperCase(), color)
-                                    ).build(),
+                                    ).decoration(TextDecoration.ITALIC, false).build(),
                                     MC.SEPARATOR_32
                             )
                     ));
@@ -62,6 +62,6 @@ public class RanksMenu extends Menu {
     }
 
     @Override
-    public void tick() {}
+    public void close() {}
 
 }
