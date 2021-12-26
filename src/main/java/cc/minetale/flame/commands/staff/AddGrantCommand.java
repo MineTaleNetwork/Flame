@@ -16,8 +16,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 
-import java.util.concurrent.TimeUnit;
-
 public class AddGrantCommand extends Command {
 
     public AddGrantCommand() {
@@ -43,8 +41,7 @@ public class AddGrantCommand extends Command {
 
     private void addGrantExecutor(CommandSender sender, CommandContext context) {
         ProfileUtil.getProfile((String) context.get("profile"))
-                .orTimeout(5, TimeUnit.SECONDS)
-                .whenComplete((profile, throwable) -> {
+                .thenAccept(profile -> {
                     if (profile != null) {
                         Rank rank = context.get("rank");
                         long duration = Duration.fromString(context.get("duration")).getValue();
@@ -56,7 +53,8 @@ public class AddGrantCommand extends Command {
                             return;
                         }
 
-                        profile.addGrant(new Grant(
+                        profile.addGrant(Grant.createGrant(
+                                null,
                                 profile.getId(),
                                 rank,
                                 (sender instanceof Player player ? player.getUuid() : null),

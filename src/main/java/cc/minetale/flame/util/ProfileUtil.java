@@ -1,6 +1,6 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.api.Profile;
 import net.minestom.server.MinecraftServer;
 
 import java.util.UUID;

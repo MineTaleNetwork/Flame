@@ -2,13 +2,14 @@ package cc.minetale.flame.chat;
 
 import cc.minetale.commonlib.api.Punishment;
 import cc.minetale.commonlib.api.Rank;
-import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.api.Profile;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.menu.grant.GrantConfirmMenu;
 import cc.minetale.flame.menu.grant.GrantReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
+import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlamePlayer;
 import net.kyori.adventure.text.Component;
@@ -22,22 +23,24 @@ public class Chat {
     public static void handleChat(FlamePlayer player, String message) {
         var profile = player.getProfile();
 
-            GrantProcedure grantProcedure = GrantProcedure.getByPlayer(player);
+            Procedure procedure = Procedure.getProcedure(player);
 
-            if (grantProcedure != null) {
-                handleGrantProcedure(grantProcedure, player, message);
-                return;
-            }
+            if (procedure != null) {
+                if(procedure instanceof GrantProcedure grantProcedure) {
+                    handleGrantProcedure(grantProcedure, player, message);
+                    return;
+                }
 
-            PunishmentProcedure punishmentProcedure = PunishmentProcedure.getByPlayer(player);
+                if(procedure instanceof PunishmentProcedure punishmentProcedure) {
+                    handlePunishmentProcedure(punishmentProcedure, player, message);
+                    return;
+                }
 
-            if (punishmentProcedure != null) {
-                handlePunishmentProcedure(punishmentProcedure, player, message);
                 return;
             }
 
             if(!Rank.hasMinimumRank(profile, Rank.HELPER)) {
-                Punishment punishment = profile.getActivePunishmentByType(Punishment.Type.MUTE);
+                var punishment = profile.getActivePunishmentByType(Punishment.Type.MUTE);
 
                 if (FlameAPI.isChatMuted()) {
                     player.sendMessage(MC.SEPARATOR_80);
@@ -47,7 +50,7 @@ public class Chat {
                 }
 
                 if (punishment != null) {
-//                    FlameUtil.getPunishmentMessage(punishment, false).forEach(player::sendMessage); // TODO
+                    punishment.getPunishmentMessage().forEach(player::sendMessage);
                     return;
                 }
             }
@@ -122,8 +125,7 @@ public class Chat {
                 procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
 
                 switch (procedure.getType()) {
-                    case ADD -> new GrantConfirmMenu(player, procedure);
-//                    case REMOVE -> new GrantDeleteMenu(player, procedure);
+                    case ADD, REMOVE -> new GrantConfirmMenu(player, procedure);
                 }
             }
         }

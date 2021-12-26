@@ -4,6 +4,7 @@ import cc.minetale.commonlib.pigeon.payloads.profile.ProfileUpdatePayload;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.mlib.nametag.NameplateHandler;
 import cc.minetale.mlib.nametag.NameplateProvider;
+import cc.minetale.mlib.nametag.ProviderType;
 import cc.minetale.mlib.util.TeamUtil;
 import cc.minetale.pigeon.annotations.PayloadHandler;
 import cc.minetale.pigeon.annotations.PayloadListener;
@@ -23,7 +24,7 @@ public class PigeonListener implements Listener {
 
             flamePlayer.setProfile(profile);
 
-            NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), 1));
+            NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
             player.refreshCommands();
         }
     }

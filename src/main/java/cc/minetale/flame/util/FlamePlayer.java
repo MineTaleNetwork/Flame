@@ -1,6 +1,6 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.api.Profile;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.entity.Player;

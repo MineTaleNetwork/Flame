@@ -20,7 +20,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 public class GrantConfirmMenu extends Menu {
 
@@ -32,8 +31,8 @@ public class GrantConfirmMenu extends Menu {
 
         this.procedure = procedure;
 
-        var recipient = procedure.getRecipient();
-        var rank = this.procedure.getRank();
+        var type = procedure.getType();
+        var rank = procedure.getRank();
         var duration = procedure.getDuration();
         var reason = procedure.getReason();
 
@@ -41,62 +40,75 @@ public class GrantConfirmMenu extends Menu {
 
         setFiller(FillingType.EMPTY_SLOTS);
 
-        setFragment(2, Fragment.of(ItemStack.of(Material.LIME_CONCRETE)
-                .withDisplayName(Component.text("Confirm Grant", Style.style(NamedTextColor.GREEN, TextDecoration.ITALIC.as(false)))), event -> {
-            ProfileUtil.getProfile(recipient.getId()) // Retrieve up-to-date profile
-                    .orTimeout(5, TimeUnit.SECONDS)
-                    .whenComplete((profile, throwable) -> {
-                        if(profile != null) {
-                            profile.addGrant(new Grant(
-                                    profile.getId(),
-                                    rank,
-                                    player.getUuid(),
-                                    System.currentTimeMillis(),
-                                    reason,
-                                    duration
-                            ));
+        ProfileUtil.getProfile(procedure.getRecipient())
+                .thenAccept(profile -> {
+                    if(profile != null) {
+                        setFragment(2, Fragment.of(ItemStack.of(Material.LIME_CONCRETE)
+                                .withDisplayName(Component.text("Confirm Grant" + (type == GrantProcedure.Type.REMOVE ? " Removal" : ""), Style.style(NamedTextColor.GREEN, TextDecoration.ITALIC.as(false)))), event -> {
+                            switch (type) {
+                                case ADD -> {
+                                    profile.addGrant(Grant.createGrant(
+                                            null,
+                                            profile.getId(),
+                                            rank,
+                                            player.getUuid(),
+                                            System.currentTimeMillis(),
+                                            reason,
+                                            duration
+                                    ));
 
-                            player.sendMessage(MC.notificationMessage("Grant",
-                                    Component.text("Granted " + profile.getName() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
-                            ));
-                        } else {
-                            player.sendMessage(Lang.COULD_NOT_LOAD_PROFILE);
-                        }
-                    });
+                                    player.sendMessage(MC.notificationMessage("Grant",
+                                            Component.text("Granted " + profile.getName() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
+                                    ));
+                                }
+                                case REMOVE -> {
+                                    var grant = Grant.getGrant(procedure.getGrant());
 
-            this.shouldCancel = false;
+                                    if(grant != null) {
+                                        profile.removeGrant(grant, player.getUuid(), System.currentTimeMillis(), reason);
+                                    } else {
+                                        player.sendMessage(Lang.COULD_NOT_LOAD_PROFILE);
+                                    }
+                                }
+                            }
 
-            this.procedure.finish();
-            this.handleClose(player);
-        }));
+                            this.shouldCancel = false;
 
-        setFragment(4, Fragment.of(ItemStack.of(Material.BOOK)
-                .withDisplayName(Component.text("Grant Information", Style.style(color, TextDecoration.ITALIC.as(false))))
-                .withLore(Arrays.asList(
-                        MC.SEPARATOR_32,
-                        Component.text().append(
-                                Component.text("Player: ", NamedTextColor.GRAY),
-                                Component.text(recipient.getName(), color)
-                        ).decoration(TextDecoration.ITALIC, false).build(),
-                        Component.text().append(
-                                Component.text("Rank: ", NamedTextColor.GRAY),
-                                Component.text(rank.getName(), color)
-                        ).decoration(TextDecoration.ITALIC, false).build(),
-                        Component.text().append(
-                                Component.text("Reason: ", NamedTextColor.GRAY),
-                                Component.text(reason, color)
-                        ).decoration(TextDecoration.ITALIC, false).build(),
-                        Component.text().append(
-                                Component.text("Duration: ", NamedTextColor.GRAY),
-                                Component.text((duration == Integer.MAX_VALUE ? "Permanent" : TimeUtil.millisToRoundedTime(duration)), color)
-                        ).decoration(TextDecoration.ITALIC, false).build(),
-                        MC.SEPARATOR_32
-                )), event -> {
+                            this.procedure.finish();
+                            this.handleClose(player);
+                        }));
 
-        }));
+                        setFragment(4, Fragment.empty(ItemStack.of(Material.BOOK)
+                                .withDisplayName(Component.text("Grant Information", Style.style(color, TextDecoration.ITALIC.as(false))))
+                                .withLore(Arrays.asList(
+                                        MC.SEPARATOR_32,
+                                        Component.text().append(
+                                                Component.text("Player: ", NamedTextColor.GRAY),
+                                                Component.text(profile.getName(), color)
+                                        ).decoration(TextDecoration.ITALIC, false).build(),
+                                        Component.text().append(
+                                                Component.text("Rank: ", NamedTextColor.GRAY),
+                                                Component.text(rank.getName(), color)
+                                        ).decoration(TextDecoration.ITALIC, false).build(),
+                                        Component.text().append(
+                                                Component.text("Reason: ", NamedTextColor.GRAY),
+                                                Component.text(reason, color)
+                                        ).decoration(TextDecoration.ITALIC, false).build(),
+                                        Component.text().append(
+                                                Component.text("Duration: ", NamedTextColor.GRAY),
+                                                Component.text((duration == Integer.MAX_VALUE ? "Permanent" : TimeUtil.millisToRoundedTime(duration)), color)
+                                        ).decoration(TextDecoration.ITALIC, false).build(),
+                                        MC.SEPARATOR_32
+                                ))));
+                        
+                        setItems();
+                    } else {
+                        procedure.cancel();
+                    }
+                });
 
         setFragment(6, Fragment.of(ItemStack.of(Material.RED_CONCRETE)
-                .withDisplayName(Component.text("Cancel Grant", Style.style(NamedTextColor.RED, TextDecoration.ITALIC.as(false)))), event -> {
+                .withDisplayName(Component.text("Cancel Grant" + (type == GrantProcedure.Type.REMOVE ? " Removal" : ""), Style.style(NamedTextColor.RED, TextDecoration.ITALIC.as(false)))), event -> {
             this.handleClose(player);
         }));
 

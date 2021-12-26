@@ -2,7 +2,7 @@ package cc.minetale.flame;
 
 import cc.minetale.commonlib.api.Punishment;
 import cc.minetale.commonlib.api.Rank;
-import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.api.Profile;
 import cc.minetale.commonlib.util.MC;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

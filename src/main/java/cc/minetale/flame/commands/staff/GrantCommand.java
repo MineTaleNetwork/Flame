@@ -14,8 +14,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 
-import java.util.concurrent.TimeUnit;
-
 public class GrantCommand extends Command {
 
     public GrantCommand() {
@@ -37,8 +35,7 @@ public class GrantCommand extends Command {
     private void onGrantCommand(CommandSender sender, CommandContext context) {
         if (sender instanceof Player player) {
             ProfileUtil.getProfile((String) context.get("profile"))
-                    .orTimeout(5, TimeUnit.SECONDS)
-                    .whenComplete((profile, throwable) -> {
+                    .thenAccept(profile -> {
                         if (profile != null) {
                             new GrantRankMenu(player, profile);
                         } else {

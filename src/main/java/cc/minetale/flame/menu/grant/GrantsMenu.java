@@ -1,11 +1,11 @@
 package cc.minetale.flame.menu.grant;
 
-import cc.minetale.commonlib.api.Grant;
 import cc.minetale.commonlib.api.Rank;
-import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.api.Profile;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.FlameAPI;
+import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.flame.util.ProfileUtil;
 import cc.minetale.mlib.canvas.*;
@@ -42,29 +42,11 @@ public class GrantsMenu extends Menu {
         setFragment(30, MenuUtil.PREVIOUS_PAGE(this));
         setFragment(32, MenuUtil.NEXT_PAGE(this));
 
-        var grants = new ArrayList<>(profile.getCachedGrants());
+        var grants = new ArrayList<>(profile.getSortedGrants());
         grants.removeIf(grant -> grant.getRank() == Rank.MEMBER);
 
         var pagination = new Pagination(10, 14);
         var fragments = new Fragment[grants.size()];
-
-        List<Grant> sortedGrants = new ArrayList<>();
-        List<Grant> activeGrants = new ArrayList<>();
-        List<Grant> removedGrants = new ArrayList<>();
-
-        for (var grant : grants) {
-            if (grant.isRemoved()) {
-                removedGrants.add(grant);
-            } else {
-                activeGrants.add(grant);
-            }
-        }
-
-        activeGrants.sort(Grant.COMPARATOR);
-        removedGrants.sort(Grant.COMPARATOR);
-
-        sortedGrants.addAll(activeGrants);
-        sortedGrants.addAll(removedGrants);
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             int i = 0;
@@ -80,7 +62,7 @@ public class GrantsMenu extends Menu {
                     if (addedById != null) {
                         addedBy = "Could not fetch...";
 
-                        var addedByProfile = ProfileUtil.getProfile(addedById).get(5, TimeUnit.SECONDS);
+                        var addedByProfile = ProfileUtil.getProfile(addedById).get(3, TimeUnit.SECONDS);
 
                         if (addedByProfile != null)
                             addedBy = addedByProfile.getName();
@@ -92,7 +74,7 @@ public class GrantsMenu extends Menu {
                     if(removedById != null) {
                         removedBy = "Could not fetch...";
 
-                        Profile removedByProfile = ProfileUtil.getProfile(removedById).get(5, TimeUnit.SECONDS);
+                        Profile removedByProfile = ProfileUtil.getProfile(removedById).get(3, TimeUnit.SECONDS);
                         if(removedByProfile != null)
                             removedBy = removedByProfile.getName();
                     }
@@ -114,14 +96,11 @@ public class GrantsMenu extends Menu {
                             Component.text().append(
                                     Component.text("Duration: ", NamedTextColor.GRAY),
                                     Component.text(grant.getDurationText(), color)
-                            ).build().decoration(TextDecoration.ITALIC, false),
-                            MC.SEPARATOR_50
+                            ).build().decoration(TextDecoration.ITALIC, false)
                     ));
 
-                    boolean temporary = !grant.isPermanent() && grant.isActive();
-
-                    if(temporary) {
-                            lore.add(3, Component.text().append(
+                    if(!grant.isPermanent() && grant.isActive()) {
+                            lore.add(Component.text().append(
                                     Component.text("Remaining: ", NamedTextColor.GRAY),
                                     Component.text(grant.getTimeRemaining(), color)
                             ).build().decoration(TextDecoration.ITALIC, false));
@@ -144,17 +123,19 @@ public class GrantsMenu extends Menu {
                                 ).build().decoration(TextDecoration.ITALIC, false)
                         );
 
-                        lore.addAll((temporary ? 6 : 5), removedLore);
+                        lore.addAll(removedLore);
                     } else {
                         if(grant.isActive() && FlameAPI.canStartProcedure(player) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
                             List<Component> removeGrantLore = Arrays.asList(
-                                    Component.text("Click to remove this Grant", Style.style(color, TextDecoration.ITALIC.as(false))),
-                                    MC.SEPARATOR_50
+                                    MC.SEPARATOR_50,
+                                    Component.text("Click to remove this Grant", Style.style(color, TextDecoration.ITALIC.as(false)))
                             );
 
                             lore.addAll(lore.size(), removeGrantLore);
                         }
                     }
+
+                    lore.add(MC.SEPARATOR_50);
 
                     fragments[i] = Fragment.of(ItemStack.of(ColorUtil.toConcrete(color))
                             .withDisplayName(Component.text().append(
@@ -165,19 +146,17 @@ public class GrantsMenu extends Menu {
                             ).build().decoration(TextDecoration.ITALIC, false))
                             .withLore(lore)
                             .withMeta(meta -> {
-                                if(grant.isActive()) {
+                                if(grant.isActive())
                                     meta.enchantment(Enchantment.UNBREAKING, (short) 1)
                                             .hideFlag(ItemHideFlag.HIDE_ENCHANTS);
-                                }
 
                                 return meta;
                             }), event -> {
                         if(grant.isActive() && FlameAPI.canStartProcedure(player) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
-//                            GrantProcedure procedure = new GrantProcedure(player, profile, GrantProcedure.Type.REMOVE, GrantProcedure.Stage.PROVIDE_REASON);
-//                            procedure.setGrantId(grant.getId());
-//
-//                            player.sendMessage(Component.text("Type a reason for removing this grant in chat...", NamedTextColor.GREEN));
-//                            player.closeInventory();
+                            var procedure = new GrantProcedure(player, profile.getId(), GrantProcedure.Type.REMOVE, GrantProcedure.Stage.PROVIDE_REASON);
+                            procedure.setGrant(grant.getId());
+
+                            new GrantReasonMenu(player, procedure);
                         }
                     });
                 } catch (ExecutionException | InterruptedException | TimeoutException e) {
@@ -190,8 +169,10 @@ public class GrantsMenu extends Menu {
             pagination.setFragments(fragments);
             setPagination(pagination);
 
-            openMenu();
+            refresh();
         }).executionType(ExecutionType.ASYNC).schedule();
+
+        openMenu();
     }
 
     @Override

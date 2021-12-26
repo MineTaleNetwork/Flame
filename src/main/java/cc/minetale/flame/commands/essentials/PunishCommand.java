@@ -13,8 +13,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 
-import java.util.concurrent.TimeUnit;
-
 public class PunishCommand extends Command {
 
     public PunishCommand() {
@@ -36,8 +34,7 @@ public class PunishCommand extends Command {
     private void onPunishCommand(CommandSender sender, CommandContext context) {
         if (sender instanceof Player player) {
             ProfileUtil.getProfile((String) context.get("profile"))
-                    .orTimeout(5, TimeUnit.SECONDS)
-                    .whenComplete((profile, throwable) -> {
+                    .thenAccept(profile -> {
                         if (profile != null) {
                             player.sendMessage(Component.text("Work in progress", NamedTextColor.RED));
 //                            new PunishmentMenu(player, profile);

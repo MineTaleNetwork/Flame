@@ -1,6 +1,6 @@
 //package cc.minetale.flame.menu.punishment;
 //
-//import cc.minetale.commonlib.profile.Profile;
+//import cc.minetale.commonlib.api.Profile;
 //import cc.minetale.mlib.fabric.FabricInventory;
 //import cc.minetale.mlib.fabric.content.FabricContents;
 //import cc.minetale.mlib.fabric.content.FabricProvider;
