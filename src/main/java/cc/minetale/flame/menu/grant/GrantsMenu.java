@@ -1,13 +1,12 @@
 package cc.minetale.flame.menu.grant;
 
 import cc.minetale.commonlib.api.Rank;
-import cc.minetale.commonlib.api.Profile;
+import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.util.FlamePlayer;
-import cc.minetale.flame.util.ProfileUtil;
 import cc.minetale.mlib.canvas.*;
 import cc.minetale.mlib.util.ColorUtil;
 import cc.minetale.mlib.util.MenuUtil;
@@ -62,7 +61,7 @@ public class GrantsMenu extends Menu {
                     if (addedById != null) {
                         addedBy = "Could not fetch...";
 
-                        var addedByProfile = ProfileUtil.getProfile(addedById).get(3, TimeUnit.SECONDS);
+                        var addedByProfile = FlamePlayer.getProfile(addedById).get(3, TimeUnit.SECONDS);
 
                         if (addedByProfile != null)
                             addedBy = addedByProfile.getName();
@@ -74,7 +73,8 @@ public class GrantsMenu extends Menu {
                     if(removedById != null) {
                         removedBy = "Could not fetch...";
 
-                        Profile removedByProfile = ProfileUtil.getProfile(removedById).get(3, TimeUnit.SECONDS);
+                        Profile removedByProfile = FlamePlayer.getProfile(removedById).get(3, TimeUnit.SECONDS);
+
                         if(removedByProfile != null)
                             removedBy = removedByProfile.getName();
                     }
@@ -153,7 +153,7 @@ public class GrantsMenu extends Menu {
                                 return meta;
                             }), event -> {
                         if(grant.isActive() && FlameAPI.canStartProcedure(player) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
-                            var procedure = new GrantProcedure(player, profile.getId(), GrantProcedure.Type.REMOVE, GrantProcedure.Stage.PROVIDE_REASON);
+                            var procedure = new GrantProcedure(player, profile.getUuid(), GrantProcedure.Type.REMOVE, GrantProcedure.Stage.PROVIDE_REASON);
                             procedure.setGrant(grant.getId());
 
                             new GrantReasonMenu(player, procedure);
@@ -176,8 +176,6 @@ public class GrantsMenu extends Menu {
     }
 
     @Override
-    public void close() {
-
-    }
+    public void close() {}
 
 }

@@ -1,6 +1,7 @@
 package cc.minetale.flame.listeners;
 
 import cc.minetale.commonlib.pigeon.payloads.profile.ProfileUpdatePayload;
+import cc.minetale.commonlib.profile.ProfileUtil;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.mlib.nametag.NameplateHandler;
 import cc.minetale.mlib.nametag.NameplateProvider;
@@ -16,17 +17,20 @@ public class PigeonListener implements Listener {
 
     @PayloadHandler
     public void onProfileUpdate(ProfileUpdatePayload payload) {
-        var profile = payload.getProfile();
-        var player = MinecraftServer.getConnectionManager().getPlayer(profile.getId());
+        var playerUuid = payload.getPlayer();
+        var player = MinecraftServer.getConnectionManager().getPlayer(playerUuid);
 
-        if(player != null) {
-            var flamePlayer = FlamePlayer.fromPlayer(player);
+        ProfileUtil.getFromCache(payload.getPlayer())
+                .thenAccept(profile -> {
+                   if(profile != null && player != null) {
+                       var flamePlayer = FlamePlayer.fromPlayer(player);
 
-            flamePlayer.setProfile(profile);
+                       flamePlayer.setProfile(profile);
 
-            NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
-            player.refreshCommands();
-        }
+                       NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
+                       player.refreshCommands();
+                   }
+                });
     }
 
 }

@@ -6,7 +6,7 @@ import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.procedure.GrantProcedure;
-import cc.minetale.flame.util.ProfileUtil;
+import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.mlib.canvas.CanvasType;
 import cc.minetale.mlib.canvas.FillingType;
 import cc.minetale.mlib.canvas.Fragment;
@@ -40,7 +40,7 @@ public class GrantConfirmMenu extends Menu {
 
         setFiller(FillingType.EMPTY_SLOTS);
 
-        ProfileUtil.getProfile(procedure.getRecipient())
+        FlamePlayer.getProfile(procedure.getRecipient())
                 .thenAccept(profile -> {
                     if(profile != null) {
                         setFragment(2, Fragment.of(ItemStack.of(Material.LIME_CONCRETE)
@@ -49,7 +49,7 @@ public class GrantConfirmMenu extends Menu {
                                 case ADD -> {
                                     profile.addGrant(Grant.createGrant(
                                             null,
-                                            profile.getId(),
+                                            profile.getUuid(),
                                             rank,
                                             player.getUuid(),
                                             System.currentTimeMillis(),

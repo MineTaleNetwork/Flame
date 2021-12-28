@@ -7,7 +7,7 @@ import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.util.CommandUtil;
-import cc.minetale.flame.util.ProfileUtil;
+import cc.minetale.flame.util.FlamePlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
@@ -40,7 +40,7 @@ public class AddGrantCommand extends Command {
     }
 
     private void addGrantExecutor(CommandSender sender, CommandContext context) {
-        ProfileUtil.getProfile((String) context.get("profile"))
+        FlamePlayer.getProfile((String) context.get("profile"))
                 .thenAccept(profile -> {
                     if (profile != null) {
                         Rank rank = context.get("rank");
@@ -55,7 +55,7 @@ public class AddGrantCommand extends Command {
 
                         profile.addGrant(Grant.createGrant(
                                 null,
-                                profile.getId(),
+                                profile.getUuid(),
                                 rank,
                                 (sender instanceof Player player ? player.getUuid() : null),
                                 System.currentTimeMillis(),

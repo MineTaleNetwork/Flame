@@ -1,13 +1,16 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.api.Profile;
+import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.profile.ProfileUtil;
 import lombok.Getter;
 import lombok.Setter;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Getter
 public class FlamePlayer extends Player {
@@ -20,6 +23,29 @@ public class FlamePlayer extends Player {
 
     public static FlamePlayer fromPlayer(Player player) {
         return (FlamePlayer) player;
+    }
+
+    public static CompletableFuture<Profile> getProfile(String name) {
+        var future = new CompletableFuture<Profile>();
+        var player = MinecraftServer.getConnectionManager().getPlayer(name);
+
+        if(player != null) {
+            future.complete(FlamePlayer.fromPlayer(player).getProfile());
+        } else {
+            future = ProfileUtil.getProfile(name);
+        }
+
+        return future;
+    }
+
+    public static CompletableFuture<Profile> getProfile(UUID uuid) {
+        var player = MinecraftServer.getConnectionManager().getPlayer(uuid);
+
+        if(player != null) {
+            return CompletableFuture.completedFuture(FlamePlayer.fromPlayer(player).getProfile());
+        } else {
+            return ProfileUtil.getProfile(uuid);
+        }
     }
 
 }

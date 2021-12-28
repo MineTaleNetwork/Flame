@@ -5,7 +5,7 @@ import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.menu.grant.GrantsMenu;
 import cc.minetale.flame.util.CommandUtil;
-import cc.minetale.flame.util.ProfileUtil;
+import cc.minetale.flame.util.FlamePlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
@@ -34,7 +34,7 @@ public class GrantsCommand extends Command {
 
     private void onGrantsCommand(CommandSender sender, CommandContext context) {
         if (sender instanceof Player player) {
-            ProfileUtil.getProfile((String) context.get("profile"))
+            FlamePlayer.getProfile((String) context.get("profile"))
                     .thenAccept(profile -> {
                         if (profile != null) {
                             new GrantsMenu(player, profile);

@@ -1,7 +1,7 @@
 package cc.minetale.flame.menu.grant;
 
 import cc.minetale.commonlib.api.Rank;
-import cc.minetale.commonlib.api.Profile;
+import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.procedure.GrantProcedure;
@@ -57,7 +57,7 @@ public class GrantRankMenu extends Menu {
                             )
                     ), event -> {
                 if (FlameAPI.canStartProcedure(player)) {
-                    var procedure = new GrantProcedure(player, this.profile.getId(), GrantProcedure.Type.ADD, GrantProcedure.Stage.PROVIDE_TIME);
+                    var procedure = new GrantProcedure(player, this.profile.getUuid(), GrantProcedure.Type.ADD, GrantProcedure.Stage.PROVIDE_TIME);
 
                     SoundsUtil.playClickSound(player);
 

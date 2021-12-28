@@ -1,6 +1,7 @@
 package cc.minetale.flame.listeners;
 
-import cc.minetale.commonlib.api.Profile;
+import cc.minetale.commonlib.CommonLib;
+import cc.minetale.commonlib.profile.ProfileUtil;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.chat.Chat;
 import cc.minetale.flame.procedure.GrantProcedure;
@@ -11,10 +12,7 @@ import cc.minetale.mlib.nametag.ProviderType;
 import cc.minetale.mlib.util.TeamUtil;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.event.player.PlayerChatEvent;
-import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.event.player.PlayerLoginEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.event.trait.PlayerEvent;
 
 import java.util.concurrent.ExecutionException;
@@ -36,17 +34,24 @@ public class PlayerListener {
                     if (procedure != null)
                         procedure.finish();
                 })
-                .addListener(PlayerLoginEvent.class, event -> {
-                    var player = (FlamePlayer) event.getPlayer();
-                    var uuid = player.getUuid();
+                .addListener(AsyncPlayerPreLoginEvent.class, event -> {
+                    var player = FlamePlayer.fromPlayer(event.getPlayer());
 
                     try {
-                        var profile = Profile.getProfile(player.getUsername(), uuid).get(3, TimeUnit.SECONDS);
-                        player.setProfile(profile);
+                        var profile = ProfileUtil.getFromCache(player.getUuid()).get(3, TimeUnit.SECONDS);
+
+                        if(profile != null) {
+                            profile.validateProfile();
+                            player.setProfile(profile);
+
+                            System.out.println(CommonLib.getGson().toJson(profile.getActiveGrant()));
+                            return;
+                        }
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                        player.kick(Lang.PROFILE_FAILED);
                         e.printStackTrace();
                     }
+
+                    player.kick(Lang.PROFILE_FAILED);
                 })
                 .addListener(PlayerSpawnEvent.class, event -> {
                     var player = event.getPlayer();

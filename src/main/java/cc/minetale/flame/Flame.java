@@ -7,6 +7,8 @@ import cc.minetale.pigeon.Pigeon;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.extensions.Extension;
+import net.minestom.server.timer.ExecutionType;
+import net.minestom.server.utils.time.Tick;
 import org.reflections.Reflections;
 
 public class Flame extends Extension {
@@ -36,6 +38,17 @@ public class Flame extends Extension {
         Pigeon.getPigeon()
                 .getListenersRegistry()
                 .registerListener(new PigeonListener());
+
+        MinecraftServer.getSchedulerManager()
+                .buildTask(() -> {
+                    for(var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+                        var profile = FlamePlayer.fromPlayer(player).getProfile();
+
+                        profile.checkGrants();
+                    }
+                }).executionType(ExecutionType.ASYNC)
+                .repeat(20, Tick.SERVER_TICKS)
+                .schedule();
 
         MinecraftServer.getGlobalEventHandler().addChild(PlayerListener.events());
     }
