@@ -1,7 +1,7 @@
 package cc.minetale.flame.util;
 
+import cc.minetale.commonlib.cache.ProfileCache;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.profile.ProfileUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
@@ -32,7 +32,7 @@ public class FlamePlayer extends Player {
         if(player != null) {
             future.complete(FlamePlayer.fromPlayer(player).getProfile());
         } else {
-            future = ProfileUtil.getProfile(name);
+            future = ProfileCache.getProfile(name);
         }
 
         return future;
@@ -44,7 +44,7 @@ public class FlamePlayer extends Player {
         if(player != null) {
             return CompletableFuture.completedFuture(FlamePlayer.fromPlayer(player).getProfile());
         } else {
-            return ProfileUtil.getProfile(uuid);
+            return ProfileCache.getProfile(uuid);
         }
     }
 

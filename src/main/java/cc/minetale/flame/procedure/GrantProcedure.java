@@ -1,6 +1,6 @@
 package cc.minetale.flame.procedure;
 
-import cc.minetale.commonlib.api.Rank;
+import cc.minetale.commonlib.grant.Rank;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;

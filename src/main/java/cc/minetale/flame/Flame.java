@@ -3,6 +3,7 @@ package cc.minetale.flame;
 import cc.minetale.flame.listeners.PigeonListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.util.FlamePlayer;
+import cc.minetale.flame.util.FlameProvider;
 import cc.minetale.pigeon.Pigeon;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
@@ -23,6 +24,8 @@ public class Flame extends Extension {
 
         var commandManager = MinecraftServer.getCommandManager();
         var commandClasses = new Reflections("cc.minetale.flame.commands").getSubTypesOf(Command.class);
+
+        FlameProvider.init();
 
         for (var commandClass : commandClasses) {
             try {
@@ -46,7 +49,8 @@ public class Flame extends Extension {
 
                         profile.checkGrants();
                     }
-                }).executionType(ExecutionType.ASYNC)
+                })
+                .executionType(ExecutionType.ASYNC)
                 .repeat(20, Tick.SERVER_TICKS)
                 .schedule();
 

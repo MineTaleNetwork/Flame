@@ -1,7 +1,6 @@
 package cc.minetale.flame.listeners;
 
-import cc.minetale.commonlib.CommonLib;
-import cc.minetale.commonlib.profile.ProfileUtil;
+import cc.minetale.commonlib.cache.ProfileCache;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.chat.Chat;
 import cc.minetale.flame.procedure.GrantProcedure;
@@ -38,13 +37,12 @@ public class PlayerListener {
                     var player = FlamePlayer.fromPlayer(event.getPlayer());
 
                     try {
-                        var profile = ProfileUtil.getFromCache(player.getUuid()).get(3, TimeUnit.SECONDS);
+                        var profile = ProfileCache.getProfile(player.getUuid()).get(3, TimeUnit.SECONDS);
 
-                        if(profile != null) {
-                            profile.validateProfile();
+                        if (profile != null) {
+                            profile.checkGrants();
+
                             player.setProfile(profile);
-
-                            System.out.println(CommonLib.getGson().toJson(profile.getActiveGrant()));
                             return;
                         }
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -57,7 +55,9 @@ public class PlayerListener {
                     var player = event.getPlayer();
                     var profile = FlamePlayer.fromPlayer(player).getProfile();
 
-                    NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
+                    if (event.isFirstSpawn()) {
+                        NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
+                    }
                 });
     }
 

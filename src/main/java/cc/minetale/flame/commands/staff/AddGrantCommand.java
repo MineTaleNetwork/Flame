@@ -1,7 +1,7 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.commonlib.api.Grant;
-import cc.minetale.commonlib.api.Rank;
+import cc.minetale.commonlib.grant.Grant;
+import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.commonlib.util.TimeUtil;
@@ -53,7 +53,7 @@ public class AddGrantCommand extends Command {
                             return;
                         }
 
-                        profile.addGrant(Grant.createGrant(
+                        profile.addGrant(new Grant(
                                 null,
                                 profile.getUuid(),
                                 rank,

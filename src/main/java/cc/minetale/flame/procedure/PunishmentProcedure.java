@@ -1,6 +1,6 @@
 package cc.minetale.flame.procedure;
 
-import cc.minetale.commonlib.api.Punishment;
+import cc.minetale.commonlib.punishment.PunishmentType;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -13,7 +13,7 @@ import java.util.UUID;
 public class PunishmentProcedure extends Procedure {
 
     private String punishment;
-    private Punishment.Type punishmentType;
+    private PunishmentType punishmentType;
     private long duration;
     private String reason;
 

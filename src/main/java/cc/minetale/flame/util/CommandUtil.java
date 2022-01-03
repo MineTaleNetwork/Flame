@@ -1,6 +1,6 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.api.Rank;
+import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.Lang;
 import net.kyori.adventure.text.Component;

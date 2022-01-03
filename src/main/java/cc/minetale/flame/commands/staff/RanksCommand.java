@@ -1,6 +1,6 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.commonlib.api.Rank;
+import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.flame.menu.RanksMenu;
 import cc.minetale.flame.util.CommandUtil;
 import net.minestom.server.command.CommandSender;

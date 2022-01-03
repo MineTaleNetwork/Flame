@@ -1,6 +1,6 @@
 package cc.minetale.flame.menu;
 
-import cc.minetale.commonlib.api.Rank;
+import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.mlib.canvas.*;
 import cc.minetale.mlib.util.ColorUtil;

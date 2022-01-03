@@ -1,6 +1,6 @@
 package cc.minetale.flame.commands.essentials;
 
-import cc.minetale.commonlib.api.Rank;
+import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

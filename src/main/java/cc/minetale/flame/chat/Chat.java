@@ -1,8 +1,8 @@
 package cc.minetale.flame.chat;
 
-import cc.minetale.commonlib.api.Punishment;
-import cc.minetale.commonlib.api.Rank;
+import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.profile.Profile;
+import cc.minetale.commonlib.punishment.PunishmentType;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.MC;
 import cc.minetale.flame.FlameAPI;
@@ -40,7 +40,7 @@ public class Chat {
             }
 
             if(!Rank.hasMinimumRank(profile, Rank.HELPER)) {
-                var punishment = profile.getActivePunishmentByType(Punishment.Type.MUTE);
+                var punishment = profile.getActivePunishmentByType(PunishmentType.MUTE);
 
                 if (FlameAPI.isChatMuted()) {
                     player.sendMessage(MC.SEPARATOR_80);
