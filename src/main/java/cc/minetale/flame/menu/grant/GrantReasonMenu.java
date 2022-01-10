@@ -39,7 +39,7 @@ public class GrantReasonMenu extends Menu {
                 "Custom"
         );
 
-        var pagination = new Pagination(10, 14);
+        var pagination = new Pagination(10, 14, true);
         var fragments = new Fragment[reasons.size()];
 
         int i = 0;

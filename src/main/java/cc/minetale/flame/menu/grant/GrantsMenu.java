@@ -44,7 +44,7 @@ public class GrantsMenu extends Menu {
         var grants = new ArrayList<>(profile.getSortedGrants());
         grants.removeIf(grant -> grant.getRank() == Rank.MEMBER);
 
-        var pagination = new Pagination(10, 14);
+        var pagination = new Pagination(10, 14, true);
         var fragments = new Fragment[grants.size()];
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {

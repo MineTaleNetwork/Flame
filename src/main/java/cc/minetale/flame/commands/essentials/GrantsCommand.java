@@ -13,6 +13,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.entity.EntityAttackEvent;
 
 public class GrantsCommand extends Command {
 

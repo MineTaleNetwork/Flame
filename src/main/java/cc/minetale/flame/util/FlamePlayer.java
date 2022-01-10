@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Pattern;
 
 @Getter
 public class FlamePlayer extends Player {
@@ -25,14 +26,16 @@ public class FlamePlayer extends Player {
         return (FlamePlayer) player;
     }
 
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^\\w{3,16}$");
+
     public static CompletableFuture<Profile> getProfile(String name) {
         var future = new CompletableFuture<Profile>();
         var player = MinecraftServer.getConnectionManager().getPlayer(name);
 
         if(player != null) {
             future.complete(FlamePlayer.fromPlayer(player).getProfile());
-        } else {
-            future = ProfileCache.getProfile(name);
+        } else if(USERNAME_PATTERN.matcher(name).matches()) {
+                future = ProfileCache.getProfile(name);
         }
 
         return future;

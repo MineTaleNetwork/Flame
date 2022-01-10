@@ -32,7 +32,7 @@ public class GrantRankMenu extends Menu {
         setFragment(30, MenuUtil.PREVIOUS_PAGE(this));
         setFragment(32, MenuUtil.NEXT_PAGE(this));
 
-        var pagination = new Pagination(10, 14);
+        var pagination = new Pagination(10, 14, true);
         var fragments = new Fragment[Rank.values().length];
 
         int i = 0;
