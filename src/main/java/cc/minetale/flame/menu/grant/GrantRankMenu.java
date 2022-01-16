@@ -2,7 +2,7 @@ package cc.minetale.flame.menu.grant;
 
 import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.mlib.canvas.*;
@@ -46,14 +46,14 @@ public class GrantRankMenu extends Menu {
                     .withDisplayName(Component.text(rank.getName(), Style.style(color, TextDecoration.ITALIC.as(false))))
                     .withLore(
                             Arrays.asList(
-                                    MC.SEPARATOR_50,
+                                    Message.menuSeparator(),
                                     Component.text().append(
                                             Component.text("Click to grant ", Style.style(NamedTextColor.GRAY, TextDecoration.ITALIC.as(false))),
                                             Component.text(rank.getName(), Style.style(color, TextDecoration.ITALIC.as(false))),
                                             Component.text(" to ", Style.style(NamedTextColor.GRAY, TextDecoration.ITALIC.as(false))),
                                             this.profile.getColoredName().decoration(TextDecoration.ITALIC, false)
                                     ).build(),
-                                    MC.SEPARATOR_50
+                                    Message.menuSeparator()
                             )
                     ), event -> {
                 if (FlameAPI.canStartProcedure(player)) {

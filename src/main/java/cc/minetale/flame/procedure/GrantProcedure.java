@@ -9,13 +9,12 @@ import net.minestom.server.entity.Player;
 
 import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
 public class GrantProcedure extends Procedure {
 
     private String grant;
     private Rank rank;
-    private long duration;
-    private String reason;
 
     public GrantProcedure(Player issuer, UUID recipient, Type type, Stage stage) {
         super(issuer, recipient, type, stage);

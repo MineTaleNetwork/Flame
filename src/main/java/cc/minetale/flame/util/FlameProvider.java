@@ -4,7 +4,7 @@ import cc.minetale.commonlib.CommonLib;
 import cc.minetale.commonlib.api.LibProvider;
 import cc.minetale.commonlib.grant.Grant;
 import cc.minetale.commonlib.punishment.Punishment;
-import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.mlib.nametag.NameplateHandler;
 import cc.minetale.mlib.nametag.NameplateProvider;
@@ -69,9 +69,10 @@ public class FlameProvider {
 
         profile.activateNextGrant();
         NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
+        player.refreshCommands();
 
-        player.sendMessage(MC.SEPARATOR_80);
-        player.sendMessage(MC.notificationMessage("Grant",
+        player.sendMessage(Message.chatSeparator());
+        player.sendMessage(Message.message("Grant",
                 Component.text().append(
                         Component.text("A ", NamedTextColor.GRAY),
                         Component.text(rank.getName(), rank.getColor()),
@@ -79,7 +80,7 @@ public class FlameProvider {
                                 (grant.getDuration() == Integer.MAX_VALUE ? "permanently" :
                                         "for " + TimeUtil.millisToRoundedTime(grant.getDuration())) + ".", NamedTextColor.GRAY)
                 ).build()));
-        player.sendMessage(MC.SEPARATOR_80);
+        player.sendMessage(Message.chatSeparator());
     }
 
     public static void removeGrant(Player player, Grant grant) {
@@ -88,15 +89,16 @@ public class FlameProvider {
 
         profile.activateNextGrant();
         NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
+        player.refreshCommands();
 
-        player.sendMessage(MC.SEPARATOR_80);
-        player.sendMessage(MC.notificationMessage("Grant",
+        player.sendMessage(Message.chatSeparator());
+        player.sendMessage(Message.message("Grant",
                 Component.text().append(
                         Component.text("Your ", NamedTextColor.GRAY),
                         Component.text(rank.getName(), rank.getColor()),
                         Component.text(" grant has been removed.", NamedTextColor.GRAY)
                 ).build()));
-        player.sendMessage(MC.SEPARATOR_80);
+        player.sendMessage(Message.chatSeparator());
     }
 
     public static void expireGrant(Player player, Grant grant) {
@@ -105,15 +107,16 @@ public class FlameProvider {
 
         profile.activateNextGrant();
         NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
+        player.refreshCommands();
 
-        player.sendMessage(MC.SEPARATOR_80);
-        player.sendMessage(MC.notificationMessage("Grant",
+        player.sendMessage(Message.chatSeparator());
+        player.sendMessage(Message.message("Grant",
                 Component.text().append(
                         Component.text("Your ", NamedTextColor.GRAY),
                         Component.text(rank.getName(), rank.getColor()),
                         Component.text(" grant has expired.", NamedTextColor.GRAY)
                 ).build()));
-        player.sendMessage(MC.SEPARATOR_80);
+        player.sendMessage(Message.chatSeparator());
     }
 
 }

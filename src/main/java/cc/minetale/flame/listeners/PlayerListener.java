@@ -1,6 +1,6 @@
 package cc.minetale.flame.listeners;
 
-import cc.minetale.commonlib.cache.ProfileCache;
+import cc.minetale.commonlib.util.ProfileUtil;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.chat.Chat;
 import cc.minetale.flame.procedure.GrantProcedure;
@@ -9,6 +9,8 @@ import cc.minetale.mlib.nametag.NameplateHandler;
 import cc.minetale.mlib.nametag.NameplateProvider;
 import cc.minetale.mlib.nametag.ProviderType;
 import cc.minetale.mlib.util.TeamUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.*;
@@ -22,6 +24,17 @@ public class PlayerListener {
 
     public static EventNode<PlayerEvent> events() {
         return EventNode.type("flame", EventFilter.PLAYER)
+                .addListener(PlayerCommandEvent.class, event -> {
+                    var player = FlamePlayer.fromPlayer(event.getPlayer());
+                    var cooldown = player.getCooldown();
+
+                    if(cooldown.hasCooldown()) {
+                        player.sendMessage(Component.text("You are on cooldown for another " + cooldown.getSecondsRemaining() + " seconds.", NamedTextColor.RED));
+                        event.setCancelled(true);
+                    } else {
+                        cooldown.refresh();
+                    }
+                })
                 .addListener(PlayerChatEvent.class, event -> {
                     event.setCancelled(true);
 
@@ -37,11 +50,10 @@ public class PlayerListener {
                     var player = FlamePlayer.fromPlayer(event.getPlayer());
 
                     try {
-                        var profile = ProfileCache.getProfile(player.getUuid()).get(3, TimeUnit.SECONDS);
+                        var profile = ProfileUtil.getProfile(player.getUuid()).get(3, TimeUnit.SECONDS);
 
                         if (profile != null) {
                             profile.checkGrants();
-
                             player.setProfile(profile);
                             return;
                         }
@@ -56,6 +68,7 @@ public class PlayerListener {
                     var profile = FlamePlayer.fromPlayer(player).getProfile();
 
                     if (event.isFirstSpawn()) {
+                        System.out.println("First Spawn");
                         NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
                     }
                 });

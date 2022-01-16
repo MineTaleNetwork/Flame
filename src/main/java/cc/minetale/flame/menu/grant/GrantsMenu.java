@@ -2,7 +2,7 @@ package cc.minetale.flame.menu.grant;
 
 import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.procedure.GrantProcedure;
@@ -29,6 +29,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+// TODO -> Improve
 public class GrantsMenu extends Menu {
 
     public GrantsMenu(Player player, Profile profile) {
@@ -79,8 +80,8 @@ public class GrantsMenu extends Menu {
                             removedBy = removedByProfile.getName();
                     }
 
-                    List<Component> lore = new ArrayList<>(Arrays.asList(
-                            MC.SEPARATOR_50,
+                    var lore = new ArrayList<>(Arrays.asList(
+                            Message.menuSeparator(),
                             Component.text().append(
                                     Component.text("Added On: ", NamedTextColor.GRAY),
                                     Component.text(TimeUtil.dateToString(new Date(grant.getAddedAt()), true), color)
@@ -108,7 +109,7 @@ public class GrantsMenu extends Menu {
 
                     if(grant.isRemoved()) {
                         List<Component> removedLore = Arrays.asList(
-                                MC.SEPARATOR_50,
+                                Message.menuSeparator(),
                                 Component.text().append(
                                         Component.text("Removed On: ", NamedTextColor.GRAY),
                                         Component.text(TimeUtil.dateToString(new Date(grant.getRemovedAt()), true), color)
@@ -127,7 +128,7 @@ public class GrantsMenu extends Menu {
                     } else {
                         if(grant.isActive() && FlameAPI.canStartProcedure(player) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
                             List<Component> removeGrantLore = Arrays.asList(
-                                    MC.SEPARATOR_50,
+                                    Message.menuSeparator(),
                                     Component.text("Click to remove this Grant", Style.style(color, TextDecoration.ITALIC.as(false)))
                             );
 
@@ -135,7 +136,7 @@ public class GrantsMenu extends Menu {
                         }
                     }
 
-                    lore.add(MC.SEPARATOR_50);
+                    lore.add(Message.menuSeparator());
 
                     fragments[i] = Fragment.of(ItemStack.of(ColorUtil.toConcrete(color))
                             .withDisplayName(Component.text().append(

@@ -2,7 +2,7 @@ package cc.minetale.flame.menu.grant;
 
 
 import cc.minetale.commonlib.grant.Grant;
-import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.procedure.GrantProcedure;
@@ -47,17 +47,17 @@ public class GrantConfirmMenu extends Menu {
                                 .withDisplayName(Component.text("Confirm Grant" + (type == GrantProcedure.Type.REMOVE ? " Removal" : ""), Style.style(NamedTextColor.GREEN, TextDecoration.ITALIC.as(false)))), event -> {
                             switch (type) {
                                 case ADD -> {
-                                    profile.addGrant(new Grant(
+                                    profile.issueGrant(new Grant(
                                             null,
                                             profile.getUuid(),
-                                            rank,
                                             player.getUuid(),
                                             System.currentTimeMillis(),
                                             reason,
-                                            duration
+                                            duration,
+                                            rank
                                     ));
 
-                                    player.sendMessage(MC.notificationMessage("Grant",
+                                    player.sendMessage(Message.message("Grant",
                                             Component.text("Granted " + profile.getName() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
                                     ));
                                 }
@@ -80,7 +80,7 @@ public class GrantConfirmMenu extends Menu {
                         setFragment(4, Fragment.empty(ItemStack.of(Material.BOOK)
                                 .withDisplayName(Component.text("Grant Information", Style.style(color, TextDecoration.ITALIC.as(false))))
                                 .withLore(Arrays.asList(
-                                        MC.SEPARATOR_32,
+                                        Message.scoreboardSeparator(),
                                         Component.text().append(
                                                 Component.text("Player: ", NamedTextColor.GRAY),
                                                 Component.text(profile.getName(), color)
@@ -97,7 +97,7 @@ public class GrantConfirmMenu extends Menu {
                                                 Component.text("Duration: ", NamedTextColor.GRAY),
                                                 Component.text((duration == Integer.MAX_VALUE ? "Permanent" : TimeUtil.millisToRoundedTime(duration)), color)
                                         ).decoration(TextDecoration.ITALIC, false).build(),
-                                        MC.SEPARATOR_32
+                                        Message.scoreboardSeparator()
                                 ))));
                         
                         setItems();

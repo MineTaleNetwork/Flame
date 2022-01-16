@@ -9,13 +9,12 @@ import net.minestom.server.entity.Player;
 
 import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
 public class PunishmentProcedure extends Procedure {
 
     private String punishment;
     private PunishmentType punishmentType;
-    private long duration;
-    private String reason;
 
     public PunishmentProcedure(Player issuer, UUID recipient, Type type, Stage stage) {
         super(issuer, recipient, type, stage);

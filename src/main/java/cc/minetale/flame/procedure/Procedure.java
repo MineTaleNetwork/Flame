@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
 public abstract class Procedure {
 
     private static final Map<Player, Procedure> activeProcedures = new HashMap<>();
@@ -17,6 +18,8 @@ public abstract class Procedure {
     private final UUID recipient;
     private final Type type;
     private Stage stage;
+    private long duration;
+    private String reason;
 
     public Procedure(Player issuer, UUID recipient, Type type, Stage stage) {
         this.issuer = issuer;

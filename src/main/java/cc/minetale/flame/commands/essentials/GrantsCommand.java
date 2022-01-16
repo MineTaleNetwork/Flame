@@ -1,7 +1,7 @@
 package cc.minetale.flame.commands.essentials;
 
 import cc.minetale.commonlib.grant.Rank;
-import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.menu.grant.GrantsMenu;
 import cc.minetale.flame.util.CommandUtil;
@@ -13,7 +13,6 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.entity.EntityAttackEvent;
 
 public class GrantsCommand extends Command {
 
@@ -29,8 +28,9 @@ public class GrantsCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(MC.notificationMessage("Command",
-                Component.text("Usage: /grants <player>", NamedTextColor.GRAY)));
+        sender.sendMessage(Message.message("Command",
+                Component.text("Usage: /grants <player>", NamedTextColor.GRAY))
+        );
     }
 
     private void onGrantsCommand(CommandSender sender, CommandContext context) {

@@ -3,7 +3,7 @@ package cc.minetale.flame.commands.staff;
 import cc.minetale.commonlib.grant.Grant;
 import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.util.Duration;
-import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.util.CommandUtil;
@@ -35,8 +35,9 @@ public class AddGrantCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(MC.notificationMessage("Command",
-                Component.text("Usage: /addgrant <player> <rank> <duration> <reason>", NamedTextColor.GRAY)));
+        sender.sendMessage(Message.message("Command",
+                Component.text("Usage: /addgrant <player> <rank> <duration> <reason>", NamedTextColor.GRAY))
+        );
     }
 
     private void addGrantExecutor(CommandSender sender, CommandContext context) {
@@ -44,26 +45,26 @@ public class AddGrantCommand extends Command {
                 .thenAccept(profile -> {
                     if (profile != null) {
                         Rank rank = context.get("rank");
-                        long duration = Duration.fromString(context.get("duration")).getValue();
+                        long duration = Duration.fromString(context.get("duration")).value();
                         String[] reason = context.get("reason");
 
                         if (duration == -1) {
-                            sender.sendMessage(MC.notificationMessage("Command",
+                            sender.sendMessage(Message.message("Command",
                                     Component.text("You have provided an invalid duration", NamedTextColor.GRAY)));
                             return;
                         }
 
-                        profile.addGrant(new Grant(
+                        profile.issueGrant(new Grant(
                                 null,
                                 profile.getUuid(),
-                                rank,
                                 (sender instanceof Player player ? player.getUuid() : null),
                                 System.currentTimeMillis(),
                                 String.join(" ", reason),
-                                duration
+                                duration,
+                                rank
                         ));
 
-                        sender.sendMessage(MC.notificationMessage("Grant",
+                        sender.sendMessage(Message.message("Grant",
                                 Component.text("Granted " + profile.getName() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
                         ));
                     } else {

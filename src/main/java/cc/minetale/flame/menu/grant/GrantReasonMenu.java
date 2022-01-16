@@ -13,7 +13,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class GrantReasonMenu extends Menu {
 
@@ -30,7 +29,7 @@ public class GrantReasonMenu extends Menu {
         setFragment(30, MenuUtil.PREVIOUS_PAGE(this));
         setFragment(32, MenuUtil.NEXT_PAGE(this));
 
-        List<String> reasons = Arrays.asList(
+        var reasons = Arrays.asList(
                 "Donation Issue",
                 "Promoted",
                 "Demoted",

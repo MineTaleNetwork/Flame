@@ -1,6 +1,6 @@
 package cc.minetale.flame.commands.essentials;
 
-import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.flame.util.CommandUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -31,11 +31,11 @@ public class PingCommand extends Command {
                 if(player == executor) {
                     this.onPingSelf(sender);
                 } else {
-                    sender.sendMessage(MC.notificationMessage("Ping",
+                    sender.sendMessage(Message.message("Ping",
                             Component.text(player.getUsername() + "'s ping is " + player.getLatency() + "ms", NamedTextColor.GRAY)));
                 }
             } else {
-                sender.sendMessage(MC.notificationMessage("Ping",
+                sender.sendMessage(Message.message("Ping",
                         Component.text("A player with that name could not be found.", NamedTextColor.GRAY)));
             }
         }
@@ -43,7 +43,7 @@ public class PingCommand extends Command {
 
     private void onPingSelf(CommandSender sender) {
         if(sender instanceof Player executor) {
-            sender.sendMessage(MC.notificationMessage("Ping",
+            sender.sendMessage(Message.message("Ping",
                     Component.text("Your ping is " + executor.getLatency() + "ms", NamedTextColor.GRAY)));
         }
     }

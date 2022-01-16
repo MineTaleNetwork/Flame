@@ -1,7 +1,7 @@
 package cc.minetale.flame.commands.essentials;
 
 import cc.minetale.commonlib.grant.Rank;
-import cc.minetale.commonlib.util.MC;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.FlamePlayer;
@@ -27,8 +27,9 @@ public class PunishCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(MC.notificationMessage("Command",
-                Component.text("Usage: /punish <player>", NamedTextColor.GRAY)));
+        sender.sendMessage(Message.message("Command",
+                Component.text("Usage: /punish <player>", NamedTextColor.GRAY))
+        );
     }
 
     private void onPunishCommand(CommandSender sender, CommandContext context) {
