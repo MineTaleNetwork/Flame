@@ -1,5 +1,6 @@
 package cc.minetale.flame.listeners;
 
+import cc.minetale.commonlib.CommonLib;
 import cc.minetale.commonlib.util.ProfileUtil;
 import cc.minetale.flame.Lang;
 import cc.minetale.flame.chat.Chat;
@@ -9,6 +10,7 @@ import cc.minetale.mlib.nametag.NameplateHandler;
 import cc.minetale.mlib.nametag.NameplateProvider;
 import cc.minetale.mlib.nametag.ProviderType;
 import cc.minetale.mlib.util.TeamUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.event.EventFilter;
@@ -52,12 +54,14 @@ public class PlayerListener {
                     try {
                         var profile = ProfileUtil.getProfile(player.getUuid()).get(3, TimeUnit.SECONDS);
 
+                        System.out.println(CommonLib.getMapper().writeValueAsString(profile));
+
                         if (profile != null) {
                             profile.checkGrants();
                             player.setProfile(profile);
                             return;
                         }
-                    } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                    } catch (InterruptedException | ExecutionException | TimeoutException | JsonProcessingException e) {
                         e.printStackTrace();
                     }
 
