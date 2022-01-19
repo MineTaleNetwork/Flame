@@ -1,5 +1,6 @@
 package cc.minetale.flame.commands.essentials.friend;
 
+import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.profile.CachedProfile;
 import cc.minetale.commonlib.util.Colors;
 import cc.minetale.commonlib.util.Message;
@@ -7,6 +8,8 @@ import cc.minetale.commonlib.util.ProfileUtil;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.flame.util.Pagination;
+import cc.minetale.flame.util.SubCommand;
+import cc.minetale.mlib.util.MathUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -23,18 +26,18 @@ import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+@SubCommand
 public class FriendListCommand extends Command {
 
     public FriendListCommand() {
         super("list");
 
+        setDefaultExecutor(this::defaultExecutor);
+
         var page = ArgumentType.Integer("page");
 
         addSyntax(this::onFriendsListCommand, page);
         setArgumentCallback(CommandUtil::callbackError, page);
-
-
-        setDefaultExecutor(this::defaultExecutor);
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
@@ -54,12 +57,17 @@ public class FriendListCommand extends Command {
             var profile = FlamePlayer.fromPlayer(player).getProfile();
             var friends = profile.getFriends();
 
+            if(friends.size() == 0) {
+                player.sendMessage(Language.Friend.General.NO_FRIENDS);
+                return;
+            }
+
             try {
                 var profiles = ProfileUtil.getProfiles(friends).get();
 
                 var sorter = (Comparator<CachedProfile>) (profile1, profile2) -> {
-//                            var onlineCompare = Boolean.compare(profile2.isOnline(), profile1.isOnline());
-//                            if(onlineCompare != 0) { return onlineCompare; }
+                    var onlineCompare = Boolean.compare(profile2.getServer() != null, profile1.getServer() != null);
+                    if(onlineCompare != 0) { return onlineCompare; }
 
                     var rank1 = profile1.getProfile().getGrant().getRank();
                     var rank2 = profile2.getProfile().getGrant().getRank();
@@ -70,26 +78,16 @@ public class FriendListCommand extends Command {
                 profiles.sort(sorter);
 
                 var pagination = new Pagination<>(8, profiles.toArray(new CachedProfile[0]));
+                pagination.setCurrentPage(MathUtil.clamp(page, 0, pagination.getPageCount() - 1));
 
-                if (page < 0) {
-                    System.out.println("Less");
-                    pagination.setCurrentPage(0);
-                } else if (page > pagination.getPageCount()) {
-                    System.out.println("Greater");
-                    pagination.setCurrentPage(pagination.getPageCount() - 1);
-                } else {
-                    System.out.println("Normal");
-                    pagination.setCurrentPage(page);
-                }
-
-                var messages = new ArrayList<Component>(Arrays.asList(
+                var messages = new ArrayList<>(Arrays.asList(
                         Message.chatSeparator(),
                         Component.text().append(
                                 Component.text(pagination.isFirst() ? "" : "<< ", Colors.DARK_YELLOW, TextDecoration.BOLD)
-                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/f list " + (pagination.getCurrentPage() - 1))),
+                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/f list " + (pagination.getCurrentPage()))),
                                 Component.text("Your Friends (Page " + (pagination.getCurrentPage() + 1) + " of " + pagination.getPageCount() + ")", Colors.YELLOW),
                                 Component.text(pagination.isLast() ? "" : " >>", Colors.DARK_YELLOW, TextDecoration.BOLD)
-                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/f list " + (pagination.getCurrentPage() + 1)))
+                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/f list " + (pagination.getCurrentPage() + 2)))
                         ).build(),
                         Message.chatSeparator()
                 ));
@@ -111,8 +109,7 @@ public class FriendListCommand extends Command {
                 messages.add(Message.chatSeparator());
 
                 player.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), messages));
-            } catch (InterruptedException | ExecutionException ignored) {
-            }
+            } catch (InterruptedException | ExecutionException ignored) {}
         });
     }
 

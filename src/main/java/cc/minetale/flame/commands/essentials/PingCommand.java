@@ -16,6 +16,7 @@ public class PingCommand extends Command {
         super("ping");
 
         setDefaultExecutor(this::defaultExecutor);
+
         addSyntax(this::onPingOthers, ArgumentType.Entity("target").onlyPlayers(true).singleEntity(true));
     }
 
@@ -31,11 +32,11 @@ public class PingCommand extends Command {
                 if(player == executor) {
                     this.onPingSelf(sender);
                 } else {
-                    sender.sendMessage(Message.message("Ping",
+                    sender.sendMessage(Message.notification("Ping",
                             Component.text(player.getUsername() + "'s ping is " + player.getLatency() + "ms", NamedTextColor.GRAY)));
                 }
             } else {
-                sender.sendMessage(Message.message("Ping",
+                sender.sendMessage(Message.notification("Ping",
                         Component.text("A player with that name could not be found.", NamedTextColor.GRAY)));
             }
         }
@@ -43,7 +44,7 @@ public class PingCommand extends Command {
 
     private void onPingSelf(CommandSender sender) {
         if(sender instanceof Player executor) {
-            sender.sendMessage(Message.message("Ping",
+            sender.sendMessage(Message.notification("Ping",
                     Component.text("Your ping is " + executor.getLatency() + "ms", NamedTextColor.GRAY)));
         }
     }

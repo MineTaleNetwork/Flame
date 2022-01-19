@@ -14,6 +14,7 @@ public class RanksCommand extends Command {
         super("ranks");
 
         setCondition(CommandUtil.getRankCondition(Rank.OWNER));
+
         setDefaultExecutor(this::defaultExecutor);
     }
 

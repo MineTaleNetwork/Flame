@@ -24,14 +24,16 @@ public class PigeonListener implements Listener {
         var playerUuid = payload.getPlayer();
         var player = MinecraftServer.getConnectionManager().getPlayer(playerUuid);
 
-        ProfileUtil.getProfile(payload.getPlayer())
-                .thenAccept(profile -> {
-                    if (profile != null && player != null) {
-                        var flamePlayer = FlamePlayer.fromPlayer(player);
+        if(player != null) {
+            ProfileUtil.getProfile(playerUuid)
+                    .thenAccept(profile -> {
+                        if (profile != null) {
+                            var flamePlayer = FlamePlayer.fromPlayer(player);
 
-                        flamePlayer.setProfile(profile);
-                    }
-                });
+                            flamePlayer.setProfile(profile);
+                        }
+                    });
+        }
     }
 
     @PayloadHandler

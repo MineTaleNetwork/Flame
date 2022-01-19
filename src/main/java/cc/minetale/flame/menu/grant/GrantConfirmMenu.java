@@ -2,9 +2,10 @@ package cc.minetale.flame.menu.grant;
 
 
 import cc.minetale.commonlib.grant.Grant;
+import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.util.Message;
+import cc.minetale.commonlib.util.StringUtil;
 import cc.minetale.commonlib.util.TimeUtil;
-import cc.minetale.flame.Lang;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.mlib.canvas.CanvasType;
@@ -48,7 +49,7 @@ public class GrantConfirmMenu extends Menu {
                             switch (type) {
                                 case ADD -> {
                                     profile.issueGrant(new Grant(
-                                            null,
+                                            StringUtil.generateId(),
                                             profile.getUuid(),
                                             player.getUuid(),
                                             System.currentTimeMillis(),
@@ -57,7 +58,7 @@ public class GrantConfirmMenu extends Menu {
                                             rank
                                     ));
 
-                                    player.sendMessage(Message.message("Grant",
+                                    player.sendMessage(Message.notification("Grant",
                                             Component.text("Granted " + profile.getName() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
                                     ));
                                 }
@@ -66,7 +67,7 @@ public class GrantConfirmMenu extends Menu {
                                             if(grant != null) {
                                                 profile.removeGrant(grant, player.getUuid(), System.currentTimeMillis(), reason);
                                             } else {
-                                                player.sendMessage(Lang.COULD_NOT_LOAD_PROFILE);
+                                                player.sendMessage(Language.Error.UNKNOWN_PLAYER_ERROR);
                                             }
                                 });
                             }

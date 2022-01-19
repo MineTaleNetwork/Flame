@@ -1,8 +1,8 @@
 package cc.minetale.flame.commands.staff;
 
 import cc.minetale.commonlib.grant.Rank;
+import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.util.Message;
-import cc.minetale.flame.Lang;
 import cc.minetale.flame.menu.grant.GrantRankMenu;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.FlamePlayer;
@@ -20,27 +20,28 @@ public class GrantCommand extends Command {
         super("grant");
 
         setCondition(CommandUtil.getRankCondition(Rank.OWNER));
+
         setDefaultExecutor(this::defaultExecutor);
 
-        var profile = ArgumentType.Word("profile");
+        var profile = ArgumentType.Word("player");
 
         addSyntax(this::onGrantCommand, profile);
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Message.message("Command",
+        sender.sendMessage(Message.notification("Command",
                 Component.text("Usage: /grant <player>", NamedTextColor.GRAY))
         );
     }
 
     private void onGrantCommand(CommandSender sender, CommandContext context) {
         if (sender instanceof Player player) {
-            FlamePlayer.getProfile((String) context.get("profile"))
+            FlamePlayer.getProfile((String) context.get("player"))
                     .thenAccept(profile -> {
                         if (profile != null) {
                             new GrantRankMenu(player, profile);
                         } else {
-                            player.sendMessage(Lang.COULD_NOT_LOAD_PROFILE);
+                            player.sendMessage(Language.Error.UNKNOWN_PLAYER_ERROR);
                         }
                     });
         }

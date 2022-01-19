@@ -33,19 +33,20 @@ public class FlamePlayer extends Player {
         return (FlamePlayer) player;
     }
 
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("^\\w{3,16}$");
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^\\w+$");
 
     public static CompletableFuture<Profile> getProfile(String name) {
-        var future = new CompletableFuture<Profile>();
         var player = MinecraftServer.getConnectionManager().getPlayer(name);
 
-        if(player != null) {
-            future.complete(FlamePlayer.fromPlayer(player).getProfile());
-        } else if(USERNAME_PATTERN.matcher(name).matches()) {
-                future = ProfileUtil.getProfile(name);
+        if(!(name.length() >= 3 && name.length() <= 16 && USERNAME_PATTERN.matcher(name).matches())) {
+            return CompletableFuture.completedFuture(null);
         }
 
-        return future;
+        if(player != null) {
+            return CompletableFuture.completedFuture(FlamePlayer.fromPlayer(player).getProfile());
+        }
+
+        return ProfileUtil.getProfile(name);
     }
 
     public static CompletableFuture<Profile> getProfile(UUID uuid) {

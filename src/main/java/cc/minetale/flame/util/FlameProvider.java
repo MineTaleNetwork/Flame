@@ -72,7 +72,7 @@ public class FlameProvider {
         player.refreshCommands();
 
         player.sendMessage(Message.chatSeparator());
-        player.sendMessage(Message.message("Grant",
+        player.sendMessage(Message.notification("Grant",
                 Component.text().append(
                         Component.text("A ", NamedTextColor.GRAY),
                         Component.text(rank.getName(), rank.getColor()),
@@ -92,7 +92,7 @@ public class FlameProvider {
         player.refreshCommands();
 
         player.sendMessage(Message.chatSeparator());
-        player.sendMessage(Message.message("Grant",
+        player.sendMessage(Message.notification("Grant",
                 Component.text().append(
                         Component.text("Your ", NamedTextColor.GRAY),
                         Component.text(rank.getName(), rank.getColor()),
@@ -110,7 +110,7 @@ public class FlameProvider {
         player.refreshCommands();
 
         player.sendMessage(Message.chatSeparator());
-        player.sendMessage(Message.message("Grant",
+        player.sendMessage(Message.notification("Grant",
                 Component.text().append(
                         Component.text("Your ", NamedTextColor.GRAY),
                         Component.text(rank.getName(), rank.getColor()),

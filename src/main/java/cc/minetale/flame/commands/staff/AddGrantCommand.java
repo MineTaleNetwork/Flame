@@ -2,10 +2,11 @@ package cc.minetale.flame.commands.staff;
 
 import cc.minetale.commonlib.grant.Grant;
 import cc.minetale.commonlib.grant.Rank;
+import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.Message;
+import cc.minetale.commonlib.util.StringUtil;
 import cc.minetale.commonlib.util.TimeUtil;
-import cc.minetale.flame.Lang;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.FlamePlayer;
 import net.kyori.adventure.text.Component;
@@ -22,9 +23,10 @@ public class AddGrantCommand extends Command {
         super("addgrant");
 
         setCondition(CommandUtil.getRankCondition(Rank.OWNER));
+
         setDefaultExecutor(this::defaultExecutor);
 
-        var profile = ArgumentType.Word("profile");
+        var profile = ArgumentType.Word("player");
         var rank = ArgumentType.Enum("rank", Rank.class);
         var duration = ArgumentType.Word("duration");
         var reason = ArgumentType.StringArray("reason");
@@ -35,13 +37,13 @@ public class AddGrantCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Message.message("Command",
+        sender.sendMessage(Message.notification("Command",
                 Component.text("Usage: /addgrant <player> <rank> <duration> <reason>", NamedTextColor.GRAY))
         );
     }
 
     private void addGrantExecutor(CommandSender sender, CommandContext context) {
-        FlamePlayer.getProfile((String) context.get("profile"))
+        FlamePlayer.getProfile((String) context.get("player"))
                 .thenAccept(profile -> {
                     if (profile != null) {
                         Rank rank = context.get("rank");
@@ -49,13 +51,13 @@ public class AddGrantCommand extends Command {
                         String[] reason = context.get("reason");
 
                         if (duration == -1) {
-                            sender.sendMessage(Message.message("Command",
+                            sender.sendMessage(Message.notification("Command",
                                     Component.text("You have provided an invalid duration", NamedTextColor.GRAY)));
                             return;
                         }
 
                         profile.issueGrant(new Grant(
-                                null,
+                                StringUtil.generateId(),
                                 profile.getUuid(),
                                 (sender instanceof Player player ? player.getUuid() : null),
                                 System.currentTimeMillis(),
@@ -64,11 +66,11 @@ public class AddGrantCommand extends Command {
                                 rank
                         ));
 
-                        sender.sendMessage(Message.message("Grant",
+                        sender.sendMessage(Message.notification("Grant",
                                 Component.text("Granted " + profile.getName() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
                         ));
                     } else {
-                        sender.sendMessage(Lang.COULD_NOT_LOAD_PROFILE);
+                        sender.sendMessage(Language.Error.UNKNOWN_PLAYER_ERROR);
                     }
                 });
     }

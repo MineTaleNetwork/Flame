@@ -1,9 +1,11 @@
 package cc.minetale.flame;
 
+import cc.minetale.commonlib.lang.Language;
 import cc.minetale.flame.listeners.PigeonListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.flame.util.FlameProvider;
+import cc.minetale.flame.util.SubCommand;
 import cc.minetale.pigeon.Pigeon;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
@@ -20,19 +22,21 @@ public class Flame extends Extension {
                 .setPlayerProvider(FlamePlayer::new);
 
         MinecraftServer.getCommandManager()
-                .setUnknownCommandCallback((sender, command) -> sender.sendMessage(Lang.UNKNOWN_COMMAND));
-
-        var commandManager = MinecraftServer.getCommandManager();
-        var commandClasses = new Reflections("cc.minetale.flame.commands").getSubTypesOf(Command.class);
+                .setUnknownCommandCallback((sender, command) -> sender.sendMessage(Language.Command.UNKNOWN_COMMAND_ERROR));
 
         FlameProvider.init();
 
+        var commandClasses = new Reflections("cc.minetale.flame.commands")
+                .getSubTypesOf(Command.class)
+                .stream()
+                .filter(command -> !command.isAnnotationPresent(SubCommand.class))
+                .toList();
+
         for (var commandClass : commandClasses) {
             try {
-                if (!Command.class.isAssignableFrom(commandClass)) continue;
-
                 var command = commandClass.getDeclaredConstructor().newInstance();
-                commandManager.register(command);
+
+                MinecraftServer.getCommandManager().register(command);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

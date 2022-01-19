@@ -1,17 +1,10 @@
 package cc.minetale.flame.util;
 
-import net.minestom.server.command.builder.Command;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class SubCommand extends Command {
-
-    public SubCommand(@NotNull String name, @Nullable String... aliases) {
-        super(name, aliases);
-    }
-
-    public SubCommand(@NotNull String name) {
-        super(name);
-    }
-
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface SubCommand { }

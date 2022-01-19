@@ -1,8 +1,8 @@
 package cc.minetale.flame.util;
 
 import cc.minetale.commonlib.grant.Rank;
+import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.util.Message;
-import cc.minetale.flame.Lang;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
@@ -18,17 +18,17 @@ import java.util.stream.Collectors;
 public class CommandUtil {
 
     public static Component getUsage(String command, String... args) {
-        return Message.message("Command",
+        return Message.notification("Command",
                 Component.text("Usage: /" + command + " " + Arrays.stream(args).map(argument -> "<" + argument + ">").collect(Collectors.joining(" ")), NamedTextColor.GRAY));
     }
 
     public static Component getJoinedUsage(String command, String... args) {
-        return Message.message("Command",
+        return Message.notification("Command",
                 Component.text("Usage: /" + command + " <" + String.join("/", args) + ">", NamedTextColor.GRAY));
     }
 
     public static void callbackError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Message.message("Command", Component.text(exception.getMessage(), NamedTextColor.GRAY)));
+        sender.sendMessage(Message.notification("Command", Component.text(exception.getMessage(), NamedTextColor.GRAY)));
     }
 
     public static CommandCondition getRankCondition(Rank rank) {
@@ -43,7 +43,7 @@ public class CommandUtil {
 
                 if(!hasMinimum)
                     if (command)
-                        sender.sendMessage(Lang.COMMAND_PERMISSION(rank));
+                        sender.sendMessage(Message.format(Language.Command.COMMAND_PERMISSION_ERROR, Component.text(rank.getName(), NamedTextColor.GOLD)));
 
                 return hasMinimum;
             }
