@@ -88,7 +88,7 @@ public class FriendCommand extends Command {
                                                                     PigeonUtil.broadcast(new FriendRequestCreatePayload(player.getUuid(), target.getUuid())); // TODO -> Handle Payload
                                                                 }
 
-                                                                sender.sendMessage(Message.format(Language.Friend.Add.SUCCESS_PLAYER, target.getName()));
+                                                                sender.sendMessage(Message.format(Language.Friend.Add.SUCCESS_PLAYER, target.getUsername()));
                                                             }
                                                             case ERROR -> sender.sendMessage(Language.Error.COMMAND_ERROR);
                                                             case REQUEST_EXIST -> sender.sendMessage(Language.Friend.Add.REQUEST_EXIST);
@@ -144,7 +144,7 @@ public class FriendCommand extends Command {
                                                 PigeonUtil.broadcast(new FriendRequestAcceptPayload(player.getUuid(), target.getUuid()));  // TODO -> Handle Payload
                                             }
 
-                                            sender.sendMessage(Message.format(Language.Friend.Accept.SUCCESS, target.getName()));
+                                            sender.sendMessage(Message.format(Language.Friend.Accept.SUCCESS, target.getUsername()));
                                         }
                                         case NO_REQUEST -> sender.sendMessage(Language.Friend.Accept.NO_REQUEST);
                                         case TARGET_IGNORED -> sender.sendMessage(Language.Friend.General.TARGET_IGNORED);

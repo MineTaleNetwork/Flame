@@ -24,7 +24,7 @@ public class Lang {
     }
 
     public static Component PUNISHMENT_SUCCESS(Profile profile) {
-        return Component.text("You have successfully punished " + profile.getName(), NamedTextColor.GREEN);
+        return Component.text("You have successfully punished " + profile.getUsername(), NamedTextColor.GREEN);
     }
 
     public static Component TO_MSG(Profile target, String message) {

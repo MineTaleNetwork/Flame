@@ -58,7 +58,7 @@ public class GrantConfirmMenu extends Menu {
                                     ));
 
                                     player.sendMessage(Message.message("Grant",
-                                            Component.text("Granted " + profile.getName() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
+                                            Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
                                     ));
                                 }
                                 case REMOVE -> Grant.getGrant(procedure.getGrant())
@@ -83,7 +83,7 @@ public class GrantConfirmMenu extends Menu {
                                         Message.scoreboardSeparator(),
                                         Component.text().append(
                                                 Component.text("Player: ", NamedTextColor.GRAY),
-                                                Component.text(profile.getName(), color)
+                                                Component.text(profile.getUsername(), color)
                                         ).decoration(TextDecoration.ITALIC, false).build(),
                                         Component.text().append(
                                                 Component.text("Rank: ", NamedTextColor.GRAY),
