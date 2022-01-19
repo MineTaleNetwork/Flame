@@ -50,7 +50,7 @@ public class FriendAcceptCommand extends Command {
                                                     PigeonUtil.broadcast(new FriendRequestAcceptPayload(player.getUuid(), target.getUuid()));  // TODO -> Handle Payload
                                                 }
 
-                                                sender.sendMessage(Message.format(Language.Friend.Accept.SUCCESS, target.getName()));
+                                                sender.sendMessage(Message.format(Language.Friend.Accept.SUCCESS, target.getUsername()));
                                             }
                                             case PLAYER_MAXIMUM_FRIENDS -> sender.sendMessage(Language.Friend.General.PLAYER_MAXIMUM_FRIENDS);
                                             case TARGET_MAXIMUM_FRIENDS -> sender.sendMessage(Language.Friend.General.TARGET_MAXIMUM_FRIENDS);

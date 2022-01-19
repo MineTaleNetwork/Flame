@@ -47,7 +47,7 @@ public class FriendAddCommand extends Command {
                                                     PigeonUtil.broadcast(new FriendRequestCreatePayload(player.getUuid(), target.getUuid())); // TODO -> Handle Payload
                                                 }
 
-                                                sender.sendMessage(Message.format(Language.Friend.Add.SUCCESS_PLAYER, target.getName()));
+                                                sender.sendMessage(Message.format(Language.Friend.Add.SUCCESS_PLAYER, target.getUsername()));
                                             }
                                             case ALREADY_FRIENDS -> sender.sendMessage(Language.Friend.Add.ALREADY_FRIENDS);
                                             case TARGET_IS_PLAYER -> sender.sendMessage(Language.Friend.Add.TARGET_IS_PLAYER);

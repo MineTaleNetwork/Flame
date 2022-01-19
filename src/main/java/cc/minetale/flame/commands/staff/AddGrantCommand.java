@@ -67,7 +67,7 @@ public class AddGrantCommand extends Command {
                         ));
 
                         sender.sendMessage(Message.notification("Grant",
-                                Component.text("Granted " + profile.getName() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
+                                Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
                         ));
                     } else {
                         sender.sendMessage(Language.Error.UNKNOWN_PLAYER_ERROR);
