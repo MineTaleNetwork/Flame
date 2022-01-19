@@ -59,16 +59,19 @@ public class Chat {
             var instance = player.getInstance();
 
             if(instance != null)
-                instance.sendMessage(player, formatChat(profile, message));
+                instance.sendMessage(player, formatChat(player, message));
     }
 
-    public static TextComponent formatChat(Profile profile, String message) {
-        var rank = profile.getGrant().getRank();
+    public static TextComponent formatChat(FlamePlayer player, String message) {
+        var team = player.getTeam();
+        var color = team.getTeamColor();
 
         return Component.text().append(
-                profile.getChatFormat(),
+                team.getPrefix(),
+                Component.text(player.getUsername(), color),
+                team.getSuffix(),
                 Component.text(" » ", NamedTextColor.DARK_GRAY, TextDecoration.BOLD),
-                Component.text(message, Colors.bleach(rank.getColor(), 0.80))
+                Component.text(message, Colors.bleach(color, 0.80))
         ).build();
     }
 

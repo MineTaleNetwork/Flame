@@ -65,7 +65,7 @@ public class GrantsMenu extends Menu {
                         var addedByProfile = FlamePlayer.getProfile(addedById).get(3, TimeUnit.SECONDS);
 
                         if (addedByProfile != null)
-                            addedBy = addedByProfile.getName();
+                            addedBy = addedByProfile.getUsername();
                     }
 
                     var removedBy = "Console";
@@ -77,7 +77,7 @@ public class GrantsMenu extends Menu {
                         Profile removedByProfile = FlamePlayer.getProfile(removedById).get(3, TimeUnit.SECONDS);
 
                         if(removedByProfile != null)
-                            removedBy = removedByProfile.getName();
+                            removedBy = removedByProfile.getUsername();
                     }
 
                     var lore = new ArrayList<>(Arrays.asList(
