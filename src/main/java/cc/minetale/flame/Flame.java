@@ -1,6 +1,7 @@
 package cc.minetale.flame;
 
 import cc.minetale.commonlib.lang.Language;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.flame.listeners.PigeonListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.util.FlamePlayer;
@@ -16,13 +17,15 @@ import org.reflections.Reflections;
 
 public class Flame extends Extension {
 
+    // TODO -> Make /f requests and /f list display GUI
+
     @Override
     public void initialize() {
         MinecraftServer.getConnectionManager()
                 .setPlayerProvider(FlamePlayer::new);
 
         MinecraftServer.getCommandManager()
-                .setUnknownCommandCallback((sender, command) -> sender.sendMessage(Language.Command.UNKNOWN_COMMAND_ERROR));
+                .setUnknownCommandCallback((sender, command) -> sender.sendMessage(Message.parse(Language.Command.UNKNOWN_COMMAND_ERROR)));
 
         FlameProvider.init();
 

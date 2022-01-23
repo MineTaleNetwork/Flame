@@ -1,6 +1,7 @@
 package cc.minetale.flame.listeners;
 
 import cc.minetale.commonlib.lang.Language;
+import cc.minetale.commonlib.util.Message;
 import cc.minetale.commonlib.util.ProfileUtil;
 import cc.minetale.flame.chat.Chat;
 import cc.minetale.flame.procedure.GrantProcedure;
@@ -61,7 +62,7 @@ public class PlayerListener {
                         e.printStackTrace();
                     }
 
-                    player.kick(Language.Error.PROFILE_LOAD_ERROR);
+                    player.kick(Message.parse(Language.Error.PROFILE_LOAD_ERROR));
                 })
                 .addListener(PlayerSpawnEvent.class, event -> {
                     var player = event.getPlayer();

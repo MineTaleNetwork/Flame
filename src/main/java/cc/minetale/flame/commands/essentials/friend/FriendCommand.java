@@ -16,9 +16,9 @@ public class FriendCommand extends Command {
         addSubcommand(new FriendAcceptCommand());
         addSubcommand(new FriendRequestsCommand());
         addSubcommand(new FriendListCommand());
-        //        addSubcommand(new RemoveCommand());
-        //        addSubcommand(new CancelCommand());
-        //        addSubcommand(new DenyCommand());
+        addSubcommand(new FriendRemoveCommand());
+        addSubcommand(new FriendCancelCommand());
+        addSubcommand(new FriendDenyCommand());
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {

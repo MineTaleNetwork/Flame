@@ -41,7 +41,7 @@ public class GrantCommand extends Command {
                         if (profile != null) {
                             new GrantRankMenu(player, profile);
                         } else {
-                            player.sendMessage(Language.Error.UNKNOWN_PLAYER_ERROR);
+                            player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
                         }
                     });
         }

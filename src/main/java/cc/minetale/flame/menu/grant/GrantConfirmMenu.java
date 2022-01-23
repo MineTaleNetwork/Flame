@@ -67,7 +67,7 @@ public class GrantConfirmMenu extends Menu {
                                             if(grant != null) {
                                                 profile.removeGrant(grant, player.getUuid(), System.currentTimeMillis(), reason);
                                             } else {
-                                                player.sendMessage(Language.Error.UNKNOWN_PLAYER_ERROR);
+                                                player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
                                             }
                                 });
                             }

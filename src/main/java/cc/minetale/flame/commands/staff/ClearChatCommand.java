@@ -46,7 +46,7 @@ public class ClearChatCommand extends Command {
 
                     instancePlayer.sendMessage(Message.chatSeparator());
                     instancePlayer.sendMessage(Component.empty());
-                    instancePlayer.sendMessage(Message.format(Language.General.CHAT_CLEARED, profile.getChatFormat()));
+                    instancePlayer.sendMessage(Message.parse(Language.General.CHAT_CLEARED, profile.getChatFormat()));
                     instancePlayer.sendMessage(Component.empty());
                     instancePlayer.sendMessage(Message.chatSeparator());
                 }
