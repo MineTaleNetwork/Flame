@@ -1,9 +1,7 @@
 package cc.minetale.flame.commands.essentials.friend;
 
-import cc.minetale.commonlib.friend.FriendRequest;
+import cc.minetale.commonlib.friend.Friend;
 import cc.minetale.commonlib.lang.Language;
-import cc.minetale.commonlib.pigeon.payloads.friend.FriendRemovePayload;
-import cc.minetale.commonlib.pigeon.payloads.friend.FriendRequestCreatePayload;
 import cc.minetale.commonlib.pigeon.payloads.friend.FriendRequestDenyPayload;
 import cc.minetale.commonlib.util.Message;
 import cc.minetale.commonlib.util.PigeonUtil;
@@ -39,9 +37,10 @@ public class FriendDenyCommand extends Command {
             FlamePlayer.getProfile((String) context.get("player"))
                     .thenAccept(target -> {
                         if(target != null) {
-                            FriendRequest.denyRequest(profile, target)
+                            Friend.denyRequest(profile, target)
                                     .thenAccept(response -> {
                                         switch (response) {
+                                            case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
                                             case SUCCESS -> {
                                                 var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
 
@@ -54,7 +53,6 @@ public class FriendDenyCommand extends Command {
                                                 sender.sendMessage(Message.parse(Language.Friend.Deny.SUCCESS_PLAYER, target.getChatFormat()));
                                             }
                                             case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.Cancel.NO_REQUEST, target.getChatFormat()));
-                                            case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
                                         }
                                     });
                         } else {

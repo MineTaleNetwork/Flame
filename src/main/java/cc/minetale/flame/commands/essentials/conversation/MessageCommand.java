@@ -1,11 +1,8 @@
 package cc.minetale.flame.commands.essentials.conversation;
 
-import cc.minetale.commonlib.cache.ProfileCache;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.pigeon.payloads.conversation.ConversationMessagePayload;
-import cc.minetale.commonlib.util.Message;
-import cc.minetale.commonlib.util.PigeonUtil;
-import cc.minetale.commonlib.util.ProfileUtil;
+import cc.minetale.commonlib.util.*;
 import cc.minetale.flame.util.CommandUtil;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
@@ -35,6 +32,7 @@ public class MessageCommand extends Command {
         if (sender instanceof Player player) {
             CompletableFuture.runAsync(() -> {
                 var message = String.join(" ", (String[]) context.get("message"));
+                var cache = Cache.getProfileCache();
 
                 try {
                     var playerCachedProfile = ProfileUtil.fromCache(player.getUuid()).get();
@@ -73,8 +71,8 @@ public class MessageCommand extends Command {
                     playerCachedProfile.setLastMessaged(targetProfile.getUuid());
                     targetCachedProfile.setLastMessaged(playerProfile.getUuid());
 
-                    ProfileCache.updateCache(playerCachedProfile);
-                    ProfileCache.updateCache(targetCachedProfile);
+                    cache.update(JsonUtil.writeToJson(playerCachedProfile), playerProfile.getUuid());
+                    cache.update(JsonUtil.writeToJson(targetCachedProfile), targetProfile.getUuid());
 
                     player.sendMessage(Message.parse(Language.Conversation.TO_MSG, targetProfile.getChatFormat(), message));
 

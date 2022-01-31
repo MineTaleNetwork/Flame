@@ -1,6 +1,6 @@
 package cc.minetale.flame.commands.essentials.friend;
 
-import cc.minetale.commonlib.friend.FriendRequest;
+import cc.minetale.commonlib.friend.Friend;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.pigeon.payloads.friend.FriendRequestAcceptPayload;
 import cc.minetale.commonlib.util.Message;
@@ -37,7 +37,7 @@ public class FriendAcceptCommand extends Command {
             FlamePlayer.getProfile((String) context.get("player"))
                     .thenAccept(target -> {
                         if (target != null) {
-                            FriendRequest.acceptRequest(profile, target)
+                            Friend.acceptRequest(profile, target)
                                     .thenAccept(response -> {
                                         switch (response) {
                                             case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));

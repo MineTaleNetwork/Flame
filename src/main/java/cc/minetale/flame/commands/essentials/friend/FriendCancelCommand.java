@@ -1,6 +1,6 @@
 package cc.minetale.flame.commands.essentials.friend;
 
-import cc.minetale.commonlib.friend.FriendRequest;
+import cc.minetale.commonlib.friend.Friend;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.util.Message;
 import cc.minetale.flame.util.CommandUtil;
@@ -34,7 +34,7 @@ public class FriendCancelCommand extends Command {
             FlamePlayer.getProfile((String) context.get("player"))
                     .thenAccept(target -> {
                         if (target != null) {
-                            FriendRequest.cancelRequest(profile, target)
+                            Friend.cancelRequest(profile, target)
                                     .thenAccept(response -> {
                                         switch (response) {
                                             case SUCCESS -> sender.sendMessage(Message.parse(Language.Friend.Cancel.SUCCESS, target.getChatFormat()));

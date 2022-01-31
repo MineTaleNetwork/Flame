@@ -1,14 +1,9 @@
 package cc.minetale.flame.commands.essentials.friend;
 
-import cc.minetale.commonlib.cache.FriendCache;
-import cc.minetale.commonlib.friend.FriendRequest;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.profile.CachedProfile;
 import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.util.Colors;
-import cc.minetale.commonlib.util.Message;
-import cc.minetale.commonlib.util.ProfileUtil;
-import cc.minetale.commonlib.util.TimeUtil;
+import cc.minetale.commonlib.util.*;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.Pagination;
 import cc.minetale.flame.util.SubCommand;
@@ -67,14 +62,15 @@ public class FriendRequestsCommand extends Command {
         CompletableFuture.runAsync(() -> {
             var requests = new HashMap<UUID, Long>();
             var profiles = new ArrayList<Profile>();
+            var cache = Cache.getFriendRequestCache();
 
             try {
                 switch (type) {
                     case INCOMING -> {
-                        var incoming = FriendCache.getIncomingRequests(player.getUuid()).get();
+                        var incoming = cache.getIncoming(player.getUuid()).get();
 
                         for (var request : incoming) {
-                            requests.put(request.player(), request.ttl());
+                            requests.put(request.initiator(), request.ttl());
                         }
 
                         profiles.addAll(getProfiles(incoming, type));
@@ -85,7 +81,7 @@ public class FriendRequestsCommand extends Command {
                         }
                     }
                     case OUTGOING -> {
-                        var outgoing = FriendCache.getOutgoingRequests(player.getUuid()).get();
+                        var outgoing = cache.getOutgoing(player.getUuid()).get();
 
                         for (var request : outgoing) {
                             requests.put(request.target(), request.ttl());
@@ -144,14 +140,14 @@ public class FriendRequestsCommand extends Command {
         });
     }
 
-    public List<Profile> getProfiles(Set<FriendRequest> requests, RequestType type) {
+    public List<Profile> getProfiles(Set<Request> requests, RequestType type) {
         var profiles = new ArrayList<Profile>();
 
         if (requests != null && requests.size() > 0) {
             List<CachedProfile> cachedProfiles = null;
             try {
                 cachedProfiles = ProfileUtil.getProfiles(requests.stream()
-                                .map(request -> type == RequestType.INCOMING ? request.player() : request.target())
+                                .map(request -> type == RequestType.INCOMING ? request.initiator() : request.target())
                                 .collect(Collectors.toList()))
                         .get();
             } catch (InterruptedException | ExecutionException e) {

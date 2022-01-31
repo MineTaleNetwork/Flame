@@ -1,6 +1,6 @@
 package cc.minetale.flame.commands.essentials.friend;
 
-import cc.minetale.commonlib.friend.FriendRequest;
+import cc.minetale.commonlib.friend.Friend;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.pigeon.payloads.friend.FriendRequestCreatePayload;
 import cc.minetale.commonlib.util.Message;
@@ -37,9 +37,10 @@ public class FriendAddCommand extends Command {
             FlamePlayer.getProfile((String) context.get("player"))
                     .thenAccept(target -> {
                         if (target != null) {
-                            FriendRequest.addRequest(FlamePlayer.fromPlayer(player).getProfile(), target)
+                            Friend.addRequest(FlamePlayer.fromPlayer(player).getProfile(), target)
                                     .thenAccept(response -> {
                                         switch (response) {
+                                            case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
                                             case SUCCESS -> {
                                                 var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
 
@@ -54,7 +55,6 @@ public class FriendAddCommand extends Command {
                                             case ALREADY_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.Add.ALREADY_FRIENDS, target.getChatFormat()));
                                             case TARGET_IS_PLAYER -> sender.sendMessage(Message.parse(Language.Friend.Add.TARGET_IS_PLAYER));
                                             case MAXIMUM_REQUESTS -> sender.sendMessage(Message.parse(Language.Friend.General.MAXIMUM_REQUESTS));
-                                            case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
                                             case REQUEST_EXIST -> sender.sendMessage(Message.parse(Language.Friend.Add.REQUEST_EXIST, target.getChatFormat()));
                                             case PENDING_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.Add.PENDING_REQUEST, target.getChatFormat()));
                                             case TARGET_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.General.TARGET_IGNORED));

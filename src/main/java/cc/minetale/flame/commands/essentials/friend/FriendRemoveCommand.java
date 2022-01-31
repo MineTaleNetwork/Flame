@@ -1,9 +1,8 @@
 package cc.minetale.flame.commands.essentials.friend;
 
-import cc.minetale.commonlib.friend.FriendRequest;
+import cc.minetale.commonlib.friend.Friend;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.pigeon.payloads.friend.FriendRemovePayload;
-import cc.minetale.commonlib.pigeon.payloads.friend.FriendRequestCreatePayload;
 import cc.minetale.commonlib.util.Message;
 import cc.minetale.commonlib.util.PigeonUtil;
 import cc.minetale.flame.util.CommandUtil;
@@ -36,7 +35,7 @@ public class FriendRemoveCommand extends Command {
             var profile = FlamePlayer.fromPlayer(player).getProfile();
 
             FlamePlayer.getProfile((String) context.get("player"))
-                    .thenAccept(target -> FriendRequest.removeFriend(profile, target)
+                    .thenAccept(target -> Friend.removeFriend(profile, target)
                             .thenAccept(response -> {
                                 switch (response) {
                                     case SUCCESS -> {
