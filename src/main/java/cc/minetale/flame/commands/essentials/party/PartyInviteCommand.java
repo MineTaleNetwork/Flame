@@ -2,7 +2,6 @@ package cc.minetale.flame.commands.essentials.party;
 
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.party.Party;
-import cc.minetale.commonlib.pigeon.payloads.friend.FriendRequestCreatePayload;
 import cc.minetale.commonlib.pigeon.payloads.party.PartyRequestCreatePayload;
 import cc.minetale.commonlib.util.Cache;
 import cc.minetale.commonlib.util.Message;
@@ -51,14 +50,14 @@ public class PartyInviteCommand extends Command {
                     var partyUuid = cachedProfile.getParty();
 
                     if(partyUuid == null) {
-                        // TODO -> Not in a party
+                        player.sendMessage(Message.parse(Language.Party.NO_PARTY));
                         return;
                     }
 
                     var party = Party.getParty(partyUuid).get();
 
                     if(party == null) {
-                        // TODO -> Not in a party
+                        player.sendMessage(Message.parse(Language.Party.NO_PARTY));
                         Cache.getProfileCache().updateParty(playerUuid, null);
                         return;
                     }
@@ -79,9 +78,6 @@ public class PartyInviteCommand extends Command {
 
                             if (targetPlayer != null) {
                                 targetPlayer.sendMessage(Message.parse(Language.Party.Invite.SUCCESS_TARGET, profile.getChatFormat()));
-                            } else {
-                                // TODO -> Success
-//                                PigeonUtil.broadcast(new PartyRequestCreatePayload(profile, target.getUuid()));
                             }
 
                             var message = Message.parse(Language.Friend.Add.SUCCESS_PLAYER, target.getChatFormat());
@@ -94,9 +90,16 @@ public class PartyInviteCommand extends Command {
                                 memberPlayer.sendMessage(message);
                             }
 
+                            PigeonUtil.broadcast(new PartyRequestCreatePayload(party, profile, target));
+
                         }
-                        case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
-                        // TODO -> Add more cases and messages
+                        case ERROR -> player.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
+                        case REQUEST_EXIST -> player.sendMessage(Message.parse(Language.Party.Invite.REQUEST_EXIST, target.getChatFormat()));
+                        case ALREADY_IN_PARTY -> player.sendMessage(Message.parse(Language.Party.Invite.IN_PARTY, target.getChatFormat()));
+                        case TARGET_IS_PLAYER -> player.sendMessage(Message.parse(Language.Party.Invite.TARGET_IS_PLAYER));
+                        case REQUESTS_TOGGLED, PLAYER_IGNORED -> player.sendMessage(Message.parse(Language.Party.Invite.TARGET_TOGGLED));
+                        case MAXIMUM_REQUESTS -> player.sendMessage(Message.parse(Language.Party.Invite.PARTY_MAXIMUM_REQUESTS));
+                        case TARGET_IGNORED -> player.sendMessage(Message.parse(Language.Party.Invite.TARGET_IGNORED));
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     player.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));

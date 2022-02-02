@@ -1,6 +1,7 @@
 package cc.minetale.flame.chat;
 
 import cc.minetale.commonlib.grant.Rank;
+import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.punishment.PunishmentType;
 import cc.minetale.commonlib.util.Colors;
@@ -62,17 +63,11 @@ public class Chat {
                 instance.sendMessage(player, formatChat(player, message));
     }
 
-    public static TextComponent formatChat(FlamePlayer player, String message) {
+    public static Component formatChat(FlamePlayer player, String message) {
         var team = player.getTeam();
         var color = team.getTeamColor();
 
-        return Component.text().append(
-                team.getPrefix(),
-                Component.text(player.getUsername(), color),
-                team.getSuffix(),
-                Component.text(" » ", NamedTextColor.DARK_GRAY, TextDecoration.BOLD),
-                Component.text(message, Colors.bleach(color, 0.80))
-        ).build();
+        return Message.parse(Language.General.CHAT_FORMAT, team.getPrefix(), Component.text(player.getUsername(), color), "", Component.text(message, Colors.bleach(color, 0.80)));
     }
 
     private static void handlePunishmentProcedure(PunishmentProcedure procedure, Player player, String message) {
