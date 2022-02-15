@@ -1,5 +1,6 @@
 package cc.minetale.flame.commands.essentials.conversation;
 
+import cc.minetale.commonlib.cache.ProfileCache;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.pigeon.payloads.conversation.ConversationMessagePayload;
 import cc.minetale.commonlib.util.*;
@@ -32,25 +33,24 @@ public class ReplyCommand extends Command {
         if (sender instanceof Player player) {
             CompletableFuture.runAsync(() -> {
                 var message = String.join(" ", (String[]) context.get("message"));
-                var cache = Cache.getProfileCache();
 
                 try {
                     var playerCachedProfile = ProfileUtil.fromCache(player.getUuid()).get();
 
                     if(playerCachedProfile == null) {
-                        sender.sendMessage(Message.parse(Language.Error.NETWORK_ERROR));
+                        sender.sendMessage(Message.parse(Language.Error.PLAYER_NETWORK));
                         return;
                     }
 
                     if(playerCachedProfile.getLastMessaged() == null) {
-                        sender.sendMessage(Message.parse(Language.Conversation.LAST_MESSAGED_NULL));
+                        sender.sendMessage(Message.parse(Language.Conversation.UNKNOWN_CONVERSATION));
                         return;
                     }
 
                     var targetCachedProfile = ProfileUtil.fromCache(playerCachedProfile.getLastMessaged()).get();
 
                     if(targetCachedProfile == null || targetCachedProfile.getServer() == null) {
-                        sender.sendMessage(Message.parse(Language.Error.PLAYER_OFFLINE_ERROR));
+                        sender.sendMessage(Message.parse(Language.Error.PLAYER_OFFLINE));
                         return;
                     }
 
@@ -58,7 +58,7 @@ public class ReplyCommand extends Command {
                     var targetProfile = targetCachedProfile.getProfile();
 
                     if (playerProfile.equals(targetProfile)) {
-                        player.sendMessage(Message.parse(Language.Conversation.TARGET_IS_PLAYER));
+                        player.sendMessage(Message.parse(Language.Conversation.SELF_TARGET));
                         return;
                     }
 
@@ -77,8 +77,8 @@ public class ReplyCommand extends Command {
                     playerCachedProfile.setLastMessaged(targetProfile.getUuid());
                     targetCachedProfile.setLastMessaged(playerProfile.getUuid());
 
-                    cache.update(JsonUtil.writeToJson(playerCachedProfile), playerProfile.getUuid());
-                    cache.update(JsonUtil.writeToJson(targetCachedProfile), targetProfile.getUuid());
+                    ProfileCache.pushCache(playerCachedProfile);
+                    ProfileCache.pushCache(targetCachedProfile);
 
                     player.sendMessage(Message.parse(Language.Conversation.TO_MSG, targetProfile.getChatFormat(), message));
 

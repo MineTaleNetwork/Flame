@@ -34,16 +34,15 @@ public class FriendCancelCommand extends Command {
             FlamePlayer.getProfile((String) context.get("player"))
                     .thenAccept(target -> {
                         if (target != null) {
-                            Friend.cancelRequest(profile, target)
+                            Friend.removeRequest(profile, target)
                                     .thenAccept(response -> {
                                         switch (response) {
-                                            case SUCCESS -> sender.sendMessage(Message.parse(Language.Friend.Cancel.SUCCESS, target.getChatFormat()));
-                                            case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.Cancel.NO_REQUEST, target.getChatFormat()));
-                                            case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
+                                            case SUCCESS -> sender.sendMessage(Message.parse(Language.Friend.CANCEL_INITIATOR, target.getChatFormat()));
+                                            case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.CANCEL_NO_REQUEST, target.getChatFormat()));
                                         }
                                     });
                         } else {
-                            sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
+                            sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
                         }
                     });
         }

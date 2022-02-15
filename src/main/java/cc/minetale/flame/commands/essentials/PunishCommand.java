@@ -39,7 +39,7 @@ public class PunishCommand extends Command {
                             player.sendMessage(Component.text("Work in progress", NamedTextColor.RED));
 //                            new PunishmentMenu(player, profile);
                         } else {
-                            player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
+                            player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
                         }
                     });
         }

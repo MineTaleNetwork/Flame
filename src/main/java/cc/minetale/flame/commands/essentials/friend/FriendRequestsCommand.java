@@ -1,5 +1,6 @@
 package cc.minetale.flame.commands.essentials.friend;
 
+import cc.minetale.commonlib.cache.RequestCache;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.profile.CachedProfile;
 import cc.minetale.commonlib.profile.Profile;
@@ -62,42 +63,42 @@ public class FriendRequestsCommand extends Command {
         CompletableFuture.runAsync(() -> {
             var requests = new HashMap<UUID, Long>();
             var profiles = new ArrayList<Profile>();
-            var cache = Cache.getFriendRequestCache();
+            var cache = RequestCache.getFriendRequest();
 
-            try {
+//            try {
                 switch (type) {
                     case INCOMING -> {
-                        var incoming = cache.getIncoming(player.getUuid()).get();
+//                        var incoming = cache.getIncoming(player.getUuid()).get();
+//
+//                        for (var request : incoming) {
+//                            requests.put(request.initiator(), request.ttl());
+//                        }
 
-                        for (var request : incoming) {
-                            requests.put(request.initiator(), request.ttl());
-                        }
-
-                        profiles.addAll(getProfiles(incoming, type));
+//                        profiles.addAll(getProfiles(incoming, type));
 
                         if (profiles.size() == 0) {
-                            player.sendMessage(Message.parse(Language.Friend.General.NO_INCOMING));
+                            player.sendMessage(Message.parse(Language.Friend.INVITE_NO_INCOMING));
                             return;
                         }
                     }
                     case OUTGOING -> {
-                        var outgoing = cache.getOutgoing(player.getUuid()).get();
-
-                        for (var request : outgoing) {
-                            requests.put(request.target(), request.ttl());
-                        }
-
-                        profiles.addAll(getProfiles(outgoing, type));
+//                        var outgoing = cache.getOutgoing(player.getUuid()).get();
+//
+//                        for (var request : outgoing) {
+//                            requests.put(request.target(), request.ttl());
+//                        }
+//
+//                        profiles.addAll(getProfiles(outgoing, type));
 
                         if (profiles.size() == 0) {
-                            player.sendMessage(Message.parse(Language.Friend.General.NO_OUTGOING));
+                            player.sendMessage(Message.parse(Language.Friend.INVITE_NO_OUTGOING));
                             return;
                         }
                     }
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+//            } catch (InterruptedException | ExecutionException e) {
+//                e.printStackTrace();
+//            }
 
             var sorter = (Comparator<Profile>) (profile1, profile2) -> {
                 var rank1 = profile1.getGrant().getRank();

@@ -87,8 +87,8 @@ public class PigeonListener implements Listener {
         var initiatorProfile = payload.getInitiator();
         var targetProfile = payload.getTarget();
 
-        var playerMessage = Message.parse(Language.Party.Invite.SUCCESS_PLAYER, targetProfile.getChatFormat());
-        var targetMessage = Message.parse(Language.Party.Invite.SUCCESS_TARGET, initiatorProfile.getChatFormat());
+        var playerMessage = Message.parse(Language.Party.INVITE_PARTY, targetProfile.getChatFormat());
+        var targetMessage = Message.parse(Language.Party.INVITE_TARGET, initiatorProfile.getChatFormat());
 
         for(var member : payload.getParty().getMembers()) {
             var player = MinecraftServer.getConnectionManager().getPlayer(member.player());
@@ -197,7 +197,7 @@ public class PigeonListener implements Listener {
         var player = MinecraftServer.getConnectionManager().getPlayer(payload.getTarget());
 
         if (player != null) {
-            player.sendMessage(Message.parse(Language.Friend.Deny.SUCCESS_TARGET, profile.getChatFormat()));
+            player.sendMessage(Message.parse(Language.Friend.DENY_TARGET, profile.getChatFormat()));
         }
     }
 
@@ -207,7 +207,7 @@ public class PigeonListener implements Listener {
         var player = MinecraftServer.getConnectionManager().getPlayer(payload.getTarget());
 
         if (player != null) {
-            player.sendMessage(Message.parse(Language.Friend.Remove.SUCCESS_TARGET, profile.getChatFormat()));
+            player.sendMessage(Message.parse(Language.Friend.REMOVE_TARGET, profile.getChatFormat()));
         }
     }
 
@@ -217,7 +217,7 @@ public class PigeonListener implements Listener {
         var player = MinecraftServer.getConnectionManager().getPlayer(payload.getTarget());
 
         if (player != null) {
-            player.sendMessage(Message.parse(Language.Friend.Accept.SUCCESS, profile.getChatFormat()));
+            player.sendMessage(Message.parse(Language.Friend.ACCEPT_REQUEST, profile.getChatFormat()));
         }
     }
 
@@ -227,7 +227,7 @@ public class PigeonListener implements Listener {
         var player = MinecraftServer.getConnectionManager().getPlayer(payload.getTarget());
 
         if (player != null) {
-            player.sendMessage(Message.parse(Language.Friend.Add.SUCCESS_TARGET, profile.getChatFormat()));
+            player.sendMessage(Message.parse(Language.Friend.INVITE_TARGET, profile.getChatFormat()));
         }
     }
 
@@ -238,7 +238,7 @@ public class PigeonListener implements Listener {
     @PayloadHandler
     public void onProxyPlayerConnect(ProxyPlayerConnectPayload payload) {
         var profile = payload.getPlayer();
-        var friendJoined = Message.parse(Language.Friend.General.FRIEND_JOINED, profile.getChatFormat());
+        var friendJoined = Message.parse(Language.Friend.JOINED_NETWORK, profile.getChatFormat());
 
         for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             var playerProfile = FlamePlayer.fromPlayer(player).getProfile();
@@ -255,7 +255,7 @@ public class PigeonListener implements Listener {
     @PayloadHandler
     public void onProxyPlayerDisconnect(ProxyPlayerDisconnectPayload payload) {
         var profile = payload.getPlayer();
-        var friendLeft = Message.parse(Language.Friend.General.FRIEND_LEFT, profile.getChatFormat());
+        var friendLeft = Message.parse(Language.Friend.LEFT_NETWORK, profile.getChatFormat());
 
         for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             var playerProfile = FlamePlayer.fromPlayer(player).getProfile();

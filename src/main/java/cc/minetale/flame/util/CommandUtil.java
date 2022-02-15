@@ -43,7 +43,7 @@ public class CommandUtil {
 
                 if(!hasMinimum)
                     if (command)
-                        sender.sendMessage(Message.parse(Language.Command.COMMAND_PERMISSION_ERROR, Component.text(rank.getName(), NamedTextColor.GOLD)));
+                        sender.sendMessage(Message.parse(Language.Command.COMMAND_PERMISSION, Component.text(rank.getName(), NamedTextColor.GOLD)));
 
                 return hasMinimum;
             }

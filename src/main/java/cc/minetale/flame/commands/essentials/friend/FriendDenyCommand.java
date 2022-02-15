@@ -37,26 +37,25 @@ public class FriendDenyCommand extends Command {
             FlamePlayer.getProfile((String) context.get("player"))
                     .thenAccept(target -> {
                         if(target != null) {
-                            Friend.denyRequest(profile, target)
+                            Friend.removeRequest(profile, target)
                                     .thenAccept(response -> {
                                         switch (response) {
-                                            case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
                                             case SUCCESS -> {
                                                 var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
 
                                                 if (targetPlayer != null) {
-                                                    targetPlayer.sendMessage(Message.parse(Language.Friend.Deny.SUCCESS_TARGET, profile.getChatFormat()));
+                                                    targetPlayer.sendMessage(Message.parse(Language.Friend.DENY_TARGET, profile.getChatFormat()));
                                                 } else {
-                                                    PigeonUtil.broadcast(new FriendRequestDenyPayload(player.getUuid(), target.getUuid()));
+                                                    PigeonUtil.broadcast(new FriendRequestDenyPayload(profile, target.getUuid()));
                                                 }
 
-                                                sender.sendMessage(Message.parse(Language.Friend.Deny.SUCCESS_PLAYER, target.getChatFormat()));
+                                                sender.sendMessage(Message.parse(Language.Friend.DENY_INITIATOR, target.getChatFormat()));
                                             }
-                                            case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.Cancel.NO_REQUEST, target.getChatFormat()));
+                                            case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.NO_REQUEST, target.getChatFormat()));
                                         }
                                     });
                         } else {
-                            sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
+                            sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
                         }
                     });
         }

@@ -40,27 +40,26 @@ public class FriendAcceptCommand extends Command {
                             Friend.acceptRequest(profile, target)
                                     .thenAccept(response -> {
                                         switch (response) {
-                                            case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
                                             case SUCCESS -> {
                                                 var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
 
                                                 if (targetPlayer != null) {
-                                                    targetPlayer.sendMessage(Message.parse(Language.Friend.Accept.SUCCESS, profile.getChatFormat()));
+                                                    targetPlayer.sendMessage(Message.parse(Language.Friend.ACCEPT_REQUEST, profile.getChatFormat()));
                                                 } else {
-                                                    PigeonUtil.broadcast(new FriendRequestAcceptPayload(player.getUuid(), target.getUuid()));
+                                                    PigeonUtil.broadcast(new FriendRequestAcceptPayload(profile, target.getUuid()));
                                                 }
 
-                                                sender.sendMessage(Message.parse(Language.Friend.Accept.SUCCESS, target.getChatFormat()));
+                                                sender.sendMessage(Message.parse(Language.Friend.ACCEPT_REQUEST, target.getChatFormat()));
                                             }
-                                            case PLAYER_MAXIMUM_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.General.PLAYER_MAXIMUM_FRIENDS));
-                                            case TARGET_MAXIMUM_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.General.TARGET_MAXIMUM_FRIENDS));
-                                            case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.Accept.NO_REQUEST, target.getChatFormat()));
-                                            case TARGET_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.General.TARGET_IGNORED));
-                                            case PLAYER_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.General.TARGET_TOGGLED));
+                                            case PLAYER_MAX_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.MAX_FRIENDS_INITIATOR));
+                                            case TARGET_MAX_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.MAX_FRIENDS_TARGET));
+                                            case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.NO_REQUEST, target.getChatFormat()));
+                                            case TARGET_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.TARGET_IGNORED));
+                                            case PLAYER_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.TARGET_TOGGLED));
                                         }
                                     });
                         } else {
-                            sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
+                            sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
                         }
                     });
         }

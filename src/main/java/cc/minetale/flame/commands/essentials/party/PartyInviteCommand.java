@@ -3,7 +3,6 @@ package cc.minetale.flame.commands.essentials.party;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.party.Party;
 import cc.minetale.commonlib.pigeon.payloads.party.PartyRequestCreatePayload;
-import cc.minetale.commonlib.util.Cache;
 import cc.minetale.commonlib.util.Message;
 import cc.minetale.commonlib.util.PigeonUtil;
 import cc.minetale.commonlib.util.ProfileUtil;
@@ -38,74 +37,75 @@ public class PartyInviteCommand extends Command {
         if (sender instanceof Player player) {
             var playerUuid = player.getUuid();
 
-            CompletableFuture.runAsync(() -> {
-                try {
-                    var cachedProfile = ProfileUtil.getCachedProfile(playerUuid).get();
-
-                    if(cachedProfile == null) {
-                        player.sendMessage(Message.parse(Language.Error.NETWORK_ERROR));
-                        return;
-                    }
-
-                    var partyUuid = cachedProfile.getParty();
-
-                    if(partyUuid == null) {
-                        player.sendMessage(Message.parse(Language.Party.NO_PARTY));
-                        return;
-                    }
-
-                    var party = Party.getParty(partyUuid).get();
-
-                    if(party == null) {
-                        player.sendMessage(Message.parse(Language.Party.NO_PARTY));
-                        Cache.getProfileCache().updateParty(playerUuid, null);
-                        return;
-                    }
-
-                    var target = ProfileUtil.getProfile((String) context.get("player")).get();
-
-                    if(target == null) {
-                        player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
-                        return;
-                    }
-
-                    var profile = cachedProfile.getProfile();
-                    var response = party.invitePlayer(cachedProfile.getProfile(), target).get();
-
-                    switch (response) {
-                        case SUCCESS -> {
-                            var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
-
-                            if (targetPlayer != null) {
-                                targetPlayer.sendMessage(Message.parse(Language.Party.Invite.SUCCESS_TARGET, profile.getChatFormat()));
-                            }
-
-                            var message = Message.parse(Language.Friend.Add.SUCCESS_PLAYER, target.getChatFormat());
-
-                            for(var member : party.getMembers()) {
-                                var memberPlayer = MinecraftServer.getConnectionManager().getPlayer(member.player());
-
-                                if(memberPlayer == null) { continue; }
-
-                                memberPlayer.sendMessage(message);
-                            }
-
-                            PigeonUtil.broadcast(new PartyRequestCreatePayload(party, profile, target));
-
-                        }
-                        case ERROR -> player.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
-                        case REQUEST_EXIST -> player.sendMessage(Message.parse(Language.Party.Invite.REQUEST_EXIST, target.getChatFormat()));
-                        case ALREADY_IN_PARTY -> player.sendMessage(Message.parse(Language.Party.Invite.IN_PARTY, target.getChatFormat()));
-                        case TARGET_IS_PLAYER -> player.sendMessage(Message.parse(Language.Party.Invite.TARGET_IS_PLAYER));
-                        case REQUESTS_TOGGLED, PLAYER_IGNORED -> player.sendMessage(Message.parse(Language.Party.Invite.TARGET_TOGGLED));
-                        case MAXIMUM_REQUESTS -> player.sendMessage(Message.parse(Language.Party.Invite.PARTY_MAXIMUM_REQUESTS));
-                        case TARGET_IGNORED -> player.sendMessage(Message.parse(Language.Party.Invite.TARGET_IGNORED));
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    player.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
-                    e.printStackTrace();
-                }
-            });
+//            CompletableFuture.runAsync(() -> {
+//                try {
+//                    var cachedProfile = ProfileUtil.getCachedProfile(playerUuid).get();
+//
+//                    if(cachedProfile == null) {
+//                        player.sendMessage(Message.parse(Language.Error.PLAYER_NETWORK));
+//                        return;
+//                    }
+//
+//                    var partyUuid = cachedProfile.getParty();
+//
+//                    if(partyUuid == null) {
+//                        player.sendMessage(Message.parse(Language.Party.NO_PARTY));
+//                        return;
+//                    }
+//
+//                    var party = Party.getParty(partyUuid).get();
+//
+//                    if(party == null) {
+//                        player.sendMessage(Message.parse(Language.Party.NO_PARTY));
+//                        Cache.getProfileCache().updateParty(playerUuid, null);
+//                        return;
+//                    }
+//
+//                    var target = ProfileUtil.getProfile((String) context.get("player")).get();
+//
+//                    if(target == null) {
+//                        player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
+//                        return;
+//                    }
+//
+//                    var profile = cachedProfile.getProfile();
+//                    var response = party.invitePlayer(cachedProfile.getProfile(), target).get();
+//
+//                    switch (response) {
+//                        case SUCCESS -> {
+//                            var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
+//
+//                            if (targetPlayer != null) {
+//                                targetPlayer.sendMessage(Message.parse(Language.Party.INVITE_TARGET, profile.getChatFormat()));
+//                            }
+//
+//                            var message = Message.parse(Language.Party.INVITE_PARTY, target.getChatFormat());
+//
+//                            for(var member : party.getMembers()) {
+//                                var memberPlayer = MinecraftServer.getConnectionManager().getPlayer(member.player());
+//
+//                                if(memberPlayer == null) { continue; }
+//
+//                                memberPlayer.sendMessage(message);
+//                            }
+//
+//                            PigeonUtil.broadcast(new PartyRequestCreatePayload(party, profile, target));
+//
+//                        }
+//                        // TODO -> Target max incoming
+//                        case ERROR -> player.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION));
+//                        case REQUEST_EXIST -> player.sendMessage(Message.parse(Language.Party.INVITE_EXISTS, target.getChatFormat()));
+//                        case ALREADY_IN_PARTY -> player.sendMessage(Message.parse(Language.Party.IN_PARTY, target.getChatFormat()));
+//                        case TARGET_IS_PLAYER -> player.sendMessage(Message.parse(Language.Party.INVITE_SELF_TARGET));
+//                        case REQUESTS_TOGGLED, PLAYER_IGNORED -> player.sendMessage(Message.parse(Language.Party.TARGET_TOGGLED));
+//                        case MAXIMUM_REQUESTS -> player.sendMessage(Message.parse(Language.Party.INVITE_MAX_OUTGOING));
+//                        case TARGET_IGNORED -> player.sendMessage(Message.parse(Language.Party.TARGET_IGNORED));
+//                    }
+//                } catch (InterruptedException | ExecutionException e) {
+//                    player.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION));
+//                    e.printStackTrace();
+//                }
+//            });
         }
     }
 

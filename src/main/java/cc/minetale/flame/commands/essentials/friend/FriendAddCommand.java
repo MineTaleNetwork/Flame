@@ -42,32 +42,31 @@ public class FriendAddCommand extends Command {
                     var target = FlamePlayer.getProfile((String) context.get("player")).get();
 
                     if (target == null) {
-                        sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
+                        sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
                         return;
                     }
 
                     var response = Friend.addRequest(FlamePlayer.fromPlayer(player).getProfile(), target).get();
 
                     switch (response) {
-                        case ERROR -> sender.sendMessage(Message.parse(Language.Command.COMMAND_EXCEPTION_ERROR));
                         case SUCCESS -> {
                             var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
 
                             if (targetPlayer != null) {
-                                targetPlayer.sendMessage(Message.parse(Language.Friend.Add.SUCCESS_TARGET, profile.getChatFormat()));
+                                targetPlayer.sendMessage(Message.parse(Language.Friend.INVITE_TARGET, profile.getChatFormat()));
                             } else {
                                 PigeonUtil.broadcast(new FriendRequestCreatePayload(profile, target.getUuid()));
                             }
 
-                            sender.sendMessage(Message.parse(Language.Friend.Add.SUCCESS_PLAYER, target.getChatFormat()));
+                            sender.sendMessage(Message.parse(Language.Friend.INVITE_INITIATOR, target.getChatFormat()));
                         }
-                        case ALREADY_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.Add.ALREADY_FRIENDS, target.getChatFormat()));
-                        case TARGET_IS_PLAYER -> sender.sendMessage(Message.parse(Language.Friend.Add.TARGET_IS_PLAYER));
-                        case MAXIMUM_REQUESTS -> sender.sendMessage(Message.parse(Language.Friend.General.MAXIMUM_REQUESTS));
-                        case REQUEST_EXIST -> sender.sendMessage(Message.parse(Language.Friend.Add.REQUEST_EXIST, target.getChatFormat()));
-                        case PENDING_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.Add.PENDING_REQUEST, target.getChatFormat()));
-                        case TARGET_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.General.TARGET_IGNORED));
-                        case REQUESTS_TOGGLED, PLAYER_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.General.TARGET_TOGGLED));
+                        case ALREADY_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.INVITE_ALREADY_FRIENDS, target.getChatFormat()));
+                        case TARGET_IS_PLAYER -> sender.sendMessage(Message.parse(Language.Friend.INVITE_SELF_TARGET));
+                        case MAX_OUTGOING -> sender.sendMessage(Message.parse(Language.Friend.INVITE_MAX_OUTGOING));
+                        case REQUEST_EXIST -> sender.sendMessage(Message.parse(Language.Friend.INVITE_EXIST, target.getChatFormat()));
+                        case PENDING_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.INVITE_PENDING, target.getChatFormat()));
+                        case TARGET_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.TARGET_IGNORED));
+                        case REQUESTS_TOGGLED, PLAYER_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.TARGET_TOGGLED));
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();

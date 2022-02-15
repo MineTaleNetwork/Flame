@@ -3,7 +3,6 @@ package cc.minetale.flame.commands.essentials;
 import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.util.Message;
-import cc.minetale.flame.menu.grant.GrantsMenu;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.FlamePlayer;
 import net.minestom.server.command.CommandSender;
@@ -35,9 +34,9 @@ public class GrantsCommand extends Command {
             FlamePlayer.getProfile((String) context.get("player"))
                     .thenAccept(profile -> {
                         if (profile != null) {
-                            new GrantsMenu(player, profile);
+//                            new GrantsMenu(player, profile);
                         } else {
-                            player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
+                            player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
                         }
                     });
         }

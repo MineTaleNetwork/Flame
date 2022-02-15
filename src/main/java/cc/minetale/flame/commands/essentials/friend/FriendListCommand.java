@@ -58,7 +58,7 @@ public class FriendListCommand extends Command {
             var friends = profile.getFriends();
 
             if(friends.size() == 0) {
-                player.sendMessage(Message.parse(Language.Friend.General.NO_FRIENDS));
+                player.sendMessage(Message.parse(Language.Friend.NO_FRIENDS));
                 return;
             }
 

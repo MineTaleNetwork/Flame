@@ -25,7 +25,7 @@ public class Flame extends Extension {
                 .setPlayerProvider(FlamePlayer::new);
 
         MinecraftServer.getCommandManager()
-                .setUnknownCommandCallback((sender, command) -> sender.sendMessage(Message.parse(Language.Command.UNKNOWN_COMMAND_ERROR)));
+                .setUnknownCommandCallback((sender, command) -> sender.sendMessage(Message.parse(Language.Command.UNKNOWN_COMMAND)));
 
         FlameProvider.init();
 

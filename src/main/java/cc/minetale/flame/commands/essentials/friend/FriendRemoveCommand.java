@@ -42,14 +42,14 @@ public class FriendRemoveCommand extends Command {
                                         var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
 
                                         if(targetPlayer != null) {
-                                            targetPlayer.sendMessage(Message.parse(Language.Friend.Remove.SUCCESS_TARGET, profile.getChatFormat()));
+                                            targetPlayer.sendMessage(Message.parse(Language.Friend.REMOVE_TARGET, profile.getChatFormat()));
                                         } else {
-                                            PigeonUtil.broadcast(new FriendRemovePayload(player.getUuid(), target.getUuid()));
+                                            PigeonUtil.broadcast(new FriendRemovePayload(profile, target.getUuid()));
                                         }
 
-                                        sender.sendMessage(Message.parse(Language.Friend.Remove.SUCCESS_PLAYER, target.getChatFormat()));
+                                        sender.sendMessage(Message.parse(Language.Friend.REMOVE_INITIATOR, target.getChatFormat()));
                                     }
-                                    case NOT_ADDED -> sender.sendMessage(Message.parse(Language.Friend.Remove.NOT_ADDED, target.getChatFormat()));
+                                    case NOT_ADDED -> sender.sendMessage(Message.parse(Language.Friend.REMOVE_NOT_ADDED, target.getChatFormat()));
                                 }
                             }));
         }

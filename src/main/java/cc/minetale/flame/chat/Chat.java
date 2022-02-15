@@ -8,8 +8,6 @@ import cc.minetale.commonlib.util.Colors;
 import cc.minetale.commonlib.util.Duration;
 import cc.minetale.commonlib.util.Message;
 import cc.minetale.flame.FlameAPI;
-import cc.minetale.flame.menu.grant.GrantConfirmMenu;
-import cc.minetale.flame.menu.grant.GrantReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
@@ -17,7 +15,6 @@ import cc.minetale.flame.util.FlamePlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 
 public class Chat {
@@ -116,7 +113,7 @@ public class Chat {
                     procedure.setDuration(duration);
                     procedure.setStage(GrantProcedure.Stage.PROVIDE_REASON);
 
-                    new GrantReasonMenu(player, procedure);
+//                    new GrantReasonMenu(player, procedure);
                 }
             }
             case PROVIDE_REASON -> {
@@ -124,7 +121,9 @@ public class Chat {
                 procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
 
                 switch (procedure.getType()) {
-                    case ADD, REMOVE -> new GrantConfirmMenu(player, procedure);
+                    case ADD, REMOVE -> {
+//                        new GrantConfirmMenu(player, procedure);
+                    }
                 }
             }
         }

@@ -70,7 +70,7 @@ public class AddGrantCommand extends Command {
                                 Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
                         ));
                     } else {
-                        sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER_ERROR));
+                        sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
                     }
                 });
     }

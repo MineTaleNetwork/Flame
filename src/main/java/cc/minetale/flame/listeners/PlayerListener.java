@@ -62,7 +62,7 @@ public class PlayerListener {
                         e.printStackTrace();
                     }
 
-                    player.kick(Message.parse(Language.Error.PROFILE_LOAD_ERROR));
+                    player.kick(Message.parse(Language.Error.PROFILE_LOAD));
                 })
                 .addListener(PlayerSpawnEvent.class, event -> {
                     var player = event.getPlayer();
