@@ -14,14 +14,17 @@ public class GrantProcedure extends Procedure {
 
     private String grant;
     private Rank rank;
+    private String recipient;
 
-    public GrantProcedure(Player issuer, UUID recipient, Type type, Stage stage) {
-        super(issuer, recipient, type, stage);
+    public GrantProcedure(Player issuer, String recipient, Type type, Stage stage) {
+        super(issuer, null, type, stage);
+
+        this.recipient = recipient;
     }
 
     @Override
     public void finish() {
-        Procedure.removeProcedure(this.getIssuer());
+        Procedure.removeProcedure(getIssuer());
     }
 
     @Override

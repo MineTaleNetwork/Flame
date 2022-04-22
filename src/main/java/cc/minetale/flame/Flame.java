@@ -3,7 +3,6 @@ package cc.minetale.flame;
 import cc.minetale.flame.listeners.PostmanListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.util.FlamePlayer;
-import cc.minetale.flame.util.FlameProvider;
 import cc.minetale.flame.util.SubCommand;
 import cc.minetale.postman.Postman;
 import cc.minetale.sodium.lang.Language;

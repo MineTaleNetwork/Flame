@@ -1,5 +1,9 @@
 package cc.minetale.flame.util;
 
+import cc.minetale.mlib.nametag.NameplateHandler;
+import cc.minetale.mlib.nametag.NameplateProvider;
+import cc.minetale.mlib.nametag.ProviderType;
+import cc.minetale.mlib.util.TeamUtil;
 import cc.minetale.sodium.profile.Profile;
 import cc.minetale.sodium.profile.ProfileUtil;
 import cc.minetale.sodium.util.Cooldown;
@@ -35,10 +39,14 @@ public class FlamePlayer extends Player {
 
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^\\w+$");
 
+    public static boolean isValidName(String name) {
+        return name.length() >= 3 && name.length() <= 16 && USERNAME_PATTERN.matcher(name).matches();
+    }
+
     public static Profile getProfile(String name) {
         var player = MinecraftServer.getConnectionManager().getPlayer(name);
 
-        if(!(name.length() >= 3 && name.length() <= 16 && USERNAME_PATTERN.matcher(name).matches())) {
+        if(!isValidName(name)) {
             return null;
         }
 
@@ -47,6 +55,17 @@ public class FlamePlayer extends Player {
         }
 
         return ProfileUtil.getProfile(name);
+    }
+
+    public void refreshPlayer(Profile newProfile) {
+        setProfile(newProfile);
+
+        profile.activateNextGrant();
+
+        NameplateHandler.clearProviders(this);
+        NameplateHandler.addProvider(this, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));
+
+        refreshCommands();
     }
 
     public static Profile getProfile(UUID uuid) {
