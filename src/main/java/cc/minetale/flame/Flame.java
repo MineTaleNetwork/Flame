@@ -1,19 +1,21 @@
 package cc.minetale.flame;
 
-import cc.minetale.commonlib.lang.Language;
-import cc.minetale.commonlib.util.Message;
-import cc.minetale.flame.listeners.PigeonListener;
+import cc.minetale.flame.listeners.PostmanListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.flame.util.FlameProvider;
 import cc.minetale.flame.util.SubCommand;
-import cc.minetale.pigeon.Pigeon;
+import cc.minetale.postman.Postman;
+import cc.minetale.sodium.lang.Language;
+import cc.minetale.sodium.util.Message;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.utils.time.Tick;
 import org.reflections.Reflections;
+
+import java.util.Arrays;
 
 public class Flame extends Extension {
 
@@ -45,9 +47,12 @@ public class Flame extends Extension {
             }
         }
 
-        Pigeon.getPigeon()
+        Arrays.asList(
+                new PostmanListener()
+        ).forEach(listener -> Postman.getPostman()
                 .getListenersRegistry()
-                .registerListener(new PigeonListener());
+                .registerListener(listener)
+        );
 
         MinecraftServer.getSchedulerManager()
                 .buildTask(() -> {
@@ -61,7 +66,8 @@ public class Flame extends Extension {
                 .repeat(20, Tick.SERVER_TICKS)
                 .schedule();
 
-        MinecraftServer.getGlobalEventHandler().addChild(PlayerListener.events());
+        MinecraftServer.getGlobalEventHandler()
+                .addChild(PlayerListener.events());
     }
 
     @Override

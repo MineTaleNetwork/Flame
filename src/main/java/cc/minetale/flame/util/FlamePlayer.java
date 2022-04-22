@@ -1,13 +1,14 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.util.Cooldown;
-import cc.minetale.commonlib.util.ProfileUtil;
+import cc.minetale.sodium.profile.Profile;
+import cc.minetale.sodium.profile.ProfileUtil;
+import cc.minetale.sodium.util.Cooldown;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.time.Tick;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -16,8 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
-@Getter
-@Setter
+@Getter @Setter
 public class FlamePlayer extends Player {
 
     private Profile profile;
@@ -26,7 +26,7 @@ public class FlamePlayer extends Player {
     public FlamePlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(uuid, username, playerConnection);
 
-        this.cooldown = new Cooldown(Duration.of(1, ChronoUnit.SECONDS));
+        cooldown = new Cooldown(Duration.of(1L, Tick.SERVER_TICKS));
     }
 
     public static FlamePlayer fromPlayer(Player player) {
@@ -35,28 +35,28 @@ public class FlamePlayer extends Player {
 
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^\\w+$");
 
-    public static CompletableFuture<Profile> getProfile(String name) {
+    public static Profile getProfile(String name) {
         var player = MinecraftServer.getConnectionManager().getPlayer(name);
 
         if(!(name.length() >= 3 && name.length() <= 16 && USERNAME_PATTERN.matcher(name).matches())) {
-            return CompletableFuture.completedFuture(null);
+            return null;
         }
 
         if(player != null) {
-            return CompletableFuture.completedFuture(FlamePlayer.fromPlayer(player).getProfile());
+            return fromPlayer(player).getProfile();
         }
 
         return ProfileUtil.getProfile(name);
     }
 
-    public static CompletableFuture<Profile> getProfile(UUID uuid) {
+    public static Profile getProfile(UUID uuid) {
         var player = MinecraftServer.getConnectionManager().getPlayer(uuid);
 
-        if(player != null) {
-            return CompletableFuture.completedFuture(FlamePlayer.fromPlayer(player).getProfile());
-        } else {
+        if(player == null) {
             return ProfileUtil.getProfile(uuid);
         }
+
+        return FlamePlayer.fromPlayer(player).getProfile();
     }
 
 }

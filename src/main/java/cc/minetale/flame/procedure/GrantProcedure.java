@@ -1,6 +1,6 @@
 package cc.minetale.flame.procedure;
 
-import cc.minetale.commonlib.grant.Rank;
+import cc.minetale.sodium.profile.grant.Rank;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -9,8 +9,7 @@ import net.minestom.server.entity.Player;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Getter @Setter
 public class GrantProcedure extends Procedure {
 
     private String grant;
@@ -27,8 +26,8 @@ public class GrantProcedure extends Procedure {
 
     @Override
     public void cancel() {
-        this.getIssuer().sendMessage(Component.text("You have cancelled the grant " + (this.getType() == Type.REMOVE ? "removal " : "") + "procedure.", NamedTextColor.RED));
-        this.finish();
+        getIssuer().sendMessage(Component.text("You have cancelled the grant " + (this.getType() == Type.REMOVE ? "removal " : "") + "procedure.", NamedTextColor.RED));
+        finish();
     }
 
 }

@@ -1,6 +1,6 @@
 package cc.minetale.flame.procedure;
 
-import cc.minetale.commonlib.punishment.PunishmentType;
+import cc.minetale.sodium.profile.punishment.PunishmentType;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -9,8 +9,7 @@ import net.minestom.server.entity.Player;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Getter @Setter
 public class PunishmentProcedure extends Procedure {
 
     private String punishment;
@@ -27,8 +26,8 @@ public class PunishmentProcedure extends Procedure {
 
     @Override
     public void cancel() {
-        this.getIssuer().sendMessage(Component.text("You have cancelled the punishment " + (this.getType() == Type.REMOVE ? "removal " : "") + "procedure.", NamedTextColor.RED));
-        this.finish();
+        getIssuer().sendMessage(Component.text("You have cancelled the punishment " + (this.getType() == Type.REMOVE ? "removal " : "") + "procedure.", NamedTextColor.RED));
+        finish();
     }
 
 }

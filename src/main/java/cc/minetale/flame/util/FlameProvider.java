@@ -1,15 +1,15 @@
 package cc.minetale.flame.util;
 
-import cc.minetale.commonlib.CommonLib;
-import cc.minetale.commonlib.api.LibProvider;
-import cc.minetale.commonlib.grant.Grant;
-import cc.minetale.commonlib.punishment.Punishment;
-import cc.minetale.commonlib.util.Message;
-import cc.minetale.commonlib.util.TimeUtil;
 import cc.minetale.mlib.nametag.NameplateHandler;
 import cc.minetale.mlib.nametag.NameplateProvider;
 import cc.minetale.mlib.nametag.ProviderType;
 import cc.minetale.mlib.util.TeamUtil;
+import cc.minetale.sodium.Sodium;
+import cc.minetale.sodium.data.EventListener;
+import cc.minetale.sodium.profile.grant.Grant;
+import cc.minetale.sodium.profile.punishment.Punishment;
+import cc.minetale.sodium.util.Message;
+import cc.minetale.sodium.util.TimeUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -18,7 +18,7 @@ import net.minestom.server.entity.Player;
 public class FlameProvider {
 
     public static void init() {
-        CommonLib.getProviders().add(new LibProvider() {
+        Sodium.getListeners().add(new EventListener() {
             @Override
             public void addGrant(Grant grant) {
                 var player = MinecraftServer.getConnectionManager().getPlayer(grant.getPlayerId());

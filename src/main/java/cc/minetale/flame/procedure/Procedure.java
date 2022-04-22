@@ -8,11 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Getter @Setter
 public abstract class Procedure {
 
-    private static final Map<Player, Procedure> activeProcedures = new HashMap<>();
+    private static final Map<UUID, Procedure> activeProcedures = new HashMap<>();
 
     private final Player issuer;
     private final UUID recipient;
@@ -31,15 +30,15 @@ public abstract class Procedure {
     }
 
     public static Procedure getProcedure(Player player) {
-        return activeProcedures.getOrDefault(player, null);
+        return activeProcedures.getOrDefault(player.getUuid(), null);
     }
 
     public static void addProcedure(Player player, Procedure procedure) {
-        activeProcedures.put(player, procedure);
+        activeProcedures.put(player.getUuid(), procedure);
     }
 
     public static void removeProcedure(Player player) {
-        activeProcedures.remove(player);
+        activeProcedures.remove(player.getUuid());
     }
 
     public abstract void finish();
