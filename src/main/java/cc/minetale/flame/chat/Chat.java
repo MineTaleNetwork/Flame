@@ -1,17 +1,17 @@
 package cc.minetale.flame.chat;
 
-import cc.minetale.commonlib.grant.Rank;
-import cc.minetale.commonlib.lang.Language;
-import cc.minetale.commonlib.profile.Profile;
-import cc.minetale.commonlib.punishment.PunishmentType;
-import cc.minetale.commonlib.util.Colors;
-import cc.minetale.commonlib.util.Duration;
-import cc.minetale.commonlib.util.Message;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlamePlayer;
+import cc.minetale.sodium.lang.Language;
+import cc.minetale.sodium.profile.Profile;
+import cc.minetale.sodium.profile.grant.Rank;
+import cc.minetale.sodium.profile.punishment.PunishmentType;
+import cc.minetale.sodium.util.Colors;
+import cc.minetale.sodium.util.Duration;
+import cc.minetale.sodium.util.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -49,7 +49,7 @@ public class Chat {
                 }
 
                 if (punishment != null) {
-                    punishment.getPunishmentMessage().forEach(player::sendMessage);
+//                    punishment.getPunishmentMessage().forEach(player::sendMessage); // TODO
                     return;
                 }
             }
@@ -64,7 +64,11 @@ public class Chat {
         var team = player.getTeam();
         var color = team.getTeamColor();
 
-        return Message.parse(Language.General.CHAT_FORMAT, team.getPrefix(), Component.text(player.getUsername(), color), "", Component.text(message, Colors.bleach(color, 0.80)));
+        return Message.parse(
+                Language.General.CHAT_FORMAT,
+                player.getProfile().getChatFormat(),
+                Component.text(message, Colors.bleach(color, 0.80))
+        );
     }
 
     private static void handlePunishmentProcedure(PunishmentProcedure procedure, Player player, String message) {
@@ -78,7 +82,7 @@ public class Chat {
                 long duration = Duration.fromString(message).value();
 
                 if (duration == -1) {
-                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1d]", NamedTextColor.RED));
+                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1m1d1w1d]", NamedTextColor.RED));
                     procedure.cancel();
                 } else {
                     procedure.setDuration(duration);
@@ -107,7 +111,7 @@ public class Chat {
                 long duration = Duration.fromString(message).value();
 
                 if (duration == -1) {
-                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1d]", NamedTextColor.RED));
+                    player.sendMessage(Component.text("That duration is not valid. Example: [perm/1y1m1w1M1y]", NamedTextColor.RED));
                     procedure.cancel();
                 } else {
                     procedure.setDuration(duration);

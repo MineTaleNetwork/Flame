@@ -1,6 +1,6 @@
 //package cc.minetale.flame.menu.grant;
 //
-//import cc.minetale.commonlib.grant.Rank;
+//import cc.minetale.sodium.profile.grant.Rank;
 //import cc.minetale.commonlib.profile.Profile;
 //import cc.minetale.commonlib.util.Message;
 //import cc.minetale.commonlib.util.TimeUtil;

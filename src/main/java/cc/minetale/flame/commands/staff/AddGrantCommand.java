@@ -1,16 +1,17 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.commonlib.grant.Grant;
-import cc.minetale.commonlib.grant.Rank;
-import cc.minetale.commonlib.lang.Language;
-import cc.minetale.commonlib.util.Duration;
-import cc.minetale.commonlib.util.Message;
-import cc.minetale.commonlib.util.StringUtil;
-import cc.minetale.commonlib.util.TimeUtil;
+import cc.minetale.postman.StringUtil;
+import cc.minetale.sodium.lang.Language;
+import cc.minetale.sodium.profile.grant.Grant;
+import cc.minetale.sodium.profile.grant.Rank;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.FlamePlayer;
+import cc.minetale.sodium.util.Duration;
+import cc.minetale.sodium.util.Message;
+import cc.minetale.sodium.util.TimeUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -43,36 +44,37 @@ public class AddGrantCommand extends Command {
     }
 
     private void addGrantExecutor(CommandSender sender, CommandContext context) {
-        FlamePlayer.getProfile((String) context.get("player"))
-                .thenAccept(profile -> {
-                    if (profile != null) {
-                        Rank rank = context.get("rank");
-                        long duration = Duration.fromString(context.get("duration")).value();
-                        String[] reason = context.get("reason");
+        var targetName = (String) context.get("player");
+        var profile = FlamePlayer.getProfile(targetName);
 
-                        if (duration == -1) {
-                            sender.sendMessage(Message.notification("Command",
-                                    Component.text("You have provided an invalid duration", NamedTextColor.GRAY)));
-                            return;
-                        }
+        if(profile == null) {
+            sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
+            return;
+        }
 
-                        profile.issueGrant(new Grant(
-                                StringUtil.generateId(),
-                                profile.getUuid(),
-                                (sender instanceof Player player ? player.getUuid() : null),
-                                System.currentTimeMillis(),
-                                String.join(" ", reason),
-                                duration,
-                                rank
-                        ));
+        Rank rank = context.get("rank");
+        long duration = Duration.fromString(context.get("duration")).value();
+        String[] reason = context.get("reason");
 
-                        sender.sendMessage(Message.notification("Grant",
-                                Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
-                        ));
-                    } else {
-                        sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
-                    }
-                });
+        if (duration == -1) {
+            sender.sendMessage(Message.notification("Command",
+                    Component.text("You have provided an invalid duration", NamedTextColor.GRAY)));
+            return;
+        }
+
+        profile.issueGrant(new Grant(
+                StringUtil.generateId(),
+                profile.getUuid(),
+                (sender instanceof Player player ? player.getUuid() : null),
+                System.currentTimeMillis(),
+                String.join(" ", reason),
+                duration,
+                rank
+        ));
+
+        sender.sendMessage(Message.notification("Grant",
+                Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
+        ));
     }
 
 }

@@ -1,17 +1,17 @@
 //package cc.minetale.flame.menu.grant;
 //
 //
-//import cc.minetale.commonlib.grant.Grant;
-//import cc.minetale.commonlib.lang.Language;
-//import cc.minetale.commonlib.util.Message;
-//import cc.minetale.commonlib.util.StringUtil;
-//import cc.minetale.commonlib.util.TimeUtil;
 //import cc.minetale.flame.procedure.GrantProcedure;
 //import cc.minetale.flame.util.FlamePlayer;
 //import cc.minetale.mlib.canvas.CanvasType;
-//import cc.minetale.mlib.canvas.FillingType;
+//import cc.minetale.mlib.canvas.Filler;
 //import cc.minetale.mlib.canvas.Fragment;
-//import cc.minetale.mlib.canvas.Menu;
+//import cc.minetale.mlib.canvas.template.Menu;
+//import cc.minetale.postman.StringUtil;
+//import cc.minetale.sodium.lang.Language;
+//import cc.minetale.sodium.profile.Profile;
+//import cc.minetale.sodium.profile.grant.Grant;
+//import cc.minetale.sodium.util.Message;
 //import net.kyori.adventure.text.Component;
 //import net.kyori.adventure.text.format.NamedTextColor;
 //import net.kyori.adventure.text.format.Style;
@@ -39,88 +39,98 @@
 //
 //        var color = rank.getColor();
 //
-//        setFiller(FillingType.EMPTY_SLOTS);
+//        setFiller(Filler.EMPTY_SLOTS);
 //
-//        FlamePlayer.getProfile(procedure.getRecipient())
-//                .thenAccept(profile -> {
-//                    if(profile != null) {
-//                        setFragment(2, Fragment.of(ItemStack.of(Material.LIME_CONCRETE)
-//                                .withDisplayName(Component.text("Confirm Grant" + (type == GrantProcedure.Type.REMOVE ? " Removal" : ""), Style.style(NamedTextColor.GREEN, TextDecoration.ITALIC.as(false)))), event -> {
-//                            switch (type) {
-//                                case ADD -> {
-//                                    profile.issueGrant(new Grant(
-//                                            StringUtil.generateId(),
-//                                            profile.getUuid(),
-//                                            player.getUuid(),
-//                                            System.currentTimeMillis(),
-//                                            reason,
-//                                            duration,
-//                                            rank
-//                                    ));
 //
-//                                    player.sendMessage(Message.notification("Grant",
-//                                            Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
-//                                    ));
-//                                }
-//                                case REMOVE -> Grant.getGrant(procedure.getGrant())
-//                                        .thenAccept(grant -> {
-//                                            if(grant != null) {
-//                                                profile.removeGrant(grant, player.getUuid(), System.currentTimeMillis(), reason);
-//                                            } else {
-//                                                player.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
-//                                            }
-//                                });
+//
+//        setButton(2, Fragment.of(ItemStack.of(Material.LIME_CONCRETE)
+//                        .withDisplayName(Component.text("Confirm Grant" + (type == GrantProcedure.Type.REMOVE ? " Removal" : ""),
+//                                Message.style(NamedTextColor.GREEN))), event -> {
+//            switch (type) {
+//                        case ADD -> {
+//                            var profile = getProfile();
+//
+//                            profile.issueGrant(new Grant(
+//                                    StringUtil.generateId(),
+//                                    profile.getUuid(),
+//                                    player.getUuid(),
+//                                    System.currentTimeMillis(),
+//                                    reason,
+//                                    duration,
+//                                    rank
+//                            ));
+//
+//                            player.sendMessage(Message.notification("Grant",
+//                                    Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
+//                            ));
+//                        }
+//                        case REMOVE -> {
+//                            var profile = getProfile();
+//                            var grant = Grant.getGrant(procedure.getGrant());
+//
+//                            if(grant == null) { // TODO -> Handle close and profile null check
+//                                return;
 //                            }
 //
-//                            this.shouldCancel = false;
+//                            profile.removeGrant(grant, player.getUuid(), System.currentTimeMillis(), reason);
 //
-//                            this.procedure.finish();
-//                            this.handleClose(player);
-//                        }));
-//
-//                        setFragment(4, Fragment.empty(ItemStack.of(Material.BOOK)
-//                                .withDisplayName(Component.text("Grant Information", Style.style(color, TextDecoration.ITALIC.as(false))))
-//                                .withLore(Arrays.asList(
-//                                        Message.scoreboardSeparator(),
-//                                        Component.text().append(
-//                                                Component.text("Player: ", NamedTextColor.GRAY),
-//                                                Component.text(profile.getUsername(), color)
-//                                        ).decoration(TextDecoration.ITALIC, false).build(),
-//                                        Component.text().append(
-//                                                Component.text("Rank: ", NamedTextColor.GRAY),
-//                                                Component.text(rank.getName(), color)
-//                                        ).decoration(TextDecoration.ITALIC, false).build(),
-//                                        Component.text().append(
-//                                                Component.text("Reason: ", NamedTextColor.GRAY),
-//                                                Component.text(reason, color)
-//                                        ).decoration(TextDecoration.ITALIC, false).build(),
-//                                        Component.text().append(
-//                                                Component.text("Duration: ", NamedTextColor.GRAY),
-//                                                Component.text((duration == Integer.MAX_VALUE ? "Permanent" : TimeUtil.millisToRoundedTime(duration)), color)
-//                                        ).decoration(TextDecoration.ITALIC, false).build(),
-//                                        Message.scoreboardSeparator()
-//                                ))));
-//
-//                        setItems();
-//                    } else {
-//                        procedure.cancel();
+//                        }
 //                    }
-//                });
+//
+//                    shouldCancel = false;
+//
+//                    procedure.finish();
+//                    handleClose(player);
+//                }));
+//
+//        setFragment(4, Fragment.empty(ItemStack.of(Material.BOOK)
+//                .withDisplayName(Component.text("Grant Information", Style.style(color, TextDecoration.ITALIC.as(false))))
+//                .withLore(Arrays.asList(
+//                        Message.scoreboardSeparator(),
+//                        Component.text().append(
+//                                Component.text("Player: ", NamedTextColor.GRAY),
+//                                Component.text(profile.getUsername(), color)
+//                        ).decoration(TextDecoration.ITALIC, false).build(),
+//                        Component.text().append(
+//                                Component.text("Rank: ", NamedTextColor.GRAY),
+//                                Component.text(rank.getName(), color)
+//                        ).decoration(TextDecoration.ITALIC, false).build(),
+//                        Component.text().append(
+//                                Component.text("Reason: ", NamedTextColor.GRAY),
+//                                Component.text(reason, color)
+//                        ).decoration(TextDecoration.ITALIC, false).build(),
+//                        Component.text().append(
+//                                Component.text("Duration: ", NamedTextColor.GRAY),
+//                                Component.text((duration == Integer.MAX_VALUE ? "Permanent" : TimeUtil.millisToRoundedTime(duration)), color)
+//                        ).decoration(TextDecoration.ITALIC, false).build(),
+//                        Message.scoreboardSeparator()
+//                ))));
+//
+//        setItems();
+//
 //
 //        setFragment(6, Fragment.of(ItemStack.of(Material.RED_CONCRETE)
 //                .withDisplayName(Component.text("Cancel Grant" + (type == GrantProcedure.Type.REMOVE ? " Removal" : ""), Style.style(NamedTextColor.RED, TextDecoration.ITALIC.as(false)))), event -> {
 //            this.handleClose(player);
 //        }));
+//    }
 //
-//        openMenu();
+//    public Profile getProfile() {
+//        var profile = FlamePlayer.getProfile(procedure.getRecipient());
+//
+//        if (profile == null) {
+//            getPlayer().sendMessage(Component.text("An error has occurred, please report this to Mint. Error: GCM_PROFILE_NULL"));
+//            handleClose(getPlayer());
+//            return null;
+//        }
+//
+//        return profile;
 //    }
 //
 //    @Override
 //    public void close() {
-//        this.getPlayer().closeInventory();
-//
-//        if(this.shouldCancel)
-//            this.procedure.cancel();
+//        if (shouldCancel)
+//            procedure.cancel();
 //    }
 //
 //}
