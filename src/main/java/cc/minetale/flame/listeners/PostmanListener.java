@@ -3,7 +3,6 @@ package cc.minetale.flame.listeners;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.postman.payload.PayloadHandler;
 import cc.minetale.postman.payload.PayloadListener;
-import cc.minetale.sodium.payloads.PunishmentPayload;
 import cc.minetale.sodium.payloads.UpdateProfilePayload;
 import cc.minetale.sodium.profile.ProfileUtil;
 import net.minestom.server.MinecraftServer;
@@ -33,25 +32,5 @@ public class PostmanListener implements PayloadListener {
     /*
      * Punishment Related Payloads
      */
-
-    @PayloadHandler
-    public void onPunishment(PunishmentPayload payload) {
-        var player = MinecraftServer.getConnectionManager().getPlayer(payload.getPlayer());
-        var punishment = payload.getPunishment();
-
-        if(player == null) { return; }
-
-        switch (payload.getAction()) {
-            case ADD -> {
-//                FlameProvider.addGrant(player, grant);
-            }
-            case EXPIRE -> {
-//                FlameProvider.expireGrant(player, grant);
-            }
-            case REMOVE -> {
-//                FlameProvider.removeGrant(player, grant);
-            }
-        }
-    }
 
 }

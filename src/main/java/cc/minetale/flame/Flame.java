@@ -28,8 +28,6 @@ public class Flame extends Extension {
         MinecraftServer.getCommandManager()
                 .setUnknownCommandCallback((sender, command) -> sender.sendMessage(Message.parse(Language.Command.UNKNOWN_COMMAND)));
 
-        FlameProvider.init();
-
         var commandClasses = new Reflections("cc.minetale.flame.commands")
                 .getSubTypesOf(Command.class)
                 .stream()

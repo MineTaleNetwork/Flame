@@ -25,8 +25,6 @@ public class GrantRankMenu extends PaginatedMenu {
         super(player, Component.text("Grant Rank Selection"), CanvasType.FOUR_ROW);
 
         this.playerName = playerName;
-
-        super.initiliaze();
     }
 
     @Override
@@ -71,8 +69,5 @@ public class GrantRankMenu extends PaginatedMenu {
 
         return fragments;
     }
-
-    @Override
-    protected void initiliaze() {}
 
 }

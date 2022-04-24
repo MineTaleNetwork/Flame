@@ -26,8 +26,6 @@ public class GrantReasonMenu extends PaginatedMenu {
         super(player, Component.text("Grant Reason Selection"), CanvasType.FOUR_ROW);
 
         this.procedure = procedure;
-
-        super.initiliaze();
     }
 
     @Override
@@ -65,7 +63,7 @@ public class GrantReasonMenu extends PaginatedMenu {
                     player.sendMessage(Component.text("Type the reason for adding this grant in chat...", NamedTextColor.GREEN));
                 } else {
                     procedure.setReason(reason);
-                    Menu.openMenu(new GrantConfirmMenu(player, procedure));
+//                    Menu.openMenu(new GrantConfirmMenu(player, procedure));
                 }
             });
 
@@ -74,8 +72,5 @@ public class GrantReasonMenu extends PaginatedMenu {
 
         return fragments;
     }
-
-    @Override
-    protected void initiliaze() {}
 
 }

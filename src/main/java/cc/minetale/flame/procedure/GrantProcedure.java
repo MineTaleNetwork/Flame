@@ -7,19 +7,17 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 
-import java.util.UUID;
-
 @Getter @Setter
 public class GrantProcedure extends Procedure {
 
     private String grant;
     private Rank rank;
-    private String recipient;
+    private String target;
 
     public GrantProcedure(Player issuer, String recipient, Type type, Stage stage) {
         super(issuer, null, type, stage);
 
-        this.recipient = recipient;
+        this.target = recipient;
     }
 
     @Override
