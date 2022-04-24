@@ -1,7 +1,7 @@
 {
   "entrypoint": "cc.minetale.flame.Flame",
   "name": "Flame",
-  "version": "LATEST",
+  "version": "1.0.0",
   "dependencies": [
     "mLib"
   ]

@@ -67,6 +67,7 @@ public class PlayerListener {
                 .addListener(PlayerSpawnEvent.class, event -> {
                     var player = event.getPlayer();
                     var profile = FlamePlayer.fromPlayer(player).getProfile();
+                    if(profile == null) { return; }
 
                     if (event.isFirstSpawn()) {
                         NameplateHandler.addProvider(player, new NameplateProvider(TeamUtil.RANK_MAP.get(profile.getGrant().getRank()), ProviderType.RANK));

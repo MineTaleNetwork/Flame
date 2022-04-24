@@ -2,6 +2,7 @@ package cc.minetale.flame.util;
 
 import cc.minetale.commonlib.grant.Rank;
 import cc.minetale.commonlib.lang.Language;
+import cc.minetale.commonlib.profile.Profile;
 import cc.minetale.commonlib.util.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -38,12 +39,14 @@ public class CommandUtil {
             if (sender instanceof ConsoleSender)
                 return true;
 
-            if (sender instanceof Player player) {
-                boolean hasMinimum = Rank.hasMinimumRank(FlamePlayer.fromPlayer(player).getProfile(), rank);
+            if (sender instanceof FlamePlayer player) {
+                var profile = player.getProfile();
+                if(profile == null) { return false; }
 
-                if(!hasMinimum)
-                    if (command)
-                        sender.sendMessage(Message.parse(Language.Command.COMMAND_PERMISSION, Component.text(rank.getName(), NamedTextColor.GOLD)));
+                boolean hasMinimum = Rank.hasMinimumRank(profile, rank);
+
+                if(!hasMinimum && command)
+                    sender.sendMessage(Message.parse(Language.Command.COMMAND_PERMISSION, Component.text(rank.getName(), NamedTextColor.GOLD)));
 
                 return hasMinimum;
             }

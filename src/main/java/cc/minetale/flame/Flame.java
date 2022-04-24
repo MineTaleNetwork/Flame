@@ -2,6 +2,7 @@ package cc.minetale.flame;
 
 import cc.minetale.commonlib.lang.Language;
 import cc.minetale.commonlib.util.Message;
+import cc.minetale.commonlib.util.ProfileUtil;
 import cc.minetale.flame.listeners.PigeonListener;
 import cc.minetale.flame.listeners.PlayerListener;
 import cc.minetale.flame.util.FlamePlayer;
@@ -20,7 +21,7 @@ public class Flame extends Extension {
     // TODO -> Make /f requests and /f list display GUI
 
     @Override
-    public void initialize() {
+    public LoadStatus initialize() {
         MinecraftServer.getConnectionManager()
                 .setPlayerProvider(FlamePlayer::new);
 
@@ -62,6 +63,8 @@ public class Flame extends Extension {
                 .schedule();
 
         MinecraftServer.getGlobalEventHandler().addChild(PlayerListener.events());
+
+        return LoadStatus.SUCCESS;
     }
 
     @Override
