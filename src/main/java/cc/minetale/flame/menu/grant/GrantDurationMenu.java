@@ -103,7 +103,7 @@ public class GrantDurationMenu extends Menu {
             player.sendMessage(Component.text("Type the amount of time you would like to add this grant for in chat...", NamedTextColor.GREEN));
         } else {
             procedure.setDuration(duration.value());
-            new GrantReasonMenu(player, procedure);
+            Menu.openMenu(new GrantReasonMenu(player, procedure));
         }
     }
 

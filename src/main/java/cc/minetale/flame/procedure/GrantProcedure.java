@@ -1,5 +1,6 @@
 package cc.minetale.flame.procedure;
 
+import cc.minetale.sodium.profile.Profile;
 import cc.minetale.sodium.profile.grant.Rank;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,14 +11,14 @@ import net.minestom.server.entity.Player;
 @Getter @Setter
 public class GrantProcedure extends Procedure {
 
+    private Profile profile;
     private String grant;
     private Rank rank;
-    private String target;
 
-    public GrantProcedure(Player issuer, String recipient, Type type, Stage stage) {
-        super(issuer, null, type, stage);
+    public GrantProcedure(Player issuer, Profile profile, Type type, Stage stage) {
+        super(issuer, profile.getUuid(), type, stage);
 
-        this.target = recipient;
+        this.profile = profile;
     }
 
     @Override

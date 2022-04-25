@@ -75,6 +75,15 @@ public class AddGrantCommand extends Command {
         sender.sendMessage(Message.notification("Grant",
                 Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
         ));
+
+        var player = MinecraftServer.getConnectionManager().getPlayer(profile.getUuid());
+
+        if(player != null) {
+            var flamePlayer = FlamePlayer.fromPlayer(player);
+
+            flamePlayer.refreshPlayer(profile);
+        }
+
     }
 
 }

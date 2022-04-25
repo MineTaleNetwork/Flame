@@ -8,10 +8,12 @@ import cc.minetale.mlib.canvas.template.Menu;
 import cc.minetale.mlib.canvas.template.PaginatedMenu;
 import cc.minetale.mlib.util.ColorUtil;
 import cc.minetale.mlib.util.SoundsUtil;
+import cc.minetale.sodium.profile.Profile;
 import cc.minetale.sodium.profile.grant.Rank;
 import cc.minetale.sodium.util.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 
@@ -19,12 +21,12 @@ import java.util.Arrays;
 
 public class GrantRankMenu extends PaginatedMenu {
 
-    private final String playerName;
+    private final Profile profile;
 
-    public GrantRankMenu(Player player, String playerName) {
+    public GrantRankMenu(Player player, Profile profile) {
         super(player, Component.text("Grant Rank Selection"), CanvasType.FOUR_ROW);
 
-        this.playerName = playerName;
+        this.profile = profile;
     }
 
     @Override
@@ -45,13 +47,14 @@ public class GrantRankMenu extends PaginatedMenu {
                                     Component.text().append(
                                             Component.text("Click to grant ", Message.style(NamedTextColor.GRAY)),
                                             Component.text(rank.getName(), Message.style(color)),
-                                            Component.text(" to " + playerName, Message.style(NamedTextColor.GRAY))
+                                            Component.text(" to ", Message.style(NamedTextColor.GRAY)),
+                                            profile.getColoredName().decoration(TextDecoration.ITALIC, false)
                                     ).build(),
                                     Message.menuSeparator()
                             )
                     ), event -> {
                 if (FlameAPI.canStartProcedure(player)) {
-                    var procedure = new GrantProcedure(player, playerName, GrantProcedure.Type.ADD, GrantProcedure.Stage.PROVIDE_TIME);
+                    var procedure = new GrantProcedure(player, profile, GrantProcedure.Type.ADD, GrantProcedure.Stage.PROVIDE_TIME);
 
                     SoundsUtil.playClickSound(player);
 

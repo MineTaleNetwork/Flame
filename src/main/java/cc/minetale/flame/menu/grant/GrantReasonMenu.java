@@ -1,16 +1,14 @@
 package cc.minetale.flame.menu.grant;
 
 import cc.minetale.flame.procedure.GrantProcedure;
-import cc.minetale.mlib.canvas.*;
+import cc.minetale.mlib.canvas.CanvasType;
+import cc.minetale.mlib.canvas.Fragment;
 import cc.minetale.mlib.canvas.template.Menu;
 import cc.minetale.mlib.canvas.template.PaginatedMenu;
-import cc.minetale.mlib.util.MenuUtil;
 import cc.minetale.mlib.util.SoundsUtil;
 import cc.minetale.sodium.util.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -63,7 +61,7 @@ public class GrantReasonMenu extends PaginatedMenu {
                     player.sendMessage(Component.text("Type the reason for adding this grant in chat...", NamedTextColor.GREEN));
                 } else {
                     procedure.setReason(reason);
-//                    Menu.openMenu(new GrantConfirmMenu(player, procedure));
+                    Menu.openMenu(new ConfirmNewGrantMenu(player, procedure));
                 }
             });
 
