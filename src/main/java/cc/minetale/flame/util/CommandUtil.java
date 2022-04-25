@@ -38,12 +38,14 @@ public class CommandUtil {
             if (sender instanceof ConsoleSender)
                 return true;
 
-            if (sender instanceof Player player) {
-                var hasMinimum = Rank.hasMinimumRank(FlamePlayer.fromPlayer(player).getProfile(), rank);
+            if (sender instanceof FlamePlayer player) {
+                var profile = player.getProfile();
+                if(profile == null) { return false; }
 
-                if(!hasMinimum)
-                    if (command)
-                        sender.sendMessage(Message.parse(Language.Command.COMMAND_PERMISSION, Component.text(rank.getName(), NamedTextColor.GOLD)));
+                boolean hasMinimum = Rank.hasMinimumRank(profile, rank);
+
+                if(!hasMinimum && command)
+                    sender.sendMessage(Message.parse(Language.Command.COMMAND_PERMISSION, Component.text(rank.getName(), NamedTextColor.GOLD)));
 
                 return hasMinimum;
             }

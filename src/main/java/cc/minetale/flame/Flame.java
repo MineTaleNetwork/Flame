@@ -1,7 +1,7 @@
 package cc.minetale.flame;
 
-import cc.minetale.flame.listeners.PostmanListener;
 import cc.minetale.flame.listeners.PlayerListener;
+import cc.minetale.flame.listeners.PostmanListener;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.flame.util.SubCommand;
 import cc.minetale.postman.Postman;
@@ -15,6 +15,7 @@ import net.minestom.server.utils.time.Tick;
 import org.reflections.Reflections;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Flame extends Extension {
 
@@ -44,7 +45,7 @@ public class Flame extends Extension {
             }
         }
 
-        Arrays.asList(
+        List.of(
                 new PostmanListener()
         ).forEach(listener -> Postman.getPostman()
                 .getListenersRegistry()
