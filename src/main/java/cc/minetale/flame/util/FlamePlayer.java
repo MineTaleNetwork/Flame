@@ -57,9 +57,7 @@ public class FlamePlayer extends Player {
         return ProfileUtil.getProfile(name);
     }
 
-    public void refreshPlayer(Profile newProfile) {
-        setProfile(newProfile);
-
+    public void refreshPlayer() {
         profile.activateNextGrant();
 
         NameplateHandler.clearProviders(this);

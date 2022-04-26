@@ -45,7 +45,7 @@ public class GrantCommand extends Command {
                 return;
             }
 
-            Menu.openMenu(new GrantRankMenu(player, profile.getUsername()));
+            Menu.openMenu(new GrantRankMenu(player, profile));
         }
     }
 }

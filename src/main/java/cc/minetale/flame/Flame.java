@@ -60,7 +60,7 @@ public class Flame extends Extension {
                         profile.checkGrants();
                     }
                 })
-                .executionType(ExecutionType.ASYNC)
+                .executionType(ExecutionType.SYNC)
                 .repeat(20, Tick.SERVER_TICKS)
                 .schedule();
 

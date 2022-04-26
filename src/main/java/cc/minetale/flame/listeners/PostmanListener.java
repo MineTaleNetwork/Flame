@@ -24,13 +24,10 @@ public class PostmanListener implements PayloadListener {
             if (profile != null) {
                 var flamePlayer = FlamePlayer.fromPlayer(player);
 
-                flamePlayer.refreshPlayer(profile);
+                flamePlayer.setProfile(profile);
+                flamePlayer.refreshPlayer();
              }
         }
     }
-
-    /*
-     * Punishment Related Payloads
-     */
 
 }

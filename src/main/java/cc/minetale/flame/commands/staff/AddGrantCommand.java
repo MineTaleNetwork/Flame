@@ -81,7 +81,7 @@ public class AddGrantCommand extends Command {
         if(player != null) {
             var flamePlayer = FlamePlayer.fromPlayer(player);
 
-            flamePlayer.refreshPlayer(profile);
+            flamePlayer.refreshPlayer();
         }
 
     }
