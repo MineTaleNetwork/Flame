@@ -22,14 +22,14 @@
 //
 //        setDefaultExecutor(this::defaultExecutor);
 //
-//        addSyntax(this::onGrantsCommand, ArgumentType.StringArray("message"));
+//        addSyntax(this::onReplyCommand, ArgumentType.StringArray("message"));
 //    }
 //
 //    private void defaultExecutor(CommandSender sender, CommandContext context) {
 //        sender.sendMessage(CommandUtil.getUsage("reply", "message"));
 //    }
 //
-//    private void onGrantsCommand(CommandSender sender, CommandContext context) {
+//    private void onReplyCommand(CommandSender sender, CommandContext context) {
 //        if (sender instanceof Player player) {
 //            CompletableFuture.runAsync(() -> {
 //                var message = String.join(" ", (String[]) context.get("message"));

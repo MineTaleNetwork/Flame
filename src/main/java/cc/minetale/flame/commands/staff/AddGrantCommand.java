@@ -1,5 +1,6 @@
 package cc.minetale.flame.commands.staff;
 
+import cc.minetale.flame.listeners.PostmanListener;
 import cc.minetale.postman.StringUtil;
 import cc.minetale.sodium.lang.Language;
 import cc.minetale.sodium.profile.grant.Grant;
@@ -62,7 +63,7 @@ public class AddGrantCommand extends Command {
             return;
         }
 
-        profile.issueGrant(new Grant(
+        var grant = new Grant(
                 StringUtil.generateId(),
                 profile.getUuid(),
                 (sender instanceof Player player ? player.getUuid() : null),
@@ -70,19 +71,22 @@ public class AddGrantCommand extends Command {
                 String.join(" ", reason),
                 duration,
                 rank
-        ));
+        );
+
+        profile.issueGrant(grant);
 
         sender.sendMessage(Message.notification("Grant",
                 Component.text("Granted " + profile.getUsername() + " " + rank.getName() + " rank " + (duration == Integer.MAX_VALUE ? "permanently" : "for " + TimeUtil.millisToRoundedTime(duration)), NamedTextColor.GRAY)
         ));
 
-        var player = MinecraftServer.getConnectionManager().getPlayer(profile.getUuid());
-
-        if(player != null) {
-            var flamePlayer = FlamePlayer.fromPlayer(player);
-
-            flamePlayer.refreshPlayer();
-        }
+//        var player = MinecraftServer.getConnectionManager().getPlayer(profile.getUuid());
+//
+//        if(player != null) {
+//            var flamePlayer = FlamePlayer.fromPlayer(player);
+//
+//            flamePlayer.refreshPlayer();
+//            PostmanListener.addGrant(player, grant);
+//        }
 
     }
 

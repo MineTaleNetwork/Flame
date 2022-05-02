@@ -2,6 +2,7 @@ package cc.minetale.flame.util;
 
 import cc.minetale.sodium.lang.Language;
 import cc.minetale.sodium.profile.grant.Rank;
+import cc.minetale.sodium.util.Colors;
 import cc.minetale.sodium.util.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -45,7 +46,7 @@ public class CommandUtil {
                 boolean hasMinimum = Rank.hasMinimumRank(profile, rank);
 
                 if(!hasMinimum && command)
-                    sender.sendMessage(Message.parse(Language.Command.COMMAND_PERMISSION, Component.text(rank.getName(), NamedTextColor.GOLD)));
+                    sender.sendMessage(Message.parse(Language.Command.COMMAND_PERMISSION, Component.text(rank.getName(), Colors.BLUE)));
 
                 return hasMinimum;
             }

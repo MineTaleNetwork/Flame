@@ -61,13 +61,12 @@ public class Chat {
     }
 
     public static Component formatChat(FlamePlayer player, String message) {
-        var team = player.getTeam();
-        var color = team.getTeamColor();
+        var profile = player.getProfile();
 
         return Message.parse(
                 Language.General.CHAT_FORMAT,
-                player.getProfile().getChatFormat(),
-                Component.text(message, Colors.bleach(color, 0.80))
+                profile.getChatFormat(),
+                Component.text(message, Colors.bleach(profile.getGrant().getRank().getColor(), 0.80))
         );
     }
 

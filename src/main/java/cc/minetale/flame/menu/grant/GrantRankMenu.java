@@ -57,9 +57,7 @@ public class GrantRankMenu extends PaginatedMenu {
                     var procedure = new GrantProcedure(player, profile, GrantProcedure.Type.ADD, GrantProcedure.Stage.PROVIDE_TIME);
 
                     SoundsUtil.playClickSound(player);
-
                     procedure.setRank(rank);
-                    handleClose(player);
 
                     Menu.openMenu(new GrantDurationMenu(player, procedure));
                 } else {
