@@ -1,7 +1,8 @@
 package cc.minetale.flame.menu.grant;
 
-import cc.minetale.flame.FlameAPI;
+import cc.minetale.flame.menu.DurationMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
+import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.mlib.canvas.CanvasType;
 import cc.minetale.mlib.canvas.Fragment;
 import cc.minetale.mlib.canvas.template.Menu;
@@ -17,32 +18,32 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class GrantRankMenu extends PaginatedMenu {
 
     private final Profile profile;
 
     public GrantRankMenu(Player player, Profile profile) {
-        super(player, Component.text("Grant Rank Selection"), CanvasType.FOUR_ROW);
+        super(player, Component.text("Rank Selection"), CanvasType.FOUR_ROW);
 
         this.profile = profile;
     }
 
     @Override
     public Fragment[] getPaginatedFragments(Player player) {
-        var fragments = new Fragment[Rank.values().length - 1];
+        var ranks = new ArrayList<>(List.of(Rank.values()));
+        ranks.remove(Rank.MEMBER);
 
-        int i = 0;
-        for (var rank : Rank.values()) {
-            if(rank == Rank.MEMBER) continue;
-
+        return ranks.stream().map(rank -> {
             var color = rank.getColor();
 
-            fragments[i] = Fragment.of(ItemStack.of(ColorUtil.toConcrete(color))
+            return Fragment.of(ItemStack.of(ColorUtil.toConcrete(color))
                     .withDisplayName(Component.text(rank.getName(), Message.style(color)))
                     .withLore(
-                            Arrays.asList(
+                            List.of(
                                     Message.menuSeparator(),
                                     Component.text().append(
                                             Component.text("Click to grant ", Message.style(NamedTextColor.GRAY)),
@@ -53,22 +54,18 @@ public class GrantRankMenu extends PaginatedMenu {
                                     Message.menuSeparator()
                             )
                     ), event -> {
-                if (FlameAPI.canStartProcedure(player)) {
-                    var procedure = new GrantProcedure(player, profile, GrantProcedure.Type.ADD, GrantProcedure.Stage.PROVIDE_TIME);
+                if (Procedure.canStartProcedure(player.getUuid())) {
+                    var procedure = new GrantProcedure(player.getUuid(), profile, GrantProcedure.Type.ADD, GrantProcedure.Stage.PROVIDE_TIME);
 
                     SoundsUtil.playClickSound(player);
                     procedure.setRank(rank);
 
-                    Menu.openMenu(new GrantDurationMenu(player, procedure));
+                    Menu.openMenu(new DurationMenu(player, procedure, new GrantReasonMenu(player, procedure)));
                 } else {
                     SoundsUtil.playErrorSound(player);
                 }
             });
-
-            i++;
-        }
-
-        return fragments;
+        }).toArray(Fragment[]::new);
     }
 
 }

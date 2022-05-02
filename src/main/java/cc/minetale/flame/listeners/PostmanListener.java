@@ -3,7 +3,10 @@ package cc.minetale.flame.listeners;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.postman.payload.PayloadHandler;
 import cc.minetale.postman.payload.PayloadListener;
+import cc.minetale.sodium.lang.Language;
+import cc.minetale.sodium.payloads.ConversationPayload;
 import cc.minetale.sodium.payloads.ProfileUpdatePayloads;
+import cc.minetale.sodium.profile.ProfileUtil;
 import cc.minetale.sodium.profile.grant.Grant;
 import cc.minetale.sodium.profile.punishment.Punishment;
 import cc.minetale.sodium.util.Message;
@@ -59,6 +62,19 @@ public class PostmanListener implements PayloadListener {
                 case EXPIRE -> expireGrant(player, grant);
             }
         }
+    }
+
+    @PayloadHandler
+    public void onConversation(ConversationPayload payload) {
+        var target = MinecraftServer.getConnectionManager().getPlayer(payload.getTarget());
+
+        if(target == null) { return; }
+
+        var profile = ProfileUtil.getProfile(payload.getPlayer());
+
+        if(profile == null) { return; }
+
+        target.sendMessage(Message.parse(Language.Conversation.FROM_MSG, profile.getChatFormat(), payload.getMessage()));
     }
 
     public static void addGrant(Player player, Grant grant) {

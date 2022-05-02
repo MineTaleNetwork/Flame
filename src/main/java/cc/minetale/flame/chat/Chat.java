@@ -1,17 +1,22 @@
 package cc.minetale.flame.chat;
 
 import cc.minetale.flame.FlameAPI;
+import cc.minetale.flame.menu.grant.ConfirmNewGrantMenu;
+import cc.minetale.flame.menu.grant.GrantReasonMenu;
+import cc.minetale.flame.menu.punishment.ConfirmNewPunishment;
+import cc.minetale.flame.menu.punishment.PunishmentReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.flame.procedure.PunishmentProcedure;
 import cc.minetale.flame.util.FlamePlayer;
+import cc.minetale.mlib.canvas.template.Menu;
+import cc.minetale.sodium.cache.ProfileCache;
 import cc.minetale.sodium.lang.Language;
 import cc.minetale.sodium.profile.Profile;
+import cc.minetale.sodium.profile.ProfileUtil;
 import cc.minetale.sodium.profile.grant.Rank;
 import cc.minetale.sodium.profile.punishment.PunishmentType;
-import cc.minetale.sodium.util.Colors;
-import cc.minetale.sodium.util.Duration;
-import cc.minetale.sodium.util.Message;
+import cc.minetale.sodium.util.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -21,43 +26,47 @@ public class Chat {
 
     public static void handleChat(FlamePlayer player, String message) {
         var profile = player.getProfile();
+        var procedure = Procedure.getProcedure(player.getUuid());
 
-            Procedure procedure = Procedure.getProcedure(player);
+        if(profile.getStaffProfile().isLocked()) {
+            handleAuthentication(player, profile, message);
+            return;
+        }
 
-            if (procedure != null) {
-                if(procedure instanceof GrantProcedure grantProcedure) {
-                    handleGrantProcedure(grantProcedure, player, message);
-                    return;
-                }
-
-                if(procedure instanceof PunishmentProcedure punishmentProcedure) {
-                    handlePunishmentProcedure(punishmentProcedure, player, message);
-                    return;
-                }
-
+        if (procedure != null) {
+            if (procedure instanceof GrantProcedure grantProcedure) {
+                handleGrantProcedure(grantProcedure, player, message);
                 return;
             }
 
-            if(!Rank.hasMinimumRank(profile, Rank.HELPER)) {
-                var punishment = profile.getActivePunishmentByType(PunishmentType.MUTE);
-
-                if (FlameAPI.isChatMuted()) {
-                    player.sendMessage(Message.chatSeparator());
-                    player.sendMessage(Component.text("The chat is currently muted! Please try again later.", NamedTextColor.RED));
-                    player.sendMessage(Message.chatSeparator());
-                    return;
-                }
-
-                if (punishment != null) {
-//                    punishment.getPunishmentMessage().forEach(player::sendMessage); // TODO
-                    return;
-                }
+            if (procedure instanceof PunishmentProcedure punishmentProcedure) {
+                handlePunishmentProcedure(punishmentProcedure, player, message);
+                return;
             }
 
-            var instance = player.getInstance();
+            return;
+        }
 
-            if(instance != null)
-                instance.sendMessage(player, formatChat(player, message));
+        if (!Rank.hasMinimumRank(profile, Rank.HELPER)) {
+            if (FlameAPI.isChatMuted()) {
+                player.sendMessage(Message.chatSeparator());
+                player.sendMessage(Component.text("The chat is currently muted! Please try again later.", NamedTextColor.RED));
+                player.sendMessage(Message.chatSeparator());
+                return;
+            }
+
+            var punishment = profile.getActivePunishmentByType(PunishmentType.MUTE);
+
+            if (punishment != null) {
+                punishment.getPunishmentMessage().forEach(player::sendMessage);
+                return;
+            }
+        }
+
+        var instance = player.getInstance();
+
+        if (instance != null)
+            instance.sendMessage(player, formatChat(player, message));
     }
 
     public static Component formatChat(FlamePlayer player, String message) {
@@ -87,14 +96,14 @@ public class Chat {
                     procedure.setDuration(duration);
                     procedure.setStage(PunishmentProcedure.Stage.PROVIDE_REASON);
 
-//                    new PunishmentReasonMenu(player, procedure);
+                    Menu.openMenu(new PunishmentReasonMenu(player, procedure));
                 }
             }
             case PROVIDE_REASON -> {
                 procedure.setReason(message);
                 procedure.setStage(PunishmentProcedure.Stage.PROVIDE_CONFIRMATION);
 
-//                new PunishmentConfirmMenu(player, procedure);
+                Menu.openMenu(new ConfirmNewPunishment(player, procedure));
             }
         }
     }
@@ -116,7 +125,7 @@ public class Chat {
                     procedure.setDuration(duration);
                     procedure.setStage(GrantProcedure.Stage.PROVIDE_REASON);
 
-//                    new GrantReasonMenu(player, procedure);
+                    Menu.openMenu(new GrantReasonMenu(player, procedure));
                 }
             }
             case PROVIDE_REASON -> {
@@ -124,45 +133,40 @@ public class Chat {
                 procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
 
                 switch (procedure.getType()) {
-                    case ADD, REMOVE -> {
-//                        new GrantConfirmMenu(player, procedure);
+                    case ADD -> {
+                        Menu.openMenu(new ConfirmNewGrantMenu(player, procedure));
                     }
                 }
             }
         }
     }
 
-    public static void handleAuthentication(Player player, Profile profile, Component message) {
-        var component = (TextComponent) message;
-        var content = component.content();
-
+    public static void handleAuthentication(Player player, Profile profile, String message) {
         try {
-            int code = Integer.parseInt(content);
+            int code = Integer.parseInt(message);
+            var staffProfile = profile.getStaffProfile();
 
-            if (correctCode(profile, code)) {
+            if (Auth.isValid(staffProfile.getTwoFactorKey(), code)) {
+                staffProfile.setLocked(false);
+
+                // TODO -> ???
+
+                MongoUtil.saveDocument(Profile.getCollection(), profile.getUuid(), profile);
+
+                var redisProfile = ProfileUtil.fromCache(player.getUuid());
+                redisProfile.getProfile().getStaffProfile().setLocked(false);
+                ProfileCache.pushCache(redisProfile);
+
                 player.sendMessage(Message.chatSeparator());
                 player.sendMessage(Component.text("Access Granted! Thank you for Authenticating!")
                         .color(NamedTextColor.GREEN));
                 player.sendMessage(Message.chatSeparator());
-            } else {
-                player.kick(Component.text("Incorrect or Expired Two Factor Code", NamedTextColor.RED));
-            }
-        } catch (NumberFormatException e) {
-            player.kick(Component.text("Incorrect or Expired Two Factor Code!", NamedTextColor.RED));
-        }
-    }
 
-    private static boolean correctCode(Profile profile, int code) {
-//        String secretKey = profile.getStaffProfile().getTwoFactorKey();
-//        GoogleAuthenticator auth = Flame.getFlame().getAuth();
-//        boolean codeIsValid = auth.authorize(secretKey, code);
-//        if (codeIsValid) {
-//            if (profile.getStaffProfile().isLocked()) {
-//                profile.getStaffProfile().setLocked(false);
-//                return true;
-//            }
-//        }
-        return false;
+                return;
+            }
+        } catch (NumberFormatException ignored) {}
+
+        player.kick(Component.text("Incorrect or Expired Two Factor Code!", NamedTextColor.RED));
     }
 
 }

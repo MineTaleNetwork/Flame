@@ -79,7 +79,7 @@
 //                var pagination = new Pagination<>(8, profiles.toArray(new CachedProfile[0]));
 //                pagination.setCurrentPage(MathUtil.clamp(page, 0, pagination.getPageCount() - 1));
 //
-//                var messages = new ArrayList<>(Arrays.asList(
+//                var messages = new ArrayList<>(List.of(
 //                        Message.chatSeparator(),
 //                        Component.text().append(
 //                                Component.text(pagination.isFirst() ? "" : "<< ", Colors.DARK_YELLOW, TextDecoration.BOLD)

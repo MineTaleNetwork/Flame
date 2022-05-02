@@ -1,18 +1,16 @@
 package cc.minetale.flame.commands.staff;
 
-import cc.minetale.flame.listeners.PostmanListener;
+import cc.minetale.flame.util.CommandUtil;
+import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.postman.StringUtil;
 import cc.minetale.sodium.lang.Language;
 import cc.minetale.sodium.profile.grant.Grant;
 import cc.minetale.sodium.profile.grant.Rank;
-import cc.minetale.flame.util.CommandUtil;
-import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.sodium.util.Duration;
 import cc.minetale.sodium.util.Message;
 import cc.minetale.sodium.util.TimeUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -39,9 +37,7 @@ public class AddGrantCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Message.notification("Command",
-                Component.text("Usage: /addgrant <player> <rank> <duration> <reason>", NamedTextColor.GRAY))
-        );
+        sender.sendMessage(CommandUtil.getUsage("grants", "player", "rank", "duration", "reason"));
     }
 
     private void addGrantExecutor(CommandSender sender, CommandContext context) {

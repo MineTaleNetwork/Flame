@@ -1,6 +1,7 @@
-package cc.minetale.flame.menu.grant;
+package cc.minetale.flame.menu;
 
 import cc.minetale.flame.procedure.GrantProcedure;
+import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.mlib.canvas.CanvasType;
 import cc.minetale.mlib.canvas.Filler;
 import cc.minetale.mlib.canvas.Fragment;
@@ -10,39 +11,39 @@ import cc.minetale.sodium.util.Duration;
 import cc.minetale.sodium.util.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
-public class GrantDurationMenu extends Menu {
+public class DurationMenu extends Menu {
 
-    private final GrantProcedure procedure;
+    private final Procedure procedure;
+    private final Menu nextMenu;
     private boolean shouldCancel = true;
 
-    public GrantDurationMenu(Player player, GrantProcedure procedure) {
-        super(player, Component.text("Grant Duration Selection"), CanvasType.FOUR_ROW);
+    public DurationMenu(Player player, Procedure procedure, Menu nextMenu) {
+        super(player, Component.text("Duration Selection"), CanvasType.FOUR_ROW);
 
         this.procedure = procedure;
+        this.nextMenu = nextMenu;
 
         setFiller(Filler.BORDER);
 
         setButton(10, Fragment.of(ItemStack.of(Material.RED_DYE)
-                        .withDisplayName(Component.text("5 minutes", Message.style(NamedTextColor.GRAY))),
-                event -> selectDuration(player, Duration.fromString("5m"))));
-
-        setButton(11, Fragment.of(ItemStack.of(Material.ORANGE_DYE)
-                        .withDisplayName(Component.text("15 minutes", Message.style(NamedTextColor.GRAY))),
-                event -> selectDuration(player, Duration.fromString("15m"))));
-
-        setButton(12, Fragment.of(ItemStack.of(Material.YELLOW_DYE)
                         .withDisplayName(Component.text("30 minutes", Message.style(NamedTextColor.GRAY))),
                 event -> selectDuration(player, Duration.fromString("30m"))));
 
-        setButton(13, Fragment.of(ItemStack.of(Material.LIME_DYE)
+        setButton(11, Fragment.of(ItemStack.of(Material.ORANGE_DYE)
                         .withDisplayName(Component.text("1 hour", Message.style(NamedTextColor.GRAY))),
                 event -> selectDuration(player, Duration.fromString("1h"))));
+
+        setButton(12, Fragment.of(ItemStack.of(Material.YELLOW_DYE)
+                        .withDisplayName(Component.text("3 hours", Message.style(NamedTextColor.GRAY))),
+                event -> selectDuration(player, Duration.fromString("3h"))));
+
+        setButton(13, Fragment.of(ItemStack.of(Material.LIME_DYE)
+                        .withDisplayName(Component.text("6 hours", Message.style(NamedTextColor.GRAY))),
+                event -> selectDuration(player, Duration.fromString("6h"))));
 
         setButton(14, Fragment.of(ItemStack.of(Material.GREEN_DYE)
                         .withDisplayName(Component.text("12 hours", Message.style(NamedTextColor.GRAY))),
@@ -100,10 +101,10 @@ public class GrantDurationMenu extends Menu {
 
             handleClose(player);
 
-            player.sendMessage(Component.text("Type the amount of time you would like to add this grant for in chat...", NamedTextColor.GREEN));
+            player.sendMessage(Component.text("Please enter a valid duration in chat...", NamedTextColor.GREEN));
         } else {
             procedure.setDuration(duration.value());
-            Menu.openMenu(new GrantReasonMenu(player, procedure));
+            Menu.openMenu(nextMenu);
         }
     }
 

@@ -1,6 +1,8 @@
 package cc.minetale.flame.menu.grant;
 
+import cc.minetale.flame.menu.punishment.ConfirmNewPunishment;
 import cc.minetale.flame.procedure.GrantProcedure;
+import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.mlib.canvas.CanvasType;
 import cc.minetale.mlib.canvas.Fragment;
 import cc.minetale.mlib.canvas.template.Menu;
@@ -14,6 +16,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class GrantReasonMenu extends PaginatedMenu {
 
@@ -21,7 +24,7 @@ public class GrantReasonMenu extends PaginatedMenu {
     private boolean shouldCancel = true;
 
     public GrantReasonMenu(Player player, GrantProcedure procedure) {
-        super(player, Component.text("Grant Reason Selection"), CanvasType.FOUR_ROW);
+        super(player, Component.text("Reason Selection"), CanvasType.FOUR_ROW);
 
         this.procedure = procedure;
     }
@@ -34,41 +37,29 @@ public class GrantReasonMenu extends PaginatedMenu {
 
     @Override
     public Fragment[] getPaginatedFragments(Player player) {
-        var reasons = Arrays.asList(
+        return Stream.of(
                 "Donation Issue",
                 "Promoted",
                 "Demoted",
                 "Admin Discretion",
                 "Event Winner",
                 "Custom"
-        );
+        ).map(reason -> Fragment.of(ItemStack.of(Material.PAPER)
+                .withDisplayName(Component.text(reason, Message.style(NamedTextColor.GRAY))), event -> {
+            SoundsUtil.playClickSound(player);
 
-        var fragments = new Fragment[reasons.size()];
+            if (reason.equals("Custom")) {
+                procedure.setStage(Procedure.Stage.PROVIDE_CONFIRMATION);
+                shouldCancel = false;
 
+                handleClose(player);
 
-        int i = 0;
-        for (var reason : reasons) {
-            fragments[i] = Fragment.of(ItemStack.of(Material.PAPER)
-                    .withDisplayName(Component.text(reason, Message.style(NamedTextColor.GRAY))), event -> {
-                SoundsUtil.playClickSound(player);
-
-                if(reason.equals("Custom")) {
-                    procedure.setStage(GrantProcedure.Stage.PROVIDE_CONFIRMATION);
-                    shouldCancel = false;
-
-                    handleClose(player);
-
-                    player.sendMessage(Component.text("Type the reason for adding this grant in chat...", NamedTextColor.GREEN));
-                } else {
-                    procedure.setReason(reason);
-                    Menu.openMenu(new ConfirmNewGrantMenu(player, procedure));
-                }
-            });
-
-            i++;
-        }
-
-        return fragments;
+                player.sendMessage(Component.text("Type the reason for adding this grant in chat...", NamedTextColor.GREEN));
+            } else {
+                procedure.setReason(reason);
+                Menu.openMenu(new ConfirmNewGrantMenu(player, procedure));
+            }
+        })).toArray(Fragment[]::new);
     }
 
 }

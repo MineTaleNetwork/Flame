@@ -38,7 +38,7 @@ public class PlayerListener {
                     Chat.handleChat(FlamePlayer.fromPlayer(event.getPlayer()), event.getMessage());
                 })
                 .addListener(PlayerDisconnectEvent.class, event -> {
-                    var procedure = GrantProcedure.getProcedure(event.getPlayer());
+                    var procedure = GrantProcedure.getProcedure(event.getPlayer().getUuid());
 
                     if (procedure != null)
                         procedure.finish();

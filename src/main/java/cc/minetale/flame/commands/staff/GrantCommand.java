@@ -1,12 +1,11 @@
 package cc.minetale.flame.commands.staff;
 
 import cc.minetale.flame.menu.grant.GrantRankMenu;
-import cc.minetale.mlib.canvas.template.Menu;
-import cc.minetale.mlib.util.MenuUtil;
-import cc.minetale.sodium.lang.Language;
-import cc.minetale.sodium.profile.grant.Rank;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.FlamePlayer;
+import cc.minetale.mlib.canvas.template.Menu;
+import cc.minetale.sodium.lang.Language;
+import cc.minetale.sodium.profile.grant.Rank;
 import cc.minetale.sodium.util.Message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -31,9 +30,7 @@ public class GrantCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Message.notification("Command",
-                Component.text("Usage: /grant <player>", NamedTextColor.GRAY))
-        );
+        sender.sendMessage(CommandUtil.getUsage("grant", "player"));
     }
 
     private void onGrantCommand(CommandSender sender, CommandContext context) {

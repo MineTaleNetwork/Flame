@@ -2,12 +2,14 @@ package cc.minetale.flame.menu.grant;
 
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.procedure.GrantProcedure;
+import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.mlib.canvas.CanvasType;
 import cc.minetale.mlib.canvas.Fragment;
 import cc.minetale.mlib.canvas.template.PaginatedMenu;
 import cc.minetale.mlib.util.ColorUtil;
 import cc.minetale.sodium.profile.Profile;
+import cc.minetale.sodium.profile.RedisProfile;
 import cc.minetale.sodium.profile.grant.Rank;
 import cc.minetale.sodium.util.Message;
 import cc.minetale.sodium.util.TimeUtil;
@@ -18,61 +20,46 @@ import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemHideFlag;
 import net.minestom.server.item.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-// TODO -> Improve
 public class GrantsMenu extends PaginatedMenu {
 
     private final Profile profile;
+    private final Map<UUID, RedisProfile> profiles;
 
-    public GrantsMenu(Player player, Profile profile) {
+    public GrantsMenu(Player player, Profile profile, Map<UUID, RedisProfile> profiles) {
         super(player, Component.text("Grants"), CanvasType.FOUR_ROW);
 
         this.profile = profile;
+        this.profiles = profiles;
     }
 
     @Override
     public Fragment[] getPaginatedFragments(Player player) {
-        var fragments = new Fragment[profile.getGrants().size() - 1];
         var playerProfile = FlamePlayer.fromPlayer(getPlayer()).getProfile();
 
         var grants = new ArrayList<>(profile.getSortedGrants());
         grants.removeIf(grant -> grant.getRank() == Rank.MEMBER);
 
-        int i = 0;
-
-        for (var grant : grants) {
+        return grants.stream().map(grant -> {
             var rank = grant.getRank();
             var color = rank.getColor();
 
-            var addedBy = "Console";
             var addedById = grant.getAddedById();
+            var addedBy = (addedById == null ?
+                    "Console" :
+                    profiles.get(addedById) == null ?
+                            "Could not fetch..." :
+                            profiles.get(addedById).getProfile().getUsername());
 
-            if (addedById != null) {
-                addedBy = "Could not fetch...";
-
-                var addedByProfile = FlamePlayer.getProfile(addedById);
-
-                if (addedByProfile != null)
-                    addedBy = addedByProfile.getUsername();
-            }
-
-            var removedBy = "Console";
             var removedById = grant.getRemovedById();
+            var removedBy = (removedById == null ?
+                    "Console" :
+                    profiles.get(removedById) == null ?
+                            "Could not fetch..." :
+                            profiles.get(removedById).getProfile().getUsername());
 
-            if (removedById != null) {
-                removedBy = "Could not fetch...";
-
-                var removedByProfile = FlamePlayer.getProfile(removedById);
-
-                if (removedByProfile != null)
-                    removedBy = removedByProfile.getUsername();
-            }
-
-            var lore = new ArrayList<>(Arrays.asList(
+            var lore = new ArrayList<>(List.of(
                     Message.menuSeparator(),
                     Component.text().append(
                             Component.text("Added On: ", Message.style(NamedTextColor.GRAY)),
@@ -90,6 +77,7 @@ public class GrantsMenu extends PaginatedMenu {
                             Component.text("Duration: ", Message.style(NamedTextColor.GRAY)),
                             Component.text(grant.getDurationText(), Message.style(color))
                     ).build()
+
             ));
 
             if (!grant.isPermanent() && grant.isActive()) {
@@ -100,7 +88,7 @@ public class GrantsMenu extends PaginatedMenu {
             }
 
             if (grant.isRemoved()) {
-                List<Component> removedLore = Arrays.asList(
+                var removedLore = List.of(
                         Message.menuSeparator(),
                         Component.text().append(
                                 Component.text("Removed On: ", Message.style(NamedTextColor.GRAY)),
@@ -118,19 +106,19 @@ public class GrantsMenu extends PaginatedMenu {
 
                 lore.addAll(removedLore);
             } else {
-                if (grant.isActive() && FlameAPI.canStartProcedure(player) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
-                    List<Component> removeGrantLore = Arrays.asList(
+                if (grant.isActive() && Procedure.canStartProcedure(player.getUuid()) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
+                    var removeGrantLore = List.of(
                             Message.menuSeparator(),
                             Component.text("Click to remove this Grant", Message.style(color))
                     );
 
-                    lore.addAll(lore.size(), removeGrantLore);
+                    lore.addAll(removeGrantLore);
                 }
             }
 
             lore.add(Message.menuSeparator());
 
-            fragments[i] = Fragment.of(ItemStack.of(ColorUtil.toConcrete(color))
+            return Fragment.of(ItemStack.of(ColorUtil.toConcrete(color))
                     .withDisplayName(Component.text().append(
                             Component.text(rank.getName(), Message.style(color)),
                             Component.text(" (", Message.style(NamedTextColor.DARK_GRAY)),
@@ -143,22 +131,17 @@ public class GrantsMenu extends PaginatedMenu {
                             meta.enchantment(Enchantment.UNBREAKING, (short) 1)
                                     .hideFlag(ItemHideFlag.HIDE_ENCHANTS);
                     }), event -> {
-                if (grant.isActive() && FlameAPI.canStartProcedure(player) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
-                    var procedure = new GrantProcedure(player, profile, GrantProcedure.Type.REMOVE, GrantProcedure.Stage.PROVIDE_REASON);
+                if (grant.isActive() && Procedure.canStartProcedure(player.getUuid()) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
+                    var procedure = new GrantProcedure(player.getUuid(), profile, GrantProcedure.Type.REMOVE, GrantProcedure.Stage.PROVIDE_REASON);
                     procedure.setGrant(grant.getUuid());
 
                     new GrantReasonMenu(player, procedure);
                 }
             });
-
-            i++;
-        }
-
-        return fragments;
+        }).toArray(Fragment[]::new);
     }
 
     @Override
-    public void close() {
-    }
+    public void close() {}
 
 }
