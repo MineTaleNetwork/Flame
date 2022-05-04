@@ -19,7 +19,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GrantRankMenu extends PaginatedMenu {

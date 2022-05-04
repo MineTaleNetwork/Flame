@@ -7,7 +7,6 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 
 import java.util.UUID;
 
@@ -22,11 +21,6 @@ public class GrantProcedure extends Procedure {
         super(issuer, profile.getUuid(), type, stage);
 
         this.profile = profile;
-    }
-
-    @Override
-    public void finish() {
-        Procedure.removeProcedure(getIssuer());
     }
 
     @Override

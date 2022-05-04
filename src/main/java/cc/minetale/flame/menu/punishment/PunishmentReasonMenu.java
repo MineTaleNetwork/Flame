@@ -32,20 +32,31 @@ public class PunishmentReasonMenu extends PaginatedMenu {
     public Fragment[] getPaginatedFragments(Player player) {
         var punishments = new ArrayList<String>();
 
-        switch (procedure.getPunishmentType()) {
-            case BAN -> punishments.addAll(List.of(
-                    "Cheating",
-                    "Admin Discretion",
-                    "Custom"
-            ));
-            case MUTE -> punishments.addAll(List.of(
-                    "Chat Flooding/Chat Spamming",
-                    "Advertising",
-                    "Discrimination/Racism",
+        switch (procedure.getType()) {
+            case ADD -> {
+                switch (procedure.getPunishmentType()) {
+                    case BAN -> punishments.addAll(List.of(
+                            "Cheating",
+                            "Admin Discretion",
+                            "Custom"
+                    ));
+                    case MUTE -> punishments.addAll(List.of(
+                            "Chat Flooding/Chat Spamming",
+                            "Advertising",
+                            "Discrimination/Racism",
+                            "Admin Discretion",
+                            "Custom"
+                    ));
+                }
+            }
+            case REMOVE -> punishments.addAll(List.of(
+                    "Appealed",
+                    "False",
                     "Admin Discretion",
                     "Custom"
             ));
         }
+
 
         return punishments.stream().map(reason -> Fragment.of(ItemStack.of(Material.PAPER)
                 .withDisplayName(Component.text(reason, Message.style(NamedTextColor.GRAY))), event -> {
@@ -60,7 +71,16 @@ public class PunishmentReasonMenu extends PaginatedMenu {
                 player.sendMessage(Component.text("Type the reason for adding this punishment in chat...", NamedTextColor.GREEN));
             } else {
                 procedure.setReason(reason);
-                Menu.openMenu(new ConfirmNewPunishment(player, procedure));
+
+                switch (procedure.getType()) {
+                    case ADD -> {
+                        Menu.openMenu(new ConfirmPunishment(player, procedure));
+                    }
+
+                    case REMOVE -> {
+                        Menu.openMenu(new ConfirmPunishment(player, procedure));
+                    }
+                }
             }
         })).toArray(Fragment[]::new);
     }

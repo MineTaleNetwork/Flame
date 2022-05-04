@@ -45,8 +45,13 @@ public abstract class Procedure {
         activeProcedures.remove(player);
     }
 
-    public abstract void finish();
-    public abstract void cancel();
+    public void finish() {
+        Procedure.removeProcedure(getIssuer());
+    }
+
+    public void cancel() {
+        finish();
+    }
 
     public enum Type {
         ADD,

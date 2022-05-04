@@ -21,7 +21,7 @@ public class PingCommand extends Command {
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        this.onPingSelf(sender);
+        onPingSelf(sender);
     }
 
     private void onPingOthers(CommandSender sender, CommandContext context) {

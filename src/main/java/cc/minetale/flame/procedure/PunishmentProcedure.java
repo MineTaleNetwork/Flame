@@ -24,11 +24,6 @@ public class PunishmentProcedure extends Procedure {
     }
 
     @Override
-    public void finish() {
-        Procedure.removeProcedure(getIssuer());
-    }
-
-    @Override
     public void cancel() {
         var player = MinecraftServer.getConnectionManager().getPlayer(getIssuer());
 

@@ -3,7 +3,7 @@ package cc.minetale.flame.chat;
 import cc.minetale.flame.FlameAPI;
 import cc.minetale.flame.menu.grant.ConfirmNewGrantMenu;
 import cc.minetale.flame.menu.grant.GrantReasonMenu;
-import cc.minetale.flame.menu.punishment.ConfirmNewPunishment;
+import cc.minetale.flame.menu.punishment.ConfirmPunishment;
 import cc.minetale.flame.menu.punishment.PunishmentReasonMenu;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.Procedure;
@@ -18,7 +18,6 @@ import cc.minetale.sodium.profile.grant.Rank;
 import cc.minetale.sodium.profile.punishment.PunishmentType;
 import cc.minetale.sodium.util.*;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 
@@ -103,7 +102,7 @@ public class Chat {
                 procedure.setReason(message);
                 procedure.setStage(PunishmentProcedure.Stage.PROVIDE_CONFIRMATION);
 
-                Menu.openMenu(new ConfirmNewPunishment(player, procedure));
+                Menu.openMenu(new ConfirmPunishment(player, procedure));
             }
         }
     }
@@ -158,8 +157,7 @@ public class Chat {
                 ProfileCache.pushCache(redisProfile);
 
                 player.sendMessage(Message.chatSeparator());
-                player.sendMessage(Component.text("Access Granted! Thank you for Authenticating!")
-                        .color(NamedTextColor.GREEN));
+                player.sendMessage(Component.text("Access Granted! Thank you for Authenticating!", NamedTextColor.GREEN));
                 player.sendMessage(Message.chatSeparator());
 
                 return;

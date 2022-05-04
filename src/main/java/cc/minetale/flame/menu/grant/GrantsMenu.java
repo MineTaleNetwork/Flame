@@ -28,7 +28,7 @@ public class GrantsMenu extends PaginatedMenu {
     private final Map<UUID, RedisProfile> profiles;
 
     public GrantsMenu(Player player, Profile profile, Map<UUID, RedisProfile> profiles) {
-        super(player, Component.text("Grants"), CanvasType.FOUR_ROW);
+        super(player, Component.text(player.getName() + "'s Grants"), CanvasType.FIVE_ROW);
 
         this.profile = profile;
         this.profiles = profiles;
@@ -140,8 +140,5 @@ public class GrantsMenu extends PaginatedMenu {
             });
         }).toArray(Fragment[]::new);
     }
-
-    @Override
-    public void close() {}
 
 }

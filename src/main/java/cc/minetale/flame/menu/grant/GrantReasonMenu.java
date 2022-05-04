@@ -1,6 +1,5 @@
 package cc.minetale.flame.menu.grant;
 
-import cc.minetale.flame.menu.punishment.ConfirmNewPunishment;
 import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.mlib.canvas.CanvasType;
@@ -15,7 +14,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class GrantReasonMenu extends PaginatedMenu {

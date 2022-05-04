@@ -1,6 +1,5 @@
 package cc.minetale.flame.menu;
 
-import cc.minetale.flame.procedure.GrantProcedure;
 import cc.minetale.flame.procedure.Procedure;
 import cc.minetale.mlib.canvas.CanvasType;
 import cc.minetale.mlib.canvas.Filler;
@@ -96,7 +95,7 @@ public class DurationMenu extends Menu {
         SoundsUtil.playClickSound(player);
 
         if(duration == null) {
-            procedure.setStage(GrantProcedure.Stage.PROVIDE_TIME);
+            procedure.setStage(Procedure.Stage.PROVIDE_TIME);
             shouldCancel = false;
 
             handleClose(player);
