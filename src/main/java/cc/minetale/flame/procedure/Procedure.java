@@ -19,6 +19,7 @@ public abstract class Procedure {
     private Stage stage;
     private long duration;
     private String reason;
+    private boolean canceled;
 
     public Procedure(UUID issuer, UUID recipient, Type type, Stage stage) {
         this.issuer = issuer;

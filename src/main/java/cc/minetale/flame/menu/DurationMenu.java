@@ -18,7 +18,6 @@ public class DurationMenu extends Menu {
 
     private final Procedure procedure;
     private final Menu nextMenu;
-    private boolean shouldCancel = true;
 
     public DurationMenu(Player player, Procedure procedure, Menu nextMenu) {
         super(player, Component.text("Duration Selection"), CanvasType.FOUR_ROW);
@@ -87,7 +86,7 @@ public class DurationMenu extends Menu {
 
     @Override
     public void close() {
-        if(shouldCancel)
+        if(procedure.isCanceled())
             procedure.cancel();
     }
 
@@ -96,7 +95,7 @@ public class DurationMenu extends Menu {
 
         if(duration == null) {
             procedure.setStage(Procedure.Stage.PROVIDE_TIME);
-            shouldCancel = false;
+            procedure.setCanceled(false);
 
             handleClose(player);
 

@@ -40,7 +40,6 @@ public class PunishmentsMenu extends PaginatedMenu {
     @Override
     public Fragment[] getPaginatedFragments(Player player) {
         var playerProfile = FlamePlayer.fromPlayer(getPlayer()).getProfile();
-
         var punishments = profile.getPunishments(type);
 
         return punishments.stream().map(punishment -> {
@@ -133,7 +132,6 @@ public class PunishmentsMenu extends PaginatedMenu {
                 if (punishment.isActive() && Procedure.canStartProcedure(player.getUuid()) && Rank.hasMinimumRank(playerProfile, Rank.ADMIN)) {
                     var procedure = new PunishmentProcedure(player.getUuid(), profile, Procedure.Type.REMOVE, Procedure.Stage.PROVIDE_REASON);
                     procedure.setPunishment(punishment.getUuid());
-
                     Menu.openMenu(new PunishmentReasonMenu(player, procedure));
                 }
             });

@@ -20,7 +20,6 @@ import java.util.List;
 public class PunishmentReasonMenu extends PaginatedMenu {
 
     private final PunishmentProcedure procedure;
-    private boolean shouldCancel = true;
 
     public PunishmentReasonMenu(Player player, PunishmentProcedure procedure) {
         super(player, Component.text("Reason Selection"), CanvasType.FOUR_ROW);
@@ -64,7 +63,7 @@ public class PunishmentReasonMenu extends PaginatedMenu {
 
             if (reason.equals("Custom")) {
                 procedure.setStage(Procedure.Stage.PROVIDE_CONFIRMATION);
-                shouldCancel = false;
+                procedure.setCanceled(false);
 
                 handleClose(player);
 
@@ -87,7 +86,7 @@ public class PunishmentReasonMenu extends PaginatedMenu {
 
     @Override
     public void close() {
-        if (shouldCancel)
+        if (procedure.isCanceled())
             procedure.cancel();
     }
 

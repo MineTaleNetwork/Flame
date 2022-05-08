@@ -17,7 +17,7 @@ import net.minestom.server.entity.Player;
 public class MessageCommand extends Command {
 
     public MessageCommand() {
-        super("message", "msg", "whisper", "tell", "t");
+        super("message", "msg");
 
         setDefaultExecutor(this::defaultExecutor);
 

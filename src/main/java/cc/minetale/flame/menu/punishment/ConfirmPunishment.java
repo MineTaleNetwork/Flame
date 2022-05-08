@@ -23,7 +23,6 @@ import java.util.List;
 public class ConfirmPunishment extends Menu {
 
     private final PunishmentProcedure procedure;
-    private boolean shouldCancel = true;
 
     public ConfirmPunishment(Player player, PunishmentProcedure procedure) {
         super(player, Component.text("Confirm Punishment"), CanvasType.ONE_ROW);
@@ -109,7 +108,7 @@ public class ConfirmPunishment extends Menu {
                 }
             }
 
-            shouldCancel = false;
+            procedure.setCanceled(false);
 
             procedure.finish();
             handleClose(player);
@@ -121,7 +120,7 @@ public class ConfirmPunishment extends Menu {
 
     @Override
     public void close() {
-        if (shouldCancel)
+        if (procedure.isCanceled())
             procedure.cancel();
     }
 

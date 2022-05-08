@@ -17,7 +17,7 @@ import java.util.List;
 public class RanksMenu extends PaginatedMenu {
 
     public RanksMenu(Player player) {
-        super(player, Component.text("Ranks"), CanvasType.FOUR_ROW);
+        super(player, Component.text("Ranks"), CanvasType.FIVE_ROW);
     }
 
     @Override
