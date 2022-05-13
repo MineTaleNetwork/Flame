@@ -5,12 +5,16 @@ import cc.minetale.mlib.canvas.Fragment;
 import cc.minetale.mlib.canvas.template.PaginatedMenu;
 import cc.minetale.sodium.profile.RedisProfile;
 import cc.minetale.sodium.util.Colors;
+import cc.minetale.sodium.util.Message;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
+import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -41,22 +45,33 @@ public class FriendListMenu extends PaginatedMenu {
 
         return friends.stream()
                 .map(friend -> {
-                    var lore = new ArrayList<Component>();
+                    Component status;
 
-                    var online = friend.getServer() != null;
-                    var status = online ? "is currently in " + friend.getServer() : "is currently offline";
-                    var color = online ? Colors.GREEN : Colors.RED;
-
-                    lore.add(Component.text().append(
-                            Component.text("● ", color),
-                            friend.getProfile().getChatFormat(),
-                            Component.text(" " + status, color)
-                    ).build());
+                    if(friend.getServer() != null) {
+                        status = Component.text(" is currently playing " + friend.getServer(), Message.style(Colors.GREEN));
+                    } else {
+                        status = Component.text(" is currently offline", Colors.RED);
+                    }
 
                     return Fragment.of(ItemStack.of(Material.PLAYER_HEAD)
                             .withDisplayName(friend.getProfile().getChatFormat())
-                            .withLore(lore), event -> {
-                        // TODO
+                            .withLore(Arrays.asList(
+                                    Message.menuSeparator(),
+                                    Component.text().append(
+                                            Component.text("● ", Message.style(Colors.MIDNIGHT)),
+                                            friend.getProfile().getChatFormat(),
+                                            status
+                                    ).build(),
+                                    Component.empty(),
+                                    Component.text().append(
+                                            Component.text("SHIFT + LMB", Message.style(NamedTextColor.YELLOW, TextDecoration.BOLD)),
+                                            Component.text(" to remove this friend", Message.style(NamedTextColor.YELLOW))
+                                    ).build(),
+                                    Message.menuSeparator()
+                            )), event -> {
+                        if(event.getClickType() == ClickType.SHIFT_CLICK) {
+                            // TODO
+                        }
                     });
                 }).toArray(Fragment[]::new);
     }

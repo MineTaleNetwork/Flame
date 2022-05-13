@@ -9,9 +9,7 @@ import cc.minetale.sodium.payloads.FriendPayload;
 import cc.minetale.sodium.profile.friend.Friend;
 import cc.minetale.sodium.util.Message;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 
@@ -21,46 +19,40 @@ public class FriendAcceptCommand extends Command {
     public FriendAcceptCommand() {
         super("accept");
 
-        setDefaultExecutor(this::defaultExecutor);
+        setDefaultExecutor((sender, context) -> sender.sendMessage(CommandUtil.getUsage("friend " + getName(), "player")));
 
-        addSyntax(this::onFriendAccept, ArgumentType.Word("player"));
-    }
+        addSyntax((sender, context) -> {
+            if (sender instanceof Player player) {
+                var profile = FlamePlayer.fromPlayer(player).getProfile();
+                var target = FlamePlayer.getProfile((String) context.get("player"));
 
-    private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(CommandUtil.getUsage("friend add", "player"));
-    }
-
-    private void onFriendAccept(CommandSender sender, CommandContext context) {
-        if (sender instanceof Player player) {
-            var profile = FlamePlayer.fromPlayer(player).getProfile();
-            var target = FlamePlayer.getProfile((String) context.get("player"));
-
-            if (target == null) {
-                sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
-                return;
-            }
-
-            var response = Friend.acceptRequest(profile, target);
-
-            switch (response) {
-                case SUCCESS -> {
-                    var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
-
-                    if (targetPlayer != null) {
-                        targetPlayer.sendMessage(Message.parse(Language.Friend.ACCEPT_REQUEST, profile.getChatFormat()));
-                    } else {
-                        Postman.getPostman().broadcast(new FriendPayload(profile, target.getUuid(), FriendPayload.Action.REQUEST_ACCEPT));
-                    }
-
-                    sender.sendMessage(Message.parse(Language.Friend.ACCEPT_REQUEST, target.getChatFormat()));
+                if (target == null) {
+                    sender.sendMessage(Message.parse(Language.Error.UNKNOWN_PLAYER));
+                    return;
                 }
-                case PLAYER_MAX_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.MAX_FRIENDS_INITIATOR));
-                case TARGET_MAX_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.MAX_FRIENDS_TARGET));
-                case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.NO_REQUEST, target.getChatFormat()));
-                case TARGET_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.TARGET_IGNORED));
-                case PLAYER_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.TARGET_TOGGLED));
+
+                var response = Friend.acceptRequest(profile, target);
+
+                switch (response) {
+                    case SUCCESS -> {
+                        var targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target.getUuid());
+
+                        if (targetPlayer != null) {
+                            targetPlayer.sendMessage(Message.parse(Language.Friend.ACCEPT_REQUEST, profile.getChatFormat()));
+                        } else {
+                            Postman.getPostman().broadcast(new FriendPayload(profile, target.getUuid(), FriendPayload.Action.REQUEST_ACCEPT));
+                        }
+
+                        sender.sendMessage(Message.parse(Language.Friend.ACCEPT_REQUEST, target.getChatFormat()));
+                    }
+                    case PLAYER_MAX_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.MAX_FRIENDS_INITIATOR));
+                    case TARGET_MAX_FRIENDS -> sender.sendMessage(Message.parse(Language.Friend.MAX_FRIENDS_TARGET));
+                    case NO_REQUEST -> sender.sendMessage(Message.parse(Language.Friend.NO_REQUEST, target.getChatFormat()));
+                    case TARGET_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.TARGET_IGNORED));
+                    case PLAYER_IGNORED -> sender.sendMessage(Message.parse(Language.Friend.TARGET_TOGGLED));
+                }
             }
-        }
+        }, ArgumentType.Word("player"));
     }
 
 }
