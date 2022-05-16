@@ -1,6 +1,7 @@
 package cc.minetale.flame.commands.essentials.friend;
 
 import cc.minetale.flame.menu.friend.FriendListMenu;
+import cc.minetale.flame.menu.friend.FriendRequestsMenu;
 import cc.minetale.flame.util.CommandUtil;
 import cc.minetale.flame.util.FlamePlayer;
 import cc.minetale.flame.util.SubCommand;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 public class FriendRequestsCommand extends Command {
 
     public FriendRequestsCommand() {
-        super("list");
+        super("requests");
 
         setDefaultExecutor(this::defaultExecutor);
 
@@ -52,7 +53,7 @@ public class FriendRequestsCommand extends Command {
                     requests = RequestCache.getFriendRequest().getIncoming(profile.getUuid());
 
                     if (requests.size() == 0) {
-                        player.sendMessage(Message.parse(Language.Friend.INVITE_NO_OUTGOING));
+                        player.sendMessage(Message.parse(Language.Friend.INVITE_NO_INCOMING));
                         return;
                     }
                 }
@@ -66,9 +67,11 @@ public class FriendRequestsCommand extends Command {
                 }
             }
 
-            ProfileUtil.getProfiles(requests.stream().map(RequestCache.Request::target).collect(Collectors.toList()))
+            ProfileUtil.getProfiles(requests.stream()
+                            .map(request -> (type == RequestType.OUTGOING ? request.target() : request.initiator()))
+                            .collect(Collectors.toList()))
                     .thenAccept(friends -> {
-                        Menu.openMenu(new FriendListMenu(player, friends));
+                        Menu.openMenu(new FriendRequestsMenu(player, type, friends));
                     });
         }
     }

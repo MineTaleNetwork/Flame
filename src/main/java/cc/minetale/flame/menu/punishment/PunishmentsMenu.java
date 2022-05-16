@@ -30,7 +30,7 @@ public class PunishmentsMenu extends PaginatedMenu {
     private final Map<UUID, RedisProfile> profiles;
 
     public PunishmentsMenu(Player player, Profile profile, PunishmentType type, Map<UUID, RedisProfile> profiles) {
-        super(player, Component.text(player.getName() + "'s Punishments"), CanvasType.FIVE_ROW);
+        super(player, Component.text(player.getUsername() + "'s " + type.getReadable() + "s"), CanvasType.FIVE_ROW);
 
         this.profile = profile;
         this.type = type;
